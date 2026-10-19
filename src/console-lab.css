@@ -1,0 +1,483 @@
+.reference-editor {
+  left: 64px;
+}
+.reference-editor .config-header {
+  position: absolute;
+  top: 2px;
+  right: auto;
+  left: 290px;
+  height: 30px;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  z-index: 1;
+}
+.reference-editor .config-header > div,
+.reference-editor .config-back,
+.reference-editor .config-header > .icon-button {
+  display: none;
+}
+.reference-editor .config-header > .badge {
+  font-size: 9px;
+}
+.reference-editor .config-viewbar {
+  height: 37px;
+  padding: 0 15px;
+}
+.reference-editor .config-layout {
+  grid-template-columns: 252px minmax(0, 1fr);
+}
+.reference-editor .config-navigation {
+  padding: 16px 14px;
+  border: 0;
+}
+.reference-editor .config-main {
+  padding: 20px 36px;
+}
+.reference-editor .config-section {
+  padding: 19px 20px 13px;
+  border-radius: 2px;
+  box-shadow: 0 2px 10px #22385b06;
+}
+.reference-editor .config-section > .field {
+  max-width: 440px;
+}
+.reference-editor .config-section .form-grid {
+  display: block;
+  max-width: 440px;
+}
+.reference-editor .config-section input,
+.reference-editor .config-section select {
+  min-height: 31px;
+  padding: 6px 10px;
+  font-size: 11px;
+}
+.reference-editor .config-section textarea {
+  min-height: 39px;
+  max-height: 90px;
+}
+.reference-editor .config-resource {
+  border: 0;
+  padding: 10px 12px 13px;
+}
+.reference-editor .config-navigation nav {
+  border: 0;
+  border-top: 1px solid #e6e9ef;
+}
+.reference-editor .config-navigation nav button {
+  font-size: 11px;
+  padding: 8px 12px;
+}
+.reference-editor .config-footer {
+  padding: 12px 25px;
+  background: #fff;
+}
+.reference-items {
+  border: 1px solid #e9edf3;
+  margin: 0 0 22px;
+  padding: 15px 14px;
+  text-align: center;
+}
+.reference-items > strong {
+  display: block;
+  text-align: left;
+  font-size: 11px;
+  color: #546780;
+  margin-bottom: 13px;
+}
+.reference-items > p {
+  font-size: 11px;
+  color: #7b879b;
+  margin: 18px 0;
+}
+.reference-items table {
+  text-align: left;
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 15px;
+  font-size: 11px;
+  table-layout: fixed;
+}
+.reference-items th {
+  font-size: 10px;
+  background: #f7f8fb;
+  color: #7a879b;
+  padding: 10px;
+}
+.reference-items td {
+  padding: 9px;
+  border-bottom: 1px solid #eef1f6;
+  overflow-wrap: anywhere;
+}
+.reference-items th:first-child:nth-last-child(3) {
+  width: 13%;
+}
+.reference-items th:last-child {
+  width: 20%;
+}
+.reference-items .btn {
+  font-size: 11px;
+  min-width: 125px;
+  border-color: #97a6e0;
+  color: #6179d4;
+  background: white;
+  padding: 6px 15px;
+}
+.reference-checkbox {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 11px;
+  color: #546780;
+  margin: 0 0 18px;
+}
+.reference-editor .reference-checkbox input {
+  width: 13px;
+  height: 13px;
+  min-height: 0;
+  accent-color: #6b85df;
+  padding: 0;
+}
+.console-lab-guide {
+  background: #f7f9ff;
+  border: 1px solid #dce4f5;
+  margin-bottom: 19px;
+  border-radius: 3px;
+}
+.console-lab-guide-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  color: #6074b0;
+  font-size: 11px;
+}
+.console-lab-guide-head > span {
+  color: #8b96af;
+}
+.console-lab-guide-head > .btn {
+  margin-left: auto;
+}
+.console-lab-checks {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  border-top: 1px solid #e2e8f6;
+  background: #fff;
+}
+.console-lab-checks > button {
+  padding: 14px 12px;
+  text-align: left;
+  border-right: 1px solid #e8edf6;
+  min-width: 0;
+}
+.console-lab-checks > button > span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background: #eff3fb;
+  color: #8493ae;
+  border-radius: 50%;
+  font-size: 10px;
+  margin-bottom: 7px;
+}
+.console-lab-checks > button.complete > span {
+  background: #e9f7ef;
+  color: #39a578;
+}
+.console-lab-checks strong {
+  display: block;
+  font-size: 11px;
+  color: #384e77;
+  margin: 1px 0 7px;
+}
+.console-lab-checks small {
+  display: block;
+  line-height: 1.7;
+  font-size: 9px;
+  color: #929bb0;
+  overflow-wrap: anywhere;
+}
+.console-lab-guide-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  font-size: 9px;
+  line-height: 1.8;
+  padding: 10px 14px;
+  border-top: 1px solid #e2e8f6;
+  color: #8d99b0;
+}
+.console-lab-guide-foot a {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  white-space: nowrap;
+  color: #647bd0;
+}
+.console-application {
+  padding: 18px;
+}
+.local-address {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+}
+.local-address input {
+  min-width: 0;
+  flex: 1;
+  font-size: 12px;
+}
+.local-address select {
+  max-width: 90px;
+  font-size: 11px;
+}
+.application-menu {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px;
+  border-bottom: 1px solid #e5eaf2;
+  margin: 19px 0;
+  padding: 10px 0 16px;
+  color: #526586;
+  font-size: 11px;
+}
+.application-menu > strong {
+  margin-right: 6px;
+}
+.application-menu > span:not(.badge) {
+  color: #9aa6ba;
+  margin: 0 5px;
+}
+.application-menu button {
+  padding: 6px 9px;
+  background: #f4f7fc;
+  border: 1px solid #e2e9f4;
+  border-radius: 2px;
+  color: #647ab4;
+}
+.application-welcome {
+  padding: 25px 15px;
+  line-height: 1.9;
+}
+.application-welcome h2,
+.application-response h2 {
+  font-size: 18px;
+  margin: 14px 0;
+  color: #283e68;
+}
+.application-welcome p,
+.application-response p {
+  font-size: 12px;
+  color: #7a87a0;
+  line-height: 1.8;
+  margin: 10px 0;
+}
+.application-response {
+  background: #fcfdff;
+  border: 1px solid #e7edf5;
+  padding: 19px;
+}
+.application-response > div:first-child {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+  font-size: 11px;
+  color: #8190a7;
+}
+.application-response pre,
+.console-event-explanation pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: 11px;
+  line-height: 1.8;
+  background: #f5f7fc;
+  border: 1px solid #e5eaf4;
+  padding: 12px;
+  margin: 12px 0;
+}
+.application-response details summary {
+  font-size: 11px;
+  color: #637db5;
+  cursor: pointer;
+}
+.application-result-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 17px;
+}
+.console-event-explanation {
+  padding: 15px 22px;
+}
+.console-event-explanation pre {
+  font-size: 10px;
+}
+.console-response-chart {
+  height: 225px;
+  padding: 0 15px 12px;
+}
+.console-telemetry-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 18px;
+  margin: 14px 0;
+  font-size: 11px;
+  color: #7b89a5;
+}
+.console-telemetry-toolbar > span {
+  margin-right: auto;
+}
+.monitoring-range {
+  position: relative;
+  font-size: 11px;
+  white-space: nowrap;
+}
+.monitoring-range > div {
+  position: absolute;
+  top: 28px;
+  right: 0;
+  z-index: 8;
+  min-width: 190px;
+  padding: 12px;
+  background: #fff;
+  border: 1px solid #dfe6f1;
+  box-shadow: 0 6px 20px #213b631c;
+  border-radius: 3px;
+}
+.monitoring-range label {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 4px;
+  color: #61738e;
+  font-size: 11px;
+}
+.monitoring-range input {
+  width: 13px;
+  accent-color: #667fd9;
+}
+.monitoring-range .btn {
+  margin-top: 8px;
+  float: right;
+}
+.monitoring-range > div:after {
+  content: '';
+  display: block;
+  clear: both;
+}
+@media (max-width: 1100px) {
+  .console-lab-checks {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .reference-editor {
+    left: 0;
+  }
+  .reference-editor .config-header {
+    right: 280px;
+  }
+  .reference-editor .config-main {
+    padding: 20px;
+  }
+  .reference-editor .config-layout {
+    grid-template-columns: 210px minmax(0, 1fr);
+  }
+}
+@media (max-width: 700px) {
+  .reference-editor .config-header {
+    display: none;
+  }
+  .reference-editor .config-layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+  }
+  .reference-editor .config-navigation {
+    padding: 7px;
+    grid-column: 1;
+    grid-row: 1;
+    max-height: 100px;
+  }
+  .reference-editor .config-navigation .config-resource,
+  .reference-editor .config-navigation > a {
+    display: none;
+  }
+  .reference-editor .config-navigation nav {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .reference-editor .config-navigation nav button {
+    width: auto;
+    font-size: 10px;
+    padding: 6px 9px;
+  }
+  .reference-editor .config-main {
+    grid-column: 1;
+    grid-row: 2;
+    padding: 10px;
+  }
+  .reference-editor .config-footer {
+    grid-column: 1;
+    grid-row: 3;
+  }
+  .reference-editor .config-section {
+    padding: 14px;
+  }
+  .reference-editor .config-find {
+    display: none;
+  }
+  .reference-editor .advanced-toggle {
+    font-size: 9px;
+  }
+  .reference-items {
+    padding: 10px;
+  }
+  .console-lab-guide-head {
+    gap: 7px;
+    flex-wrap: wrap;
+  }
+  .console-lab-guide-head > span {
+    display: none;
+  }
+  .console-lab-checks {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .console-lab-guide-foot {
+    flex-wrap: wrap;
+  }
+  .console-application {
+    padding: 12px;
+  }
+  .local-address {
+    flex-wrap: wrap;
+  }
+  .local-address input {
+    font-size: 10px;
+  }
+  .application-menu {
+    gap: 5px;
+  }
+  .application-menu button {
+    font-size: 10px;
+    padding: 6px;
+  }
+  .console-telemetry-toolbar {
+    flex-wrap: wrap;
+  }
+}
+
+.console-lab-guide-head > .badge {
+  display: inline-flex;
+}
+.reference-items td input {
+  width: 100%;
+  max-width: 560px;
+  min-width: 0;
+}
+.reference-editor .config-section > .field:has(input[placeholder='Add Label']) {
+  max-width: none;
+}

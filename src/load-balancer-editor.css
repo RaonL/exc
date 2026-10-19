@@ -1,0 +1,116 @@
+/* HTTP Load Balancer configuration: official Class 1 Lab 1 form. */
+.lb-editor .reference-items {
+  text-align: center;
+  padding: 14px 16px;
+  margin-bottom: 18px;
+}
+.lb-editor .reference-items > strong {
+  color: #243151;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+.lb-editor .lb-domains > strong {
+  text-align: left;
+}
+.lb-editor .reference-items > small {
+  display: block;
+  text-align: left;
+  color: #63718b;
+  margin-bottom: 8px;
+  font-size: 11px;
+}
+.lb-editor .reference-items > p {
+  color: #63718b;
+  font-size: 12px;
+  margin: 24px 0 16px;
+}
+.lb-editor .reference-items > .btn {
+  min-width: 120px;
+  padding: 5px 12px;
+  font-size: 12px;
+}
+.lb-table-scroll {
+  overflow-x: auto;
+  max-width: 100%;
+  margin-bottom: 12px;
+}
+.lb-table-scroll table {
+  min-width: 500px;
+  table-layout: auto;
+  font-size: 12px;
+  margin-bottom: 0;
+}
+.lb-table-scroll th {
+  font-size: 11px;
+}
+.lb-editor .lb-domains th:first-child {
+  width: 60px;
+}
+.lb-editor .lb-domains th:last-child {
+  width: 90px;
+}
+.lb-editor .lb-origins th:first-child {
+  width: 55%;
+}
+.lb-editor .lb-origins td:last-child {
+  white-space: nowrap;
+}
+.lb-editor .lb-origins td:last-child button {
+  margin-right: 8px;
+  font-size: 12px;
+}
+.lb-editor .config-section .reference-checkbox input {
+  min-height: 0;
+}
+.lb-editor .reference-checkbox {
+  font-size: 12px;
+  color: #243151;
+}
+.lb-type-settings,
+.lb-waf-selection {
+  margin-left: 16px;
+  padding-left: 16px;
+  border-left: 1px solid #d6deeb;
+}
+.lb-type-settings > .field,
+.lb-waf-selection > .field {
+  max-width: 440px;
+}
+.lb-type-settings .field {
+  margin-bottom: 14px;
+}
+.lb-waf-selection {
+  max-width: 472px;
+}
+.lb-editor .config-section-body > .field {
+  max-width: 440px;
+}
+.lb-editor .config-section-body > .btn {
+  margin-right: 10px;
+}
+.lb-origin-item .config-footer {
+  display: grid;
+  grid-template-columns: 252px minmax(0, 1fr) auto;
+}
+.lb-origin-item .config-footer > .config-error {
+  grid-column: 1 / -1;
+}
+.lb-origin-item .config-footer > .btn[type='button'] {
+  justify-self: start;
+}
+@media (max-width: 1100px) {
+  .lb-origin-item .config-footer {
+    grid-template-columns: 210px minmax(0, 1fr) auto;
+  }
+}
+@media (max-width: 700px) {
+  .lb-editor .reference-items {
+    padding: 10px;
+  }
+  .lb-origin-item .config-footer {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .lb-origin-item .config-footer > .btn:first-of-type {
+    margin-left: 0;
+  }
+}

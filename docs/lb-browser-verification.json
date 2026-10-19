@@ -1,0 +1,196 @@
+{
+  "date": "2026-10-19",
+  "browser": "Isolated headless Chrome via chrome-devtools-mcp 1.11.0",
+  "application": "http://127.0.0.1:5173/",
+  "unitTests": {
+    "files": 8,
+    "passed": 142
+  },
+  "build": "passed",
+  "checks": [
+    {
+      "result": "passed",
+      "description": "Prerequisite Origin Pool is created through the console"
+    },
+    {
+      "result": "passed",
+      "description": "Origins Add Item opens the weighted pool subform"
+    },
+    {
+      "result": "passed",
+      "description": "Cancelling creation after Origin Apply adds no LB"
+    },
+    {
+      "result": "passed",
+      "description": "Origins Add Item opens the weighted pool subform"
+    },
+    {
+      "result": "passed",
+      "description": "VIP Advertisement defaults to Internet"
+    },
+    {
+      "result": "passed",
+      "description": "HTTP LB is created with the chosen origin and domain"
+    },
+    {
+      "result": "passed",
+      "description": "Created LB survives reload"
+    },
+    {
+      "result": "passed",
+      "description": "Unprotected LB permits the local SQL Injection sample"
+    },
+    {
+      "result": "passed",
+      "description": "Manage Configuration opens a view before editing"
+    },
+    {
+      "result": "passed",
+      "description": "Enable requires an explicit WAF policy selection"
+    },
+    {
+      "result": "passed",
+      "description": "Shared base-appfw opens as a read-only policy"
+    },
+    {
+      "result": "passed",
+      "description": "Cancelling the WAF draft preserves the unprotected LB"
+    },
+    {
+      "result": "passed",
+      "description": "Manage Configuration opens a view before editing"
+    },
+    {
+      "result": "passed",
+      "description": "Saved shared WAF attachment survives reload"
+    },
+    {
+      "result": "passed",
+      "description": "Protected LB still permits normal requests"
+    },
+    {
+      "result": "passed",
+      "description": "Shared WAF blocks SQL Injection and returns a Support ID"
+    },
+    {
+      "result": "passed",
+      "description": "Shared WAF blocks XSS and returns a Support ID"
+    },
+    {
+      "result": "passed",
+      "description": "Shared WAF blocks Command Injection and returns a Support ID"
+    },
+    {
+      "result": "passed",
+      "description": "Manage Configuration opens a view before editing"
+    },
+    {
+      "result": "passed",
+      "description": "Cancelled domain and WAF edits leave saved data intact"
+    },
+    {
+      "result": "passed",
+      "description": "Manage Configuration opens a view before editing"
+    },
+    {
+      "result": "passed",
+      "description": "Saved extra domain survives reload"
+    },
+    {
+      "result": "passed",
+      "description": "Manage Configuration opens a view before editing"
+    },
+    {
+      "result": "passed",
+      "description": "Saved metadata survives reload"
+    },
+    {
+      "result": "passed",
+      "description": "Reset restores the opened LB configuration"
+    },
+    {
+      "result": "passed",
+      "description": "Saving domain removal retains the other domain"
+    },
+    {
+      "result": "passed",
+      "description": "Manage Configuration opens a view before editing"
+    },
+    {
+      "result": "passed",
+      "description": "Origin Back discards unsaved weight and priority edits"
+    },
+    {
+      "result": "passed",
+      "description": "Manage Configuration opens a view before editing"
+    },
+    {
+      "result": "passed",
+      "description": "Parent Cancel discards an applied Origin connection draft"
+    },
+    {
+      "result": "passed",
+      "description": "JSON reflects the current unsaved LB draft"
+    },
+    {
+      "result": "passed",
+      "description": "Keyboard Home selects the Form view"
+    },
+    {
+      "result": "passed",
+      "description": "LB form fits 320px with named controls"
+    },
+    {
+      "result": "passed",
+      "description": "Simulation Mode stays visible at 320px"
+    },
+    {
+      "result": "passed",
+      "description": "Domain table scrolls inside its own region at 320px"
+    },
+    {
+      "result": "passed",
+      "description": "LB form fits 768px with named controls"
+    },
+    {
+      "result": "passed",
+      "description": "LB form fits 1024px with named controls"
+    },
+    {
+      "result": "passed",
+      "description": "LB form fits 1440px with named controls"
+    },
+    {
+      "result": "passed",
+      "description": "Manage Configuration opens a view before editing"
+    },
+    {
+      "result": "passed",
+      "description": "Nested Origin form fits 320px with unique dialog identifiers"
+    },
+    {
+      "result": "passed",
+      "description": "Final LB still serves normal requests after editing"
+    },
+    {
+      "result": "passed",
+      "description": "Final saved WAF still blocks the SQL Injection sample"
+    },
+    {
+      "result": "passed",
+      "description": "No browser errors, warnings or field issues in the final LB workflow"
+    },
+    {
+      "result": "passed",
+      "description": "LB configuration and test requests make no external API calls"
+    },
+    {
+      "result": "passed",
+      "description": "LB resources remain isolated by namespace"
+    },
+    {
+      "result": "passed",
+      "description": "Switching back restores the same LB list"
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+/* Official WAF metadata / Custom policy / Advanced configuration references. */
+.application-block-body {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.waf-dependent-fields {
+  border-left: 1px solid var(--origin-border);
+  margin: 0 0 16px 10px;
+  padding: 8px 0 0 20px;
+}
+.waf-dependent-fields > .field,
+.waf-signatures > .field {
+  max-width: 440px;
+}
+.waf-signatures {
+  padding: 16px;
+  border: 1px solid var(--origin-border);
+  border-radius: 3px;
+  margin-bottom: 18px;
+}
+.waf-signatures h3 {
+  font-size: 14px;
+  margin-bottom: 16px;
+  color: var(--origin-text);
+}
+.waf-attack-types {
+  border: 1px solid var(--origin-border);
+  padding: 12px;
+  margin-bottom: 16px;
+}
+.waf-attack-types legend {
+  font-size: 12px;
+  padding: 0 4px;
+}
+.waf-editor .waf-attack-types .field {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+}
+.waf-editor .waf-attack-types input {
+  min-height: 0;
+  width: 14px;
+  height: 14px;
+}
+.waf-editor .response-preview {
+  max-width: 680px;
+}
+.waf-editor .response-preview > span,
+.waf-editor .response-preview pre {
+  color: var(--origin-muted);
+}
+.waf-editor .configuration-summary div {
+  overflow-wrap: anywhere;
+}
+@media (max-width: 720px) {
+  .waf-dependent-fields {
+    margin-left: 0;
+    padding-left: 10px;
+  }
+  .waf-signatures {
+    padding: 10px;
+  }
+}

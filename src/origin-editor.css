@@ -1,0 +1,277 @@
+/* Class 1 Lab 1 Origin Pool / Origin Server reference screens. */
+:is(.origin-editor, .lb-editor, .waf-editor) {
+  --origin-text: #243151;
+  --origin-muted: #63718b;
+  --origin-border: #e2e6ee;
+  --origin-accent: #586de0;
+  background: #f6f7f9;
+}
+body:has(.origin-editor, .lb-editor, .waf-editor) {
+  min-width: 320px;
+}
+.config-reset-all,
+.config-section-actions,
+.config-section-actions button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.config-reset-all {
+  margin-left: auto;
+  font-size: 11px;
+  white-space: nowrap;
+  color: #465779;
+}
+.config-section-actions {
+  margin-left: auto;
+}
+.config-section-actions button {
+  font-size: 11px;
+  color: #465779;
+  padding: 4px;
+}
+.config-section-actions .is-collapsed {
+  transform: rotate(180deg);
+}
+.config-section-body[hidden] {
+  display: none;
+}
+.config-section-body > .field {
+  max-width: 900px;
+}
+.reference-editor .config-section-body > .field {
+  max-width: 440px;
+}
+.reference-editor .config-section-body > .field:has(input[placeholder='Add Label']) {
+  max-width: none;
+}
+.config-section-body > .btn {
+  margin-bottom: 18px;
+}
+:is(.origin-editor, .lb-editor, .waf-editor) .config-viewbar {
+  height: 40px;
+  gap: 16px;
+}
+:is(.origin-editor, .lb-editor, .waf-editor) .config-find {
+  margin-left: 0;
+}
+.config-resource-trail {
+  list-style: none;
+  padding: 12px 0 0 12px;
+  margin: 12px 0 0;
+  border-left: 1px solid #d6deeb;
+  color: #465779;
+  font-size: 12px;
+}
+.config-resource-trail li + li {
+  margin-top: 16px;
+  padding-left: 12px;
+  font-weight: 600;
+}
+.origin-server-editor .config-footer {
+  display: grid;
+  grid-template-columns: 252px minmax(0, 1fr) auto;
+}
+.origin-server-editor .config-footer > .config-error {
+  grid-column: 1 / -1;
+}
+.origin-server-editor .config-footer > .btn[type='button'] {
+  justify-self: start;
+}
+:is(.origin-editor, .lb-editor, .waf-editor) .config-header {
+  left: 300px;
+  top: 5px;
+}
+:is(.origin-editor, .lb-editor, .waf-editor) .config-main {
+  padding: 20px 32px 24px;
+}
+:is(.origin-editor, .lb-editor, .waf-editor) .config-resource small {
+  display: none;
+}
+:is(.origin-editor, .lb-editor, .waf-editor) .config-resource strong {
+  font-size: 13px;
+  margin-top: 6px;
+}
+:is(.origin-editor, .lb-editor, .waf-editor) .config-navigation nav button {
+  font-size: 12px;
+  padding: 8px 14px;
+}
+:is(.origin-editor, .lb-editor, .waf-editor) .config-section {
+  padding: 18px 20px 8px;
+  margin-bottom: 16px;
+  border-color: var(--origin-border);
+}
+:is(.origin-editor, .lb-editor, .waf-editor) .config-section-heading {
+  margin-bottom: 14px;
+  min-height: 24px;
+}
+:is(.origin-editor, .lb-editor, .waf-editor) .config-section-heading h2 {
+  font-size: 14px;
+  color: var(--origin-text);
+}
+:is(.origin-editor, .lb-editor, .waf-editor) .field > span {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--origin-text);
+}
+:is(.origin-editor, .lb-editor, .waf-editor) .field {
+  margin-bottom: 14px;
+}
+:is(.origin-editor, .lb-editor, .waf-editor) .config-section input,
+:is(.origin-editor, .lb-editor, .waf-editor) .config-section select {
+  font-size: 12px;
+  min-height: 32px;
+  border-color: #cdd5e2;
+}
+:is(.origin-editor, .lb-editor, .waf-editor) .config-section textarea {
+  font-size: 12px;
+  min-height: 38px;
+}
+:is(.origin-editor, .lb-editor, .waf-editor) .configuration-help,
+:is(.origin-editor, .lb-editor, .waf-editor) .configuration-info {
+  color: var(--origin-muted);
+  font-size: 11px;
+}
+.origin-editor .origin-simulation-note {
+  margin: -2px 0 12px;
+}
+.origin-editor .origin-server-list {
+  padding: 14px 16px;
+  margin-bottom: 18px;
+}
+.origin-editor .origin-server-list > strong {
+  font-size: 12px;
+  color: var(--origin-text);
+  margin-bottom: 8px;
+}
+.origin-editor .origin-server-list > p {
+  margin: 24px 0 16px;
+  color: var(--origin-muted);
+  font-size: 12px;
+}
+.origin-editor .origin-server-list > .btn {
+  min-width: 120px;
+  padding: 5px 12px;
+  font-size: 12px;
+}
+.origin-table-scroll {
+  overflow: auto;
+  max-width: 100%;
+  margin-bottom: 4px;
+}
+.origin-editor .origin-server-list table {
+  min-width: 450px;
+  margin-bottom: 0;
+  table-layout: auto;
+  font-size: 12px;
+}
+.origin-editor .origin-server-list th:first-child {
+  width: 24%;
+}
+.origin-editor .origin-server-list th:last-child {
+  width: 125px;
+}
+.origin-editor .origin-server-list td:last-child {
+  white-space: nowrap;
+}
+.origin-editor .origin-server-list td button {
+  margin-right: 8px;
+  font-size: 12px;
+}
+.origin-editor .origin-server-list th {
+  font-size: 11px;
+}
+.origin-editor .origin-dependent-field {
+  margin-left: 16px;
+  padding-left: 16px;
+  border-left: 1px solid #d6deeb;
+  max-width: 456px;
+}
+:is(.origin-editor, .lb-editor, .waf-editor) .config-footer {
+  font-size: 11px;
+}
+:is(.origin-editor, .lb-editor, .waf-editor) .config-footer .btn {
+  font-size: 12px;
+}
+:is(.origin-editor, .lb-editor, .waf-editor) .config-footer .btn[type='submit'] > svg {
+  display: none;
+}
+@media (max-width: 1100px) {
+  .origin-server-editor .config-footer {
+    grid-template-columns: 210px minmax(0, 1fr) auto;
+  }
+  :is(.origin-editor, .lb-editor, .waf-editor) .config-main {
+    padding: 20px;
+  }
+}
+@media (max-width: 700px) {
+  :is(.origin-editor, .lb-editor, .waf-editor) .config-header {
+    display: flex;
+    position: static;
+    height: 26px;
+    min-height: 26px;
+    flex-shrink: 0;
+    padding: 4px 12px;
+    justify-content: flex-end;
+    background: #fff;
+  }
+  .origin-server-editor .config-footer {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .origin-server-editor .config-footer > .btn:first-of-type {
+    margin-left: 0;
+  }
+  :is(.origin-editor, .lb-editor, .waf-editor) .config-viewbar {
+    flex-wrap: wrap;
+    height: auto;
+    min-height: 44px;
+    padding: 8px 12px;
+    gap: 8px;
+  }
+  :is(.origin-editor, .lb-editor, .waf-editor) .config-view-tabs {
+    height: 28px;
+  }
+  :is(.origin-editor, .lb-editor, .waf-editor) .config-reset-all {
+    font-size: 11px;
+  }
+  :is(.origin-editor, .lb-editor, .waf-editor) .advanced-toggle {
+    margin-left: 0;
+    font-size: 10px;
+  }
+  :is(.origin-editor, .lb-editor, .waf-editor) .config-navigation nav {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+  :is(.origin-editor, .lb-editor, .waf-editor) .config-navigation {
+    max-height: none;
+  }
+  :is(.origin-editor, .lb-editor, .waf-editor) .config-main {
+    padding: 10px;
+  }
+  :is(.origin-editor, .lb-editor, .waf-editor) .config-section {
+    padding: 12px;
+  }
+  :is(.origin-editor, .lb-editor, .waf-editor) .config-section-heading {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  :is(.origin-editor, .lb-editor, .waf-editor) .config-section-heading h2 {
+    font-size: 14px;
+  }
+  :is(.origin-editor, .lb-editor, .waf-editor) .config-section-actions {
+    gap: 2px;
+  }
+  :is(.origin-editor, .lb-editor, .waf-editor) .config-section-actions button {
+    font-size: 10px;
+  }
+  .origin-editor .origin-server-list {
+    padding: 10px;
+  }
+  :is(.origin-editor, .lb-editor, .waf-editor) .config-section-body > .field,
+  .origin-editor .origin-dependent-field {
+    max-width: 100%;
+  }
+  :is(.origin-editor, .lb-editor, .waf-editor) .config-footer {
+    padding: 12px;
+  }
+}

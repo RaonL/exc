@@ -1,0 +1,190 @@
+{
+  "date": "2026-10-20",
+  "tool": "Chrome DevTools MCP 1.11.0 / isolated headless Chrome",
+  "url": "http://127.0.0.1:5173/",
+  "unitTests": {
+    "files": 11,
+    "passed": 166
+  },
+  "build": "passed",
+  "count": 41,
+  "checks": [
+    {
+      "name": "Normal request succeeds before exclusions",
+      "passed": true
+    },
+    {
+      "name": "SQL Injection is blocked before exclusions",
+      "passed": true
+    },
+    {
+      "name": "XSS is blocked before exclusions",
+      "passed": true
+    },
+    {
+      "name": "Command Injection is blocked before exclusions",
+      "passed": true
+    },
+    {
+      "name": "req_id In filters to exactly one Support ID",
+      "passed": true
+    },
+    {
+      "name": "Expanded Information shows the original Support ID",
+      "passed": true
+    },
+    {
+      "name": "Request detail shows method and attack path",
+      "passed": true
+    },
+    {
+      "name": "JSON detail shows the original request evidence",
+      "passed": true
+    },
+    {
+      "name": "Event exclusion auto-fills exact path, domain, method and selected attack",
+      "passed": true
+    },
+    {
+      "name": "Back discards the un-applied rule",
+      "passed": true
+    },
+    {
+      "name": "Unsupported broad regex is rejected",
+      "passed": true
+    },
+    {
+      "name": "Invalid expiration is rejected",
+      "passed": true
+    },
+    {
+      "name": "Rule Apply returns to the exclusion summary",
+      "passed": true
+    },
+    {
+      "name": "Summary Apply adds the rule to the LB draft",
+      "passed": true
+    },
+    {
+      "name": "Parent LB Cancel preserves blocking after both Apply steps",
+      "passed": true
+    },
+    {
+      "name": "Save HTTP Load Balancer commits the exclusion",
+      "passed": true
+    },
+    {
+      "name": "Saved LB exclusion survives reload",
+      "passed": true
+    },
+    {
+      "name": "Selected SQL Injection passes through the saved exception",
+      "passed": true
+    },
+    {
+      "name": "XSS remains blocked after the exception",
+      "passed": true
+    },
+    {
+      "name": "Command Injection remains blocked after the exception",
+      "passed": true
+    },
+    {
+      "name": "XSS on the same excluded path remains blocked",
+      "passed": true
+    },
+    {
+      "name": "SQL Injection on a longer path remains blocked",
+      "passed": true
+    },
+    {
+      "name": "SQL Injection using POST remains blocked",
+      "passed": true
+    },
+    {
+      "name": "Normal requests remain allowed after the exception",
+      "passed": true
+    },
+    {
+      "name": "Original blocked request remains immutable after saving an exception and reloading",
+      "passed": true
+    },
+    {
+      "name": "Event detail tabs support keyboard Home",
+      "passed": true
+    },
+    {
+      "name": "Security Events shows the passed request and exclusion reason",
+      "passed": true
+    },
+    {
+      "name": "Unknown Support ID shows a meaningful empty state",
+      "passed": true
+    },
+    {
+      "name": "Clear All restores the event list",
+      "passed": true
+    },
+    {
+      "name": "An expired saved exclusion no longer bypasses WAF",
+      "passed": true
+    },
+    {
+      "name": "Restoring a future expiration restores the saved exception",
+      "passed": true
+    },
+    {
+      "name": "Another LB sharing the WAF remains protected",
+      "passed": true
+    },
+    {
+      "name": "The shared-by-LBs policy remains in Blocking mode",
+      "passed": true
+    },
+    {
+      "name": "Security Events fits 320px with named controls and internal table scrolling",
+      "passed": true
+    },
+    {
+      "name": "Support ID filter fits the 320px viewport",
+      "passed": true
+    },
+    {
+      "name": "Security Events fits 768px with named controls and internal table scrolling",
+      "passed": true
+    },
+    {
+      "name": "Security Events fits 1024px with named controls and internal table scrolling",
+      "passed": true
+    },
+    {
+      "name": "Security Events fits 1440px with named controls and internal table scrolling",
+      "passed": true
+    },
+    {
+      "name": "Exclusion editor fits 320px with labelled controls and Simulation Mode",
+      "passed": true
+    },
+    {
+      "name": "Final browser session has no errors, warnings or issues",
+      "passed": true
+    },
+    {
+      "name": "No cloud API or attack HTTP requests are sent",
+      "passed": true
+    }
+  ],
+  "console": "No errors, warnings or issues",
+  "network": "No fetch/XHR requests",
+  "bundle": {
+    "beforeInitialKb": 502.36,
+    "afterInitialKb": 496.62,
+    "lazyExclusionKb": 6.42
+  },
+  "notes": [
+    "All mutations used actual MCP click/fill/navigation/keyboard tools; evaluate_script read DOM only.",
+    "The initial simultaneous modal focus issue was fixed; rule, summary and parent are now shown sequentially.",
+    "Automation assertions were adjusted for split accessibility text nodes and focused tab annotations.",
+    "Exceptions are stored on the LB, scoped by host/path/method/attack type, and preserve historical console event results."
+  ]
+}

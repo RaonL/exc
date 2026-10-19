@@ -1,0 +1,156 @@
+{
+  "date": "2026-10-19",
+  "browser": "Isolated headless Chrome via chrome-devtools-mcp 1.11.0",
+  "application": "http://127.0.0.1:5173/",
+  "unitTests": {
+    "files": 7,
+    "passed": 133
+  },
+  "build": "passed",
+  "checks": [
+    {
+      "result": "passed",
+      "description": "Saving with collapsed required fields reopens Metadata"
+    },
+    {
+      "result": "passed",
+      "description": "Invalid form remains open"
+    },
+    {
+      "result": "passed",
+      "description": "Create cancel does not add a resource"
+    },
+    {
+      "result": "passed",
+      "description": "Invalid DNS is rejected before Apply"
+    },
+    {
+      "result": "passed",
+      "description": "Pool created through the console menu"
+    },
+    {
+      "result": "passed",
+      "description": "Created pool survives reload"
+    },
+    {
+      "result": "passed",
+      "description": "Metadata reset preserves unrelated port draft"
+    },
+    {
+      "result": "passed",
+      "description": "Nested Back discards server edits"
+    },
+    {
+      "result": "passed",
+      "description": "Parent Cancel discards an applied child draft"
+    },
+    {
+      "result": "passed",
+      "description": "Cancelled edit preserves the saved port"
+    },
+    {
+      "result": "passed",
+      "description": "Reset All Fields restores opened configuration"
+    },
+    {
+      "result": "passed",
+      "description": "Saved server and port edits survive reload"
+    },
+    {
+      "result": "passed",
+      "description": "Saved metadata survives reload"
+    },
+    {
+      "result": "passed",
+      "description": "JSON view uses the same saved configuration"
+    },
+    {
+      "result": "passed",
+      "description": "Section collapse works"
+    },
+    {
+      "result": "passed",
+      "description": "Section navigation expands its target"
+    },
+    {
+      "result": "passed",
+      "description": "Keyboard End selects the JSON tab"
+    },
+    {
+      "result": "passed",
+      "description": "Keyboard Home restores the Form tab"
+    },
+    {
+      "result": "passed",
+      "description": "No page overflow at 320px"
+    },
+    {
+      "result": "passed",
+      "description": "Named form controls at 320px"
+    },
+    {
+      "result": "passed",
+      "description": "Simulation Mode remains visible at 320px"
+    },
+    {
+      "result": "passed",
+      "description": "Narrow origin table scrolls inside its region"
+    },
+    {
+      "result": "passed",
+      "description": "No page overflow at 768px"
+    },
+    {
+      "result": "passed",
+      "description": "Named form controls at 768px"
+    },
+    {
+      "result": "passed",
+      "description": "No page overflow at 1024px"
+    },
+    {
+      "result": "passed",
+      "description": "Named form controls at 1024px"
+    },
+    {
+      "result": "passed",
+      "description": "No page overflow at 1440px"
+    },
+    {
+      "result": "passed",
+      "description": "Named form controls at 1440px"
+    },
+    {
+      "result": "passed",
+      "description": "Invalid address still rejected after UI refinement"
+    },
+    {
+      "result": "passed",
+      "description": "Correcting an address clears the stale validation message"
+    },
+    {
+      "result": "passed",
+      "description": "Nested dialog fits 320px and has unique accessible IDs"
+    },
+    {
+      "result": "passed",
+      "description": "Editing an existing pool preserves simulated health and LB associations"
+    },
+    {
+      "result": "passed",
+      "description": "Origin resources remain isolated by Namespace"
+    },
+    {
+      "result": "passed",
+      "description": "Final reference preview Cancel leaves no extra resource"
+    },
+    {
+      "result": "passed",
+      "description": "No browser console errors, warnings or field issues in the final flow"
+    },
+    {
+      "result": "passed",
+      "description": "Console actions make no external API requests"
+    }
+  ]
+}

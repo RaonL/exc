@@ -1,0 +1,180 @@
+{
+  "date": "2026-10-20",
+  "tool": "Chrome DevTools MCP 1.11.0 / isolated headless Chrome",
+  "url": "http://127.0.0.1:5173/",
+  "unitTests": {
+    "files": 9,
+    "passed": 152
+  },
+  "build": "passed",
+  "checks": [
+    {
+      "name": "Cancelled policy is not created",
+      "passed": true
+    },
+    {
+      "name": "Policy created from App Firewall console menu",
+      "passed": true
+    },
+    {
+      "name": "Manage Configuration opens saved policy read-only",
+      "passed": true
+    },
+    {
+      "name": "Created mode and Custom accuracy survive reload",
+      "passed": true
+    },
+    {
+      "name": "LB policy attachment survives reload",
+      "passed": true
+    },
+    {
+      "name": "Monitoring allows normal requests with HTTP 200",
+      "passed": true
+    },
+    {
+      "name": "Monitoring reports SQL Injection without blocking",
+      "passed": true
+    },
+    {
+      "name": "Monitoring reports XSS without blocking",
+      "passed": true
+    },
+    {
+      "name": "Monitoring reports Command Injection without blocking",
+      "passed": true
+    },
+    {
+      "name": "Cancelling a mode edit preserves the saved policy",
+      "passed": true
+    },
+    {
+      "name": "Cancelled Blocking draft does not change request enforcement",
+      "passed": true
+    },
+    {
+      "name": "Saved Blocking mode survives reload",
+      "passed": true
+    },
+    {
+      "name": "Blocking still allows normal requests",
+      "passed": true
+    },
+    {
+      "name": "Blocking rejects SQL Injection with HTTP 403 and Support ID",
+      "passed": true
+    },
+    {
+      "name": "Blocking rejects XSS with HTTP 403 and Support ID",
+      "passed": true
+    },
+    {
+      "name": "Blocking rejects Command Injection with HTTP 403 and Support ID",
+      "passed": true
+    },
+    {
+      "name": "Security Events filters Detected request by Support ID",
+      "passed": true
+    },
+    {
+      "name": "Event detail retains Detected policy, action and Support ID",
+      "passed": true
+    },
+    {
+      "name": "Event JSON preserves request evidence for Detected",
+      "passed": true
+    },
+    {
+      "name": "Security Events filters Blocked request by Support ID",
+      "passed": true
+    },
+    {
+      "name": "Event detail retains Blocked policy, action and Support ID",
+      "passed": true
+    },
+    {
+      "name": "Event JSON preserves request evidence for Blocked",
+      "passed": true
+    },
+    {
+      "name": "Request events persist across reload",
+      "passed": true
+    },
+    {
+      "name": "Reset restores opened enforcement mode without saving",
+      "passed": true
+    },
+    {
+      "name": "Saved custom response and Support ID are shown by the console app",
+      "passed": true
+    },
+    {
+      "name": "Default blocking response restores HTTP 403 after reload",
+      "passed": true
+    },
+    {
+      "name": "Policies are scoped to their namespace",
+      "passed": true
+    },
+    {
+      "name": "Switching back restores the saved policy",
+      "passed": true
+    },
+    {
+      "name": "Enforcement section Reset restores its saved mode",
+      "passed": true
+    },
+    {
+      "name": "Policy section Reset restores saved Custom settings",
+      "passed": true
+    },
+    {
+      "name": "Policy section can collapse",
+      "passed": true
+    },
+    {
+      "name": "Navigation reopens the collapsed policy section",
+      "passed": true
+    },
+    {
+      "name": "JSON view shows the saved policy model",
+      "passed": true
+    },
+    {
+      "name": "Keyboard Home returns from JSON to Form",
+      "passed": true
+    },
+    {
+      "name": "WAF editor fits 320px with named controls and Simulation Mode",
+      "passed": true
+    },
+    {
+      "name": "WAF editor fits 768px with named controls and Simulation Mode",
+      "passed": true
+    },
+    {
+      "name": "WAF editor fits 1024px with named controls and Simulation Mode",
+      "passed": true
+    },
+    {
+      "name": "WAF editor fits 1440px with named controls and Simulation Mode",
+      "passed": true
+    },
+    {
+      "name": "Browser console has no errors, warnings or issues",
+      "passed": true
+    },
+    {
+      "name": "No external API requests are made",
+      "passed": true
+    }
+  ],
+  "count": 40,
+  "console": "No errors, warnings or issues",
+  "network": "No fetch/XHR requests",
+  "notes": [
+    "All mutations used browser click/fill/navigation/keyboard tools. evaluate_script read DOM and geometry only.",
+    "Browser automation resumed after accessible-name, viewport minimum and response-format assertion adjustments; all final checkpoints passed.",
+    "Monitoring and Blocking request events retain their original results after later mode changes."
+  ]
+}

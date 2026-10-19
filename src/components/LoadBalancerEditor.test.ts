@@ -1,0 +1,208 @@
+import { afterEach, beforeEach, expect, it, vi } from 'vitest';
+import { act, createElement } from 'react';
+import { createRoot, type Root } from 'react-dom/client';
+import { LBForm } from './LoadBalancerEditor';
+import type { LB } from '../types';
+import { sharedBaseWaf } from '../lib/console-lab';
+import { useConsole } from '../store';
+
+let root: Root;
+let close: ReturnType<typeof vi.fn>;
+const button = (text: string) => {
+  const found = [...document.querySelectorAll('button')].find(
+    (b) => b.textContent?.trim() === text || b.getAttribute('aria-label') === text,
+  );
+  expect(found, `button ${text}`).toBeDefined();
+  return found!;
+};
+const click = async (text: string) => act(async () => button(text).click());
+const field = (name: string) => {
+  const label = [...document.querySelectorAll('label')].find(
+    (l) => l.querySelector('span')?.textContent?.replace(/\s+/g, ' ').trim() === name,
+  );
+  return label!.querySelector('input,select,textarea') as HTMLInputElement;
+};
+const fill = async (element: HTMLInputElement, value: string) => {
+  await act(async () => {
+    const prototype =
+      element.tagName === 'SELECT'
+        ? HTMLSelectElement.prototype
+        : element.tagName === 'TEXTAREA'
+          ? HTMLTextAreaElement.prototype
+          : HTMLInputElement.prototype;
+    Object.getOwnPropertyDescriptor(prototype, 'value')!.set!.call(element, value);
+    element.dispatchEvent(
+      new Event(element.tagName === 'SELECT' ? 'change' : 'input', { bubbles: true }),
+    );
+  });
+};
+beforeEach(() => {
+  (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
+  localStorage.clear();
+  useConsole.getState().reset();
+  close = vi.fn();
+  const container = document.createElement('div');
+  document.body.append(container);
+  root = createRoot(container);
+  vi.stubGlobal(
+    'ResizeObserver',
+    class {
+      observe() {}
+      unobserve() {}
+      disconnect() {}
+    },
+  );
+  Object.defineProperty(Element.prototype, 'scrollIntoView', {
+    configurable: true,
+    value: vi.fn(),
+  });
+});
+afterEach(async () => {
+  await act(async () => root.unmount());
+  document.body.replaceChildren();
+  vi.restoreAllMocks();
+  vi.unstubAllGlobals();
+});
+
+async function render(initial?: LB, viewOnly = false) {
+  await act(async () =>
+    root.render(createElement(LBForm, { initial, viewOnly, close, notify: vi.fn() })),
+  );
+}
+function domain(index = 1) {
+  return document.querySelector(`[aria-label="Domain ${index}"]`) as HTMLInputElement;
+}
+async function createDraft() {
+  await render();
+  await fill(field('Name *'), 'lab1-test-lb');
+  await fill(domain(), 'lab1-test.lab-sec.f5demos.com');
+  await fill(field('Load Balancer Type'), 'HTTP');
+  const add = document.querySelector('[data-section="origins"] .btn') as HTMLButtonElement;
+  await act(async () => add.click());
+  await fill(field('Origin Pool *'), useConsole.getState().origins[0].id);
+  await click('Apply');
+}
+
+it('keeps WAF Enable separate from policy selection and rejects an empty selection', async () => {
+  await createDraft();
+  await fill(field('Web Application Firewall (WAF)'), 'Enable');
+  expect(field('Enable *').value).toBe('');
+  await click('JSON');
+  await click('Add HTTP Load Balancer');
+  expect(document.querySelector('[role="alert"]')?.textContent).toContain(
+    'Web Application Firewall:',
+  );
+  expect(useConsole.getState().lbs.some((l) => l.name === 'lab1-test-lb')).toBe(false);
+  expect(close).not.toHaveBeenCalled();
+});
+
+it('creates and restores HTTP/80, DNS, origin and shared WAF from the same form', async () => {
+  await createDraft();
+  const manageDns = [...document.querySelectorAll('label')]
+    .find((l) => l.textContent?.includes('Automatically Manage DNS Records'))!
+    .querySelector('input')!;
+  await act(async () => manageDns.click());
+  await fill(field('Web Application Firewall (WAF)'), 'Enable');
+  await fill(field('Enable *'), sharedBaseWaf.id);
+  await click('Add HTTP Load Balancer');
+  await act(async () => {
+    await useConsole.persist.rehydrate();
+  });
+  expect(useConsole.getState().lbs.find((l) => l.name === 'lab1-test-lb')).toMatchObject({
+    protocol: 'HTTP',
+    wafId: sharedBaseWaf.id,
+    originId: useConsole.getState().origins[0].id,
+    config: { listenPort: 80, manageDns: true, vip: 'Internet' },
+  });
+  expect(close).toHaveBeenCalledOnce();
+});
+
+it('resets the opened LB draft including an enabled but unselected WAF', async () => {
+  const initial = useConsole.getState().lbs[0];
+  await render(initial);
+  await fill(field('Name *'), 'discarded-name');
+  await fill(domain(), 'discarded.example.com');
+  await fill(field('Web Application Firewall (WAF)'), 'Disable');
+  await click('Reset all configuration fields');
+  expect(field('Name *').value).toBe(initial.name);
+  expect(domain().value).toBe(initial.domains[0]);
+  expect(field('Enable *').value).toBe(initial.wafId);
+  expect(close).not.toHaveBeenCalled();
+});
+
+it('requires Apply for origin changes and discards the parent draft on Cancel', async () => {
+  const initial = useConsole.getState().lbs[0];
+  await render(initial);
+  const edit = document.querySelector(
+    '[data-section="origins"] .resource-link',
+  ) as HTMLButtonElement;
+  await act(async () => edit.click());
+  await fill(field('Origin Pool *'), useConsole.getState().origins[1].id);
+  await click('Back');
+  expect(document.querySelector('[data-section="origins"]')?.textContent).toContain(
+    useConsole.getState().origins[0].name,
+  );
+  await fill(field('Name *'), 'cancelled-lb');
+  await click('Cancel and Exit');
+  expect(useConsole.getState().lbs.find((l) => l.id === initial.id)).toEqual(initial);
+});
+
+it('rejects a policy from another namespace even if loaded into an old draft', async () => {
+  const initial = useConsole.getState().lbs[0];
+  useConsole
+    .getState()
+    .saveWaf({ id: 'foreign-waf', namespace: 'staging', name: 'foreign-waf', mode: 'Blocking' });
+  await render({ ...initial, wafId: 'foreign-waf' });
+  await click('JSON');
+  await click('Save HTTP Load Balancer');
+  expect(useConsole.getState().lbs.find((l) => l.id === initial.id)?.wafId).toBe(initial.wafId);
+  expect(close).not.toHaveBeenCalled();
+});
+
+it('retains identity, request totals and advanced settings when saving basic edits', async () => {
+  const initial = useConsole.getState().lbs[0];
+  await render(initial);
+  await fill(field('Description'), 'Updated from the LB console');
+  await click('Save HTTP Load Balancer');
+  const saved = useConsole.getState().lbs.find((l) => l.id === initial.id)!;
+  expect(saved).toMatchObject({
+    ...initial,
+    config: { ...initial.config, description: 'Updated from the LB console' },
+  });
+  expect(saved.requests).toBe(initial.requests);
+});
+
+it('opens configuration read-only and enters edit mode without saving', async () => {
+  await render(useConsole.getState().lbs[0], true);
+  expect(field('Name *').matches(':disabled')).toBe(true);
+  await click('Edit Configuration');
+  expect(field('Name *').matches(':disabled')).toBe(false);
+  expect(close).not.toHaveBeenCalled();
+});
+
+it('keeps saved domain arrays unchanged while editing, removing and cancelling rows', async () => {
+  const original = structuredClone(useConsole.getState().lbs[0]);
+  await render(useConsole.getState().lbs[0]);
+  await fill(domain(), 'draft-domain.example.com');
+  expect(useConsole.getState().lbs.find((l) => l.id === original.id)?.domains).toEqual(
+    original.domains,
+  );
+  await click('Add domain');
+  await fill(domain(2), 'second.example.com');
+  const remove = document.querySelector(
+    '[data-section="domains"] .resource-link',
+  ) as HTMLButtonElement;
+  await act(async () => remove.click());
+  expect(domain().value).toBe('second.example.com');
+  await click('Cancel and Exit');
+  expect(useConsole.getState().lbs.find((l) => l.id === original.id)).toEqual(original);
+});
+
+it('clears an outdated domain validation error when the draft is corrected', async () => {
+  await render(useConsole.getState().lbs[0]);
+  await fill(domain(), 'https://invalid.example.com');
+  await click('Save HTTP Load Balancer');
+  expect(document.querySelector('[role="alert"]')?.textContent).toContain('Domains:');
+  await fill(domain(), 'corrected.example.com');
+  expect(document.querySelector('[role="alert"]')).toBeNull();
+});
