@@ -24,13 +24,15 @@ beforeEach(() => {
 });
 describe('official Class 1–8 catalog', () => {
   it('has 34 unique units, all 8 classes and valid canonical official paths', () => {
-    expect(trainingLabs).toHaveLength(34);
-    expect(new Set(trainingLabs.map((l) => l.id)).size).toBe(34);
+    expect(trainingLabs.filter((l) => l.classId <= 8)).toHaveLength(34);
+    expect(new Set(trainingLabs.map((l) => l.id)).size).toBe(39);
     expect(classes.map((c) => trainingLabs.filter((l) => l.classId === c.id).length)).toEqual([
-      4, 5, 3, 7, 4, 4, 4, 3,
+      4, 5, 3, 7, 4, 4, 4, 3, 5,
     ]);
     for (const unit of trainingLabs) {
-      expect(new URL(unit.source).hostname).toBe('clouddocs.f5.com');
+      expect(new URL(unit.source).hostname).toBe(
+        unit.classId === 9 ? 'github.com' : 'clouddocs.f5.com',
+      );
       expect(unit.source.match(/https:/g)).toHaveLength(1);
       expect(unit.steps).toHaveLength(4);
     }

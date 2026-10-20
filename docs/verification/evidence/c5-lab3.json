@@ -1,0 +1,1109 @@
+{
+  "lab": "https://clouddocs.f5.com/training/community/f5xc/html/class5/lab3.html",
+  "baseline": {
+    "at": 1792460049954,
+    "codes": [
+      200,
+      200
+    ]
+  },
+  "verification": {
+    "at": 1792460051516,
+    "fingerprint": "{\"lb\":{\"id\":\"training-c5-lab3-lb\",\"namespace\":\"training-c5-lab3\",\"name\":\"c5-lab3-lb\",\"domains\":[\"c5-lab3.example.com\"],\"protocol\":\"HTTPS\",\"originId\":\"training-c5-lab3-aws\",\"wafId\":\"\",\"apiProtection\":false,\"botDefense\":true,\"ddosProtection\":false,\"requests\":0,\"createdAt\":\"\",\"config\":{\"description\":\"\",\"labels\":\"\",\"vip\":\"Internet\",\"vipAddress\":\"\",\"siteId\":\"\",\"certificate\":\"Automatic\",\"certificateRef\":\"\",\"listenPort\":443,\"redirectHttps\":true,\"hsts\":false,\"tlsLevel\":\"High\",\"routes\":[],\"exclusions\":[],\"cdn\":false,\"timeout\":30,\"apiDiscovery\":false,\"manageDns\":false,\"listenPortChoice\":\"HTTP Listen Port\",\"originWeight\":1,\"originPriority\":1}},\"waf\":{\"id\":\"training-c5-lab3-waf\",\"namespace\":\"training-c5-lab3\",\"name\":\"c5-lab3-appfw\",\"mode\":\"Monitoring\"},\"origins\":[{\"id\":\"training-c5-lab3-aws\",\"namespace\":\"training-c5-lab3\",\"name\":\"aws-primary\",\"endpoint\":\"aws-origin.example.com\",\"port\":80,\"healthy\":true,\"config\":{\"labels\":\"\",\"description\":\"\",\"type\":\"Public DNS\",\"siteId\":\"\",\"network\":\"Inside Network\",\"algorithm\":\"Round Robin\",\"tls\":false,\"sni\":\"\",\"healthCheck\":\"HTTP\",\"healthPath\":\"/health\",\"interval\":15,\"timeout\":3,\"healthyThreshold\":2,\"unhealthyThreshold\":3}},{\"id\":\"training-c5-lab3-azure\",\"namespace\":\"training-c5-lab3\",\"name\":\"azure-canary\",\"endpoint\":\"azure-origin.example.com\",\"port\":80,\"healthy\":true,\"config\":{\"labels\":\"\",\"description\":\"\",\"type\":\"Public DNS\",\"siteId\":\"\",\"network\":\"Inside Network\",\"algorithm\":\"Round Robin\",\"tls\":false,\"sni\":\"\",\"healthCheck\":\"HTTP\",\"healthPath\":\"/health\",\"interval\":15,\"timeout\":3,\"healthyThreshold\":2,\"unhealthyThreshold\":3}}],\"ce\":{\"id\":\"training-c5-lab3-ce\",\"namespace\":\"training-c5-lab3\",\"name\":\"c5-lab3-customer-edge\",\"kind\":\"CE\",\"region\":\"AWS / ap-northeast-2 (demo)\",\"online\":true,\"address\":\"192.0.2.10\"},\"controls\":{\"policyMode\":\"Disabled\",\"headerName\":\"x-f5-appworld\",\"headerValue\":\"RjUtQXBwd29ybGQ=\",\"allowedCountry\":\"South Korea\",\"deniedCountry\":\"Fiji\",\"blockBadReputation\":false,\"allowedPath\":\"/\",\"canary\":false,\"canaryHeader\":\"X-App-Version\",\"canaryValue\":\"green\",\"rewriteLogin\":false,\"namespaceHeader\":false,\"inventory\":false,\"apiDeny\":false,\"deniedEndpoint\":\"/api/customerlookup/getbydob\",\"schemaValidation\":false,\"apiDiscovery\":false,\"connector\":false,\"rateLimit\":false,\"rate\":3,\"rateWindow\":60,\"ratePath\":\"/api/customerlookup/getbyname\",\"rateMethod\":\"GET\",\"botMode\":\"Flag\",\"botPath\":\"/user/vipsignin\",\"botExtraPath\":\"\",\"botMethod\":\"POST\",\"telemetry\":true,\"maliciousDetection\":false,\"maliciousMitigation\":false,\"segment\":false,\"segmentPeer\":false,\"firewall\":false,\"failover\":false,\"overlapVip\":false,\"scanProfile\":false,\"scanSchedule\":\"Manual\",\"source\":\"{\\n  \\\"name\\\": \\\"xc-training-app\\\",\\n  \\\"routes\\\": [\\n    {\\n      \\\"method\\\": \\\"GET\\\",\\n      \\\"path\\\": \\\"/\\\",\\n      \\\"body\\\": \\\"Hello XC\\\"\\n    },\\n    {\\n      \\\"method\\\": \\\"GET\\\",\\n      \\\"path\\\": \\\"/about\\\",\\n      \\\"body\\\": \\\"About XC Training App\\\"\\n    },\\n    {\\n      \\\"method\\\": \\\"GET\\\",\\n      \\\"path\\\": \\\"/login\\\",\\n      \\\"body\\\": \\\"Demo login form\\\"\\n    },\\n    {\\n      \\\"method\\\": \\\"GET\\\",\\n      \\\"path\\\": \\\"/contact\\\",\\n      \\\"body\\\": \\\"Demo contact form\\\"\\n    },\\n    {\\n      \\\"method\\\": \\\"POST\\\",\\n      \\\"path\\\": \\\"/login\\\",\\n      \\\"body\\\": \\\"Demo login\\\"\\n    },\\n    {\\n      \\\"method\\\": \\\"POST\\\",\\n      \\\"path\\\": \\\"/contact\\\",\\n      \\\"body\\\": \\\"Demo contact\\\"\\n    }\\n  ]\\n}\",\"deployedSource\":\"\",\"artifact\":\"\",\"pipeline\":[]}}",
+    "checks": [
+      {
+        "name": "보호 전 기준 요청 기록",
+        "pass": true,
+        "expected": "기준 요청 실행",
+        "actual": "200 / 200"
+      },
+      {
+        "name": "LB → Origin 연결",
+        "pass": true,
+        "expected": "유효한 Origin과 Domain",
+        "actual": "c5-lab3.example.com → training-c5-lab3-aws"
+      },
+      {
+        "name": "Synthetic telemetry #1",
+        "pass": true,
+        "expected": "HTTP 200",
+        "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+      },
+      {
+        "name": "Synthetic telemetry #2",
+        "pass": true,
+        "expected": "HTTP 200",
+        "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+      },
+      {
+        "name": "Synthetic telemetry #3",
+        "pass": true,
+        "expected": "HTTP 200",
+        "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+      },
+      {
+        "name": "Synthetic telemetry #4",
+        "pass": true,
+        "expected": "HTTP 200",
+        "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+      },
+      {
+        "name": "Synthetic telemetry #5",
+        "pass": true,
+        "expected": "HTTP 200",
+        "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+      },
+      {
+        "name": "Synthetic telemetry #6",
+        "pass": true,
+        "expected": "HTTP 200",
+        "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+      },
+      {
+        "name": "Synthetic telemetry #7",
+        "pass": true,
+        "expected": "HTTP 200",
+        "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+      },
+      {
+        "name": "Synthetic telemetry #8",
+        "pass": true,
+        "expected": "HTTP 200",
+        "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+      },
+      {
+        "name": "Synthetic telemetry #9",
+        "pass": true,
+        "expected": "HTTP 200",
+        "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+      },
+      {
+        "name": "Synthetic telemetry #10",
+        "pass": true,
+        "expected": "HTTP 200",
+        "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+      },
+      {
+        "name": "Synthetic telemetry #11",
+        "pass": true,
+        "expected": "HTTP 200",
+        "actual": "HTTP 200 · Detected · aws-primary · Bot profile: synthetic telemetry classified BadBot"
+      },
+      {
+        "name": "Synthetic telemetry #12",
+        "pass": true,
+        "expected": "HTTP 200",
+        "actual": "HTTP 200 · Detected · aws-primary · Bot profile: synthetic telemetry classified BadBot"
+      }
+    ]
+  },
+  "runtime": {
+    "now": 1792460051249,
+    "buckets": {},
+    "identities": {
+      "198.51.100.42|audit-human": 12,
+      "198.51.100.42|audit-normal": 1
+    },
+    "logs": [
+      {
+        "id": "7f3b0918-352b-439b-a0e3-5dfbeffc9221",
+        "trace": [
+          "START local simulation · support_id=7f3b0918-352b-439b-a0e3-5dfbeffc9221",
+          "REQUEST POST /user/vipsignin attack_input=Human-like bot client=198.51.100.42/automation-ja4",
+          "CONTEXT namespace=training-c5-lab3 lb=c5-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Flag rate=Disabled",
+          "CLASSIFICATION BadBot · 합성 입력 기반",
+          "RESPONSE status=200 action=Detected reason=Bot profile: synthetic telemetry classified BadBot",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460051249,
+        "request": {
+          "method": "POST",
+          "path": "/user/vipsignin",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "automation-ja4",
+          "attack": "Human-like bot",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Detected",
+        "reason": "Bot profile: synthetic telemetry classified BadBot",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/user/vipsignin",
+          "x-demo-bot": "BadBot"
+        },
+        "body": "{\"simulation\":true,\"message\":\"Synthetic login accepted\",\"user\":\"demo-traveler\",\"session\":\"not-a-real-session\"}"
+      },
+      {
+        "id": "7743006c-bac7-4be2-8b05-6ec45e5d0b39",
+        "trace": [
+          "START local simulation · support_id=7743006c-bac7-4be2-8b05-6ec45e5d0b39",
+          "REQUEST POST /user/vipsignin attack_input=Human-like bot client=198.51.100.42/automation-ja4",
+          "CONTEXT namespace=training-c5-lab3 lb=c5-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Flag rate=Disabled",
+          "CLASSIFICATION BadBot · 합성 입력 기반",
+          "RESPONSE status=200 action=Detected reason=Bot profile: synthetic telemetry classified BadBot",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460051249,
+        "request": {
+          "method": "POST",
+          "path": "/user/vipsignin",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "automation-ja4",
+          "attack": "Human-like bot",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Detected",
+        "reason": "Bot profile: synthetic telemetry classified BadBot",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/user/vipsignin",
+          "x-demo-bot": "BadBot"
+        },
+        "body": "{\"simulation\":true,\"message\":\"Synthetic login accepted\",\"user\":\"demo-traveler\",\"session\":\"not-a-real-session\"}"
+      },
+      {
+        "id": "01952b4e-9b06-4189-8bfd-23b9f8362b00",
+        "trace": [
+          "START local simulation · support_id=01952b4e-9b06-4189-8bfd-23b9f8362b00",
+          "REQUEST POST /user/vipsignin attack_input=Human-like bot client=198.51.100.42/automation-ja4",
+          "CONTEXT namespace=training-c5-lab3 lb=c5-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Flag rate=Disabled",
+          "CLASSIFICATION Human · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460051249,
+        "request": {
+          "method": "POST",
+          "path": "/user/vipsignin",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "automation-ja4",
+          "attack": "Human-like bot",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/user/vipsignin",
+          "x-demo-bot": "Human"
+        },
+        "body": "{\"simulation\":true,\"message\":\"Synthetic login accepted\",\"user\":\"demo-traveler\",\"session\":\"not-a-real-session\"}"
+      },
+      {
+        "id": "29b8fdf7-53f2-4ed8-89d8-ad5a62e354fc",
+        "trace": [
+          "START local simulation · support_id=29b8fdf7-53f2-4ed8-89d8-ad5a62e354fc",
+          "REQUEST POST /user/vipsignin attack_input=Human-like bot client=198.51.100.42/automation-ja4",
+          "CONTEXT namespace=training-c5-lab3 lb=c5-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Flag rate=Disabled",
+          "CLASSIFICATION Human · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460051249,
+        "request": {
+          "method": "POST",
+          "path": "/user/vipsignin",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "automation-ja4",
+          "attack": "Human-like bot",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/user/vipsignin",
+          "x-demo-bot": "Human"
+        },
+        "body": "{\"simulation\":true,\"message\":\"Synthetic login accepted\",\"user\":\"demo-traveler\",\"session\":\"not-a-real-session\"}"
+      },
+      {
+        "id": "392379f2-3269-4398-93ee-ba44fbd1f104",
+        "trace": [
+          "START local simulation · support_id=392379f2-3269-4398-93ee-ba44fbd1f104",
+          "REQUEST POST /user/vipsignin attack_input=Human-like bot client=198.51.100.42/automation-ja4",
+          "CONTEXT namespace=training-c5-lab3 lb=c5-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Flag rate=Disabled",
+          "CLASSIFICATION Human · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460051249,
+        "request": {
+          "method": "POST",
+          "path": "/user/vipsignin",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "automation-ja4",
+          "attack": "Human-like bot",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/user/vipsignin",
+          "x-demo-bot": "Human"
+        },
+        "body": "{\"simulation\":true,\"message\":\"Synthetic login accepted\",\"user\":\"demo-traveler\",\"session\":\"not-a-real-session\"}"
+      },
+      {
+        "id": "77a5c8c1-facb-4049-9059-5e7cdb10fc10",
+        "trace": [
+          "START local simulation · support_id=77a5c8c1-facb-4049-9059-5e7cdb10fc10",
+          "REQUEST POST /user/vipsignin attack_input=Human-like bot client=198.51.100.42/automation-ja4",
+          "CONTEXT namespace=training-c5-lab3 lb=c5-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Flag rate=Disabled",
+          "CLASSIFICATION Human · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460051249,
+        "request": {
+          "method": "POST",
+          "path": "/user/vipsignin",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "automation-ja4",
+          "attack": "Human-like bot",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/user/vipsignin",
+          "x-demo-bot": "Human"
+        },
+        "body": "{\"simulation\":true,\"message\":\"Synthetic login accepted\",\"user\":\"demo-traveler\",\"session\":\"not-a-real-session\"}"
+      },
+      {
+        "id": "8561861d-227a-4bd9-96cd-805362ad3fca",
+        "trace": [
+          "START local simulation · support_id=8561861d-227a-4bd9-96cd-805362ad3fca",
+          "REQUEST POST /user/vipsignin attack_input=Human-like bot client=198.51.100.42/automation-ja4",
+          "CONTEXT namespace=training-c5-lab3 lb=c5-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Flag rate=Disabled",
+          "CLASSIFICATION Human · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460051249,
+        "request": {
+          "method": "POST",
+          "path": "/user/vipsignin",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "automation-ja4",
+          "attack": "Human-like bot",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/user/vipsignin",
+          "x-demo-bot": "Human"
+        },
+        "body": "{\"simulation\":true,\"message\":\"Synthetic login accepted\",\"user\":\"demo-traveler\",\"session\":\"not-a-real-session\"}"
+      },
+      {
+        "id": "b3aa1c8b-5822-4f6f-8937-4499f242fcad",
+        "trace": [
+          "START local simulation · support_id=b3aa1c8b-5822-4f6f-8937-4499f242fcad",
+          "REQUEST POST /user/vipsignin attack_input=Human-like bot client=198.51.100.42/automation-ja4",
+          "CONTEXT namespace=training-c5-lab3 lb=c5-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Flag rate=Disabled",
+          "CLASSIFICATION Human · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460051249,
+        "request": {
+          "method": "POST",
+          "path": "/user/vipsignin",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "automation-ja4",
+          "attack": "Human-like bot",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/user/vipsignin",
+          "x-demo-bot": "Human"
+        },
+        "body": "{\"simulation\":true,\"message\":\"Synthetic login accepted\",\"user\":\"demo-traveler\",\"session\":\"not-a-real-session\"}"
+      },
+      {
+        "id": "06eb29a8-875a-4e05-8ec4-444c7cdeaad5",
+        "trace": [
+          "START local simulation · support_id=06eb29a8-875a-4e05-8ec4-444c7cdeaad5",
+          "REQUEST POST /user/vipsignin attack_input=Human-like bot client=198.51.100.42/automation-ja4",
+          "CONTEXT namespace=training-c5-lab3 lb=c5-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Flag rate=Disabled",
+          "CLASSIFICATION Human · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460051249,
+        "request": {
+          "method": "POST",
+          "path": "/user/vipsignin",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "automation-ja4",
+          "attack": "Human-like bot",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/user/vipsignin",
+          "x-demo-bot": "Human"
+        },
+        "body": "{\"simulation\":true,\"message\":\"Synthetic login accepted\",\"user\":\"demo-traveler\",\"session\":\"not-a-real-session\"}"
+      },
+      {
+        "id": "5143a1cb-3271-4d2c-93bc-57866a004bd5",
+        "trace": [
+          "START local simulation · support_id=5143a1cb-3271-4d2c-93bc-57866a004bd5",
+          "REQUEST POST /user/vipsignin attack_input=Human-like bot client=198.51.100.42/automation-ja4",
+          "CONTEXT namespace=training-c5-lab3 lb=c5-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Flag rate=Disabled",
+          "CLASSIFICATION Human · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460051249,
+        "request": {
+          "method": "POST",
+          "path": "/user/vipsignin",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "automation-ja4",
+          "attack": "Human-like bot",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/user/vipsignin",
+          "x-demo-bot": "Human"
+        },
+        "body": "{\"simulation\":true,\"message\":\"Synthetic login accepted\",\"user\":\"demo-traveler\",\"session\":\"not-a-real-session\"}"
+      },
+      {
+        "id": "4cb81611-4827-40f5-bebb-2da5f122eea3",
+        "trace": [
+          "START local simulation · support_id=4cb81611-4827-40f5-bebb-2da5f122eea3",
+          "REQUEST POST /user/vipsignin attack_input=Human-like bot client=198.51.100.42/automation-ja4",
+          "CONTEXT namespace=training-c5-lab3 lb=c5-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Flag rate=Disabled",
+          "CLASSIFICATION Human · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460051249,
+        "request": {
+          "method": "POST",
+          "path": "/user/vipsignin",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "automation-ja4",
+          "attack": "Human-like bot",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/user/vipsignin",
+          "x-demo-bot": "Human"
+        },
+        "body": "{\"simulation\":true,\"message\":\"Synthetic login accepted\",\"user\":\"demo-traveler\",\"session\":\"not-a-real-session\"}"
+      },
+      {
+        "id": "31b391e8-7010-498e-9630-7cfbf8b294cf",
+        "trace": [
+          "START local simulation · support_id=31b391e8-7010-498e-9630-7cfbf8b294cf",
+          "REQUEST POST /user/vipsignin attack_input=Human-like bot client=198.51.100.42/automation-ja4",
+          "CONTEXT namespace=training-c5-lab3 lb=c5-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Flag rate=Disabled",
+          "CLASSIFICATION Human · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460051249,
+        "request": {
+          "method": "POST",
+          "path": "/user/vipsignin",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "automation-ja4",
+          "attack": "Human-like bot",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/user/vipsignin",
+          "x-demo-bot": "Human"
+        },
+        "body": "{\"simulation\":true,\"message\":\"Synthetic login accepted\",\"user\":\"demo-traveler\",\"session\":\"not-a-real-session\"}"
+      },
+      {
+        "id": "4fe1d9b8-9f73-44e2-973f-17630c26420e",
+        "trace": [
+          "START local simulation · support_id=4fe1d9b8-9f73-44e2-973f-17630c26420e",
+          "REQUEST POST /user/vipsignin attack_input=None client=198.51.100.42/audit-normal",
+          "CONTEXT namespace=training-c5-lab3 lb=c5-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Flag rate=Disabled",
+          "CLASSIFICATION Human · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460051249,
+        "request": {
+          "method": "POST",
+          "path": "/user/vipsignin",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "audit-normal",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/user/vipsignin",
+          "x-demo-bot": "Human"
+        },
+        "body": "{\"simulation\":true,\"message\":\"Synthetic login accepted\",\"user\":\"demo-traveler\",\"session\":\"not-a-real-session\"}"
+      },
+      {
+        "id": "6312aa0b-b2f3-4b1d-92c0-3049af19b58a",
+        "trace": [
+          "START local simulation · support_id=6312aa0b-b2f3-4b1d-92c0-3049af19b58a",
+          "REQUEST POST /user/vipsignin attack_input=Human-like bot client=198.51.100.42/audit-human",
+          "CONTEXT namespace=training-c5-lab3 lb=c5-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Flag rate=Disabled",
+          "CLASSIFICATION BadBot · 합성 입력 기반",
+          "RESPONSE status=200 action=Detected reason=Bot profile: synthetic telemetry classified BadBot",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460050905,
+        "request": {
+          "method": "POST",
+          "path": "/user/vipsignin",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "audit-human",
+          "attack": "Human-like bot",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Detected",
+        "reason": "Bot profile: synthetic telemetry classified BadBot",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/user/vipsignin",
+          "x-demo-bot": "BadBot"
+        },
+        "body": "{\"simulation\":true,\"message\":\"Synthetic login accepted\",\"user\":\"demo-traveler\",\"session\":\"not-a-real-session\"}"
+      },
+      {
+        "id": "78df0d76-451b-429f-b321-41bf97f24d1d",
+        "trace": [
+          "START local simulation · support_id=78df0d76-451b-429f-b321-41bf97f24d1d",
+          "REQUEST POST /user/vipsignin attack_input=Human-like bot client=198.51.100.42/audit-human",
+          "CONTEXT namespace=training-c5-lab3 lb=c5-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Flag rate=Disabled",
+          "CLASSIFICATION BadBot · 합성 입력 기반",
+          "RESPONSE status=200 action=Detected reason=Bot profile: synthetic telemetry classified BadBot",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460050897,
+        "request": {
+          "method": "POST",
+          "path": "/user/vipsignin",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "audit-human",
+          "attack": "Human-like bot",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Detected",
+        "reason": "Bot profile: synthetic telemetry classified BadBot",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/user/vipsignin",
+          "x-demo-bot": "BadBot"
+        },
+        "body": "{\"simulation\":true,\"message\":\"Synthetic login accepted\",\"user\":\"demo-traveler\",\"session\":\"not-a-real-session\"}"
+      },
+      {
+        "id": "408caa6d-ee29-4cf8-888a-27debbe7d8d5",
+        "trace": [
+          "START local simulation · support_id=408caa6d-ee29-4cf8-888a-27debbe7d8d5",
+          "REQUEST POST /user/vipsignin attack_input=Human-like bot client=198.51.100.42/audit-human",
+          "CONTEXT namespace=training-c5-lab3 lb=c5-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Flag rate=Disabled",
+          "CLASSIFICATION Human · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460050889,
+        "request": {
+          "method": "POST",
+          "path": "/user/vipsignin",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "audit-human",
+          "attack": "Human-like bot",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/user/vipsignin",
+          "x-demo-bot": "Human"
+        },
+        "body": "{\"simulation\":true,\"message\":\"Synthetic login accepted\",\"user\":\"demo-traveler\",\"session\":\"not-a-real-session\"}"
+      },
+      {
+        "id": "acb972c9-afdd-4a71-86b7-540575ac3765",
+        "trace": [
+          "START local simulation · support_id=acb972c9-afdd-4a71-86b7-540575ac3765",
+          "REQUEST POST /user/vipsignin attack_input=Human-like bot client=198.51.100.42/audit-human",
+          "CONTEXT namespace=training-c5-lab3 lb=c5-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Flag rate=Disabled",
+          "CLASSIFICATION Human · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460050882,
+        "request": {
+          "method": "POST",
+          "path": "/user/vipsignin",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "audit-human",
+          "attack": "Human-like bot",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/user/vipsignin",
+          "x-demo-bot": "Human"
+        },
+        "body": "{\"simulation\":true,\"message\":\"Synthetic login accepted\",\"user\":\"demo-traveler\",\"session\":\"not-a-real-session\"}"
+      },
+      {
+        "id": "9e7f0cb4-8415-4c1e-9808-97ae7d980bae",
+        "trace": [
+          "START local simulation · support_id=9e7f0cb4-8415-4c1e-9808-97ae7d980bae",
+          "REQUEST POST /user/vipsignin attack_input=Human-like bot client=198.51.100.42/audit-human",
+          "CONTEXT namespace=training-c5-lab3 lb=c5-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Flag rate=Disabled",
+          "CLASSIFICATION Human · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460050874,
+        "request": {
+          "method": "POST",
+          "path": "/user/vipsignin",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "audit-human",
+          "attack": "Human-like bot",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/user/vipsignin",
+          "x-demo-bot": "Human"
+        },
+        "body": "{\"simulation\":true,\"message\":\"Synthetic login accepted\",\"user\":\"demo-traveler\",\"session\":\"not-a-real-session\"}"
+      },
+      {
+        "id": "21886aee-59fc-4744-8178-69eb0fd20bf9",
+        "trace": [
+          "START local simulation · support_id=21886aee-59fc-4744-8178-69eb0fd20bf9",
+          "REQUEST POST /user/vipsignin attack_input=Human-like bot client=198.51.100.42/audit-human",
+          "CONTEXT namespace=training-c5-lab3 lb=c5-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Flag rate=Disabled",
+          "CLASSIFICATION Human · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460050866,
+        "request": {
+          "method": "POST",
+          "path": "/user/vipsignin",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "audit-human",
+          "attack": "Human-like bot",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/user/vipsignin",
+          "x-demo-bot": "Human"
+        },
+        "body": "{\"simulation\":true,\"message\":\"Synthetic login accepted\",\"user\":\"demo-traveler\",\"session\":\"not-a-real-session\"}"
+      },
+      {
+        "id": "820541b0-41b0-47b4-b110-f22500bc9c38",
+        "trace": [
+          "START local simulation · support_id=820541b0-41b0-47b4-b110-f22500bc9c38",
+          "REQUEST POST /user/vipsignin attack_input=Human-like bot client=198.51.100.42/audit-human",
+          "CONTEXT namespace=training-c5-lab3 lb=c5-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Flag rate=Disabled",
+          "CLASSIFICATION Human · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460050859,
+        "request": {
+          "method": "POST",
+          "path": "/user/vipsignin",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "audit-human",
+          "attack": "Human-like bot",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/user/vipsignin",
+          "x-demo-bot": "Human"
+        },
+        "body": "{\"simulation\":true,\"message\":\"Synthetic login accepted\",\"user\":\"demo-traveler\",\"session\":\"not-a-real-session\"}"
+      },
+      {
+        "id": "9877cd51-fb28-48e5-b46c-597685101d83",
+        "trace": [
+          "START local simulation · support_id=9877cd51-fb28-48e5-b46c-597685101d83",
+          "REQUEST POST /user/vipsignin attack_input=Human-like bot client=198.51.100.42/audit-human",
+          "CONTEXT namespace=training-c5-lab3 lb=c5-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Flag rate=Disabled",
+          "CLASSIFICATION Human · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460050851,
+        "request": {
+          "method": "POST",
+          "path": "/user/vipsignin",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "audit-human",
+          "attack": "Human-like bot",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/user/vipsignin",
+          "x-demo-bot": "Human"
+        },
+        "body": "{\"simulation\":true,\"message\":\"Synthetic login accepted\",\"user\":\"demo-traveler\",\"session\":\"not-a-real-session\"}"
+      },
+      {
+        "id": "dced6981-3ae8-4504-b773-7702af58072d",
+        "trace": [
+          "START local simulation · support_id=dced6981-3ae8-4504-b773-7702af58072d",
+          "REQUEST POST /user/vipsignin attack_input=Human-like bot client=198.51.100.42/audit-human",
+          "CONTEXT namespace=training-c5-lab3 lb=c5-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Flag rate=Disabled",
+          "CLASSIFICATION Human · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460050843,
+        "request": {
+          "method": "POST",
+          "path": "/user/vipsignin",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "audit-human",
+          "attack": "Human-like bot",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/user/vipsignin",
+          "x-demo-bot": "Human"
+        },
+        "body": "{\"simulation\":true,\"message\":\"Synthetic login accepted\",\"user\":\"demo-traveler\",\"session\":\"not-a-real-session\"}"
+      },
+      {
+        "id": "beec9817-afc7-4d35-ac91-7d221bbdbf8d",
+        "trace": [
+          "START local simulation · support_id=beec9817-afc7-4d35-ac91-7d221bbdbf8d",
+          "REQUEST POST /user/vipsignin attack_input=Human-like bot client=198.51.100.42/audit-human",
+          "CONTEXT namespace=training-c5-lab3 lb=c5-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Flag rate=Disabled",
+          "CLASSIFICATION Human · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460050836,
+        "request": {
+          "method": "POST",
+          "path": "/user/vipsignin",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "audit-human",
+          "attack": "Human-like bot",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/user/vipsignin",
+          "x-demo-bot": "Human"
+        },
+        "body": "{\"simulation\":true,\"message\":\"Synthetic login accepted\",\"user\":\"demo-traveler\",\"session\":\"not-a-real-session\"}"
+      },
+      {
+        "id": "5d37e37f-4910-4a98-a97b-5ba9e799aa0a",
+        "trace": [
+          "START local simulation · support_id=5d37e37f-4910-4a98-a97b-5ba9e799aa0a",
+          "REQUEST POST /user/vipsignin attack_input=Human-like bot client=198.51.100.42/audit-human",
+          "CONTEXT namespace=training-c5-lab3 lb=c5-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Flag rate=Disabled",
+          "CLASSIFICATION Human · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460050829,
+        "request": {
+          "method": "POST",
+          "path": "/user/vipsignin",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "audit-human",
+          "attack": "Human-like bot",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/user/vipsignin",
+          "x-demo-bot": "Human"
+        },
+        "body": "{\"simulation\":true,\"message\":\"Synthetic login accepted\",\"user\":\"demo-traveler\",\"session\":\"not-a-real-session\"}"
+      },
+      {
+        "id": "d1e36483-cca3-4ca1-8e4c-2d7a51cac7b1",
+        "trace": [
+          "START local simulation · support_id=d1e36483-cca3-4ca1-8e4c-2d7a51cac7b1",
+          "REQUEST POST /user/vipsignin attack_input=Human-like bot client=198.51.100.42/audit-human",
+          "CONTEXT namespace=training-c5-lab3 lb=c5-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Flag rate=Disabled",
+          "CLASSIFICATION Human · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460050820,
+        "request": {
+          "method": "POST",
+          "path": "/user/vipsignin",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "audit-human",
+          "attack": "Human-like bot",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/user/vipsignin",
+          "x-demo-bot": "Human"
+        },
+        "body": "{\"simulation\":true,\"message\":\"Synthetic login accepted\",\"user\":\"demo-traveler\",\"session\":\"not-a-real-session\"}"
+      },
+      {
+        "id": "f01d12e4-0acc-461a-9532-fd14f9340c71",
+        "trace": [
+          "START local simulation · support_id=f01d12e4-0acc-461a-9532-fd14f9340c71",
+          "REQUEST POST /user/vipsignin attack_input=Bot client=198.51.100.42/baseline-bot",
+          "CONTEXT namespace=training-c5-lab3 lb=c5-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=Disabled",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460049759,
+        "request": {
+          "method": "POST",
+          "path": "/user/vipsignin",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "baseline-bot",
+          "attack": "Bot",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/user/vipsignin"
+        },
+        "body": "{\"simulation\":true,\"message\":\"Synthetic login accepted\",\"user\":\"demo-traveler\",\"session\":\"not-a-real-session\"}"
+      },
+      {
+        "id": "26a7b7b5-4add-4fc6-b514-8df45515d54b",
+        "trace": [
+          "START local simulation · support_id=26a7b7b5-4add-4fc6-b514-8df45515d54b",
+          "REQUEST POST /user/vipsignin attack_input=None client=198.51.100.42/human-ja4",
+          "CONTEXT namespace=training-c5-lab3 lb=c5-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=Disabled",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460049759,
+        "request": {
+          "method": "POST",
+          "path": "/user/vipsignin",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/user/vipsignin"
+        },
+        "body": "{\"simulation\":true,\"message\":\"Synthetic login accepted\",\"user\":\"demo-traveler\",\"session\":\"not-a-real-session\"}"
+      }
+    ],
+    "discovered": [],
+    "explanation": ""
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "checkedAt": "2026-10-20T02:40:52.482Z",
+  "referenceImages": 15,
+  "tests": 201,
+  "build": "passed",
+  "visual": {
+    "pass": true,
+    "mobileOverflow": false,
+    "escapePreserved": true,
+    "mapPaths": 176,
+    "errors": [],
+    "saved": "High, Medium and Low"
+  },
+  "requestChecks": {
+    "normal": 200,
+    "SQLInjection": 403,
+    "XSS": 403
+  },
+  "desktop": {
+    "width": 1793,
+    "height": 1100
+  },
+  "mobile": {
+    "width": 390,
+    "height": 844
+  }
+}

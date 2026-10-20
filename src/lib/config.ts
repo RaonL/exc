@@ -42,6 +42,12 @@ export const lbConfig = (lb?: Partial<LB>): LBConfig => ({
   ...lb?.config,
 });
 export const wafConfig = (waf?: Partial<Waf>): WafConfig => ({
+  mediumAction: 'Block',
+  lowAction: 'Block',
+  botProtection: 'Default',
+  maliciousBotAction: 'Block',
+  suspiciousBotAction: 'Report',
+  goodBotAction: 'Report',
   description: '',
   labels: '',
   policy: 'Default',
@@ -88,6 +94,21 @@ export const isLbHealthy = (lb: LB, origins: Origin[]) =>
   lbOriginIds(lb).every((id) =>
     origins.some((o) => o.id === id && o.namespace === lb.namespace && o.healthy),
   );
+export function resolveRequestContext(lb: LB, wafs: Waf[], request: SimulatedRequest) {
+  const config = lbConfig(lb),
+    path = request.path.split('?')[0];
+  const route = config.routes.find(
+    (r) =>
+      r.enabled &&
+      (r.method === 'ANY' || r.method === request.method) &&
+      (r.match === 'Exact' ? path === r.path : path.startsWith(r.path)),
+  );
+  const wafId = route?.wafId || lb.wafId;
+  const waf = wafs.find(
+    (w) => w.id === wafId && (w.namespace === lb.namespace || w.namespace === 'shared'),
+  );
+  return { config, route, wafId, waf };
+}
 export function evaluateRequest(
   lb: LB,
   wafs: Waf[],
@@ -101,23 +122,11 @@ export function evaluateRequest(
   reason: string;
   evaluatedWafId?: string;
 } {
-  const config = lbConfig(lb);
-  const path = request.path.split('?')[0];
-  const route = config.routes.find(
-    (r) =>
-      r.enabled &&
-      (r.method === 'ANY' || r.method === request.method) &&
-      (r.match === 'Exact' ? path === r.path : path.startsWith(r.path)),
-  );
-  const wafId = route?.wafId || lb.wafId;
-  const waf = wafs.find(
-    (w) => w.id === wafId && (w.namespace === lb.namespace || w.namespace === 'shared'),
-  );
+  const { config, route, waf } = resolveRequestContext(lb, wafs, request);
   const isWafAttack = ['SQL Injection', 'Cross-site Scripting', 'Command Injection'].includes(
     scenario,
   );
-  let decision: SecurityEvent['action'] =
-    scenario === 'Normal HTTP traffic' ? 'Allowed' : 'Detected';
+  let decision: SecurityEvent['action'] = 'Allowed';
   let reason =
     scenario === 'Normal HTTP traffic' ? 'Request accepted' : 'Protection is not enabled';
   if (isWafAttack && waf) {
@@ -162,10 +171,10 @@ export function evaluateRequest(
           : scenario === 'L7 DDoS'
             ? lb.ddosProtection
             : false;
-    decision = enabled ? 'Blocked' : 'Detected';
+    decision = enabled ? 'Blocked' : 'Allowed';
     reason = enabled
       ? `${scenario} protection applied`
-      : 'Protection is not enabled; request detected';
+      : 'Protection is not enabled; request allowed without inspection';
   }
   if (decision === 'Blocked')
     return {

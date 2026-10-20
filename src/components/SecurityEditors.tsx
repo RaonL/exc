@@ -5,6 +5,7 @@ import { wafConfig } from '../lib/config';
 import { ConfigurationEditor } from './ConfigurationEditor';
 import { Field } from './form-fields';
 import { WafPolicyFields } from './WafPolicyFields';
+import { WafBotFields } from './WafBotFields';
 import { WafAdvancedFields } from './WafAdvancedFields';
 
 export const wafLabSource =
@@ -111,6 +112,8 @@ export function WafEditor({
         {
           id: 'metadata',
           title: 'Metadata',
+          description:
+            '웹 방화벽 정책의 이름과 설명을 지정합니다. 생성한 정책은 HTTP LB에서 별도로 연결합니다.',
           onReset: () => {
             setName(opened.name);
             setConfig((v) => ({
@@ -153,6 +156,8 @@ export function WafEditor({
         {
           id: 'mode',
           title: 'Enforcement Mode',
+          description:
+            'Monitoring은 탐지 기록을 남기고 통과시킵니다. Blocking은 정책에 따라 모의 차단 결과를 만듭니다.',
           onReset: () => {
             setMode(opened.mode);
             setError('');
@@ -183,6 +188,8 @@ export function WafEditor({
         {
           id: 'policy',
           title: 'Security Policy Settings',
+          description:
+            'Default는 기본 정책을 사용합니다. Custom을 선택하면 서명·정확도·스테이징 설정이 펼쳐집니다.',
           onReset: () => {
             const c = opened.config;
             setConfig((v) => ({
@@ -192,6 +199,8 @@ export function WafEditor({
               attackTypes: c.attackTypes,
               accuracy: c.accuracy,
               highAction: c.highAction,
+              mediumAction: c.mediumAction,
+              lowAction: c.lowAction,
               tuning: c.tuning,
               staging: c.staging,
               stagingDays: c.stagingDays,
@@ -203,8 +212,24 @@ export function WafEditor({
           content: <WafPolicyFields config={config} setting={setting} />,
         },
         {
+          id: 'bots',
+          title: 'Signature-Based Bot Protection',
+          description:
+            '봇 분류별 동작을 지정합니다. 카탈로그 테스트는 이 설정과 Enforcement Mode를 함께 평가합니다.',
+          onReset: () =>
+            setConfig((v) => ({
+              ...v,
+              botProtection: opened.config.botProtection,
+              maliciousBotAction: opened.config.maliciousBotAction,
+              suspiciousBotAction: opened.config.suspiciousBotAction,
+              goodBotAction: opened.config.goodBotAction,
+            })),
+          content: <WafBotFields config={config} setting={setting} />,
+        },
+        {
           id: 'advanced',
           title: 'Advanced Configuration',
+          description: '차단 응답과 로그 설정을 조정합니다. 응답은 로컬 모의 요청에만 적용됩니다.',
           onReset: () => {
             const c = opened.config;
             setConfig((v) => ({

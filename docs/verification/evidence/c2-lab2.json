@@ -1,0 +1,314 @@
+{
+  "lab": "https://clouddocs.f5.com/training/community/f5xc/html/class2/lab2.html",
+  "baseline": {
+    "at": 1792459964176,
+    "codes": [
+      200,
+      200
+    ]
+  },
+  "verification": {
+    "at": 1792459965868,
+    "fingerprint": "{\"lb\":{\"id\":\"training-c2-lab2-lb\",\"namespace\":\"training-c2-lab2\",\"name\":\"c2-lab2-lb\",\"domains\":[\"c2-lab2.example.com\"],\"protocol\":\"HTTPS\",\"originId\":\"training-c2-lab2-aws\",\"wafId\":\"\",\"apiProtection\":false,\"botDefense\":true,\"ddosProtection\":false,\"requests\":0,\"createdAt\":\"\",\"config\":{\"description\":\"\",\"labels\":\"\",\"vip\":\"Internet\",\"vipAddress\":\"\",\"siteId\":\"\",\"certificate\":\"Automatic\",\"certificateRef\":\"\",\"listenPort\":443,\"redirectHttps\":true,\"hsts\":false,\"tlsLevel\":\"High\",\"routes\":[],\"exclusions\":[],\"cdn\":false,\"timeout\":30,\"apiDiscovery\":false,\"manageDns\":false,\"listenPortChoice\":\"HTTP Listen Port\",\"originWeight\":1,\"originPriority\":1}},\"waf\":{\"id\":\"training-c2-lab2-waf\",\"namespace\":\"training-c2-lab2\",\"name\":\"c2-lab2-appfw\",\"mode\":\"Monitoring\"},\"origins\":[{\"id\":\"training-c2-lab2-aws\",\"namespace\":\"training-c2-lab2\",\"name\":\"aws-primary\",\"endpoint\":\"aws-origin.example.com\",\"port\":80,\"healthy\":true,\"config\":{\"labels\":\"\",\"description\":\"\",\"type\":\"Public DNS\",\"siteId\":\"\",\"network\":\"Inside Network\",\"algorithm\":\"Round Robin\",\"tls\":false,\"sni\":\"\",\"healthCheck\":\"HTTP\",\"healthPath\":\"/health\",\"interval\":15,\"timeout\":3,\"healthyThreshold\":2,\"unhealthyThreshold\":3}},{\"id\":\"training-c2-lab2-azure\",\"namespace\":\"training-c2-lab2\",\"name\":\"azure-canary\",\"endpoint\":\"azure-origin.example.com\",\"port\":80,\"healthy\":true,\"config\":{\"labels\":\"\",\"description\":\"\",\"type\":\"Public DNS\",\"siteId\":\"\",\"network\":\"Inside Network\",\"algorithm\":\"Round Robin\",\"tls\":false,\"sni\":\"\",\"healthCheck\":\"HTTP\",\"healthPath\":\"/health\",\"interval\":15,\"timeout\":3,\"healthyThreshold\":2,\"unhealthyThreshold\":3}}],\"ce\":{\"id\":\"training-c2-lab2-ce\",\"namespace\":\"training-c2-lab2\",\"name\":\"c2-lab2-customer-edge\",\"kind\":\"CE\",\"region\":\"AWS / ap-northeast-2 (demo)\",\"online\":true,\"address\":\"192.0.2.10\"},\"controls\":{\"policyMode\":\"Disabled\",\"headerName\":\"x-f5-appworld\",\"headerValue\":\"RjUtQXBwd29ybGQ=\",\"allowedCountry\":\"South Korea\",\"deniedCountry\":\"Fiji\",\"blockBadReputation\":false,\"allowedPath\":\"/\",\"canary\":false,\"canaryHeader\":\"X-App-Version\",\"canaryValue\":\"green\",\"rewriteLogin\":false,\"namespaceHeader\":false,\"inventory\":false,\"apiDeny\":false,\"deniedEndpoint\":\"/api/customerlookup/getbydob\",\"schemaValidation\":false,\"apiDiscovery\":false,\"connector\":false,\"rateLimit\":false,\"rate\":3,\"rateWindow\":60,\"ratePath\":\"/api/customerlookup/getbyname\",\"rateMethod\":\"GET\",\"botMode\":\"Blocking\",\"botPath\":\"/user/vipsignin\",\"botExtraPath\":\"\",\"botMethod\":\"POST\",\"telemetry\":false,\"maliciousDetection\":false,\"maliciousMitigation\":false,\"segment\":false,\"segmentPeer\":false,\"firewall\":false,\"failover\":false,\"overlapVip\":false,\"scanProfile\":false,\"scanSchedule\":\"Manual\",\"source\":\"{\\n  \\\"name\\\": \\\"xc-training-app\\\",\\n  \\\"routes\\\": [\\n    {\\n      \\\"method\\\": \\\"GET\\\",\\n      \\\"path\\\": \\\"/\\\",\\n      \\\"body\\\": \\\"Hello XC\\\"\\n    },\\n    {\\n      \\\"method\\\": \\\"GET\\\",\\n      \\\"path\\\": \\\"/about\\\",\\n      \\\"body\\\": \\\"About XC Training App\\\"\\n    },\\n    {\\n      \\\"method\\\": \\\"GET\\\",\\n      \\\"path\\\": \\\"/login\\\",\\n      \\\"body\\\": \\\"Demo login form\\\"\\n    },\\n    {\\n      \\\"method\\\": \\\"GET\\\",\\n      \\\"path\\\": \\\"/contact\\\",\\n      \\\"body\\\": \\\"Demo contact form\\\"\\n    },\\n    {\\n      \\\"method\\\": \\\"POST\\\",\\n      \\\"path\\\": \\\"/login\\\",\\n      \\\"body\\\": \\\"Demo login\\\"\\n    },\\n    {\\n      \\\"method\\\": \\\"POST\\\",\\n      \\\"path\\\": \\\"/contact\\\",\\n      \\\"body\\\": \\\"Demo contact\\\"\\n    }\\n  ]\\n}\",\"deployedSource\":\"\",\"artifact\":\"\",\"pipeline\":[]}}",
+    "checks": [
+      {
+        "name": "보호 전 기준 요청 기록",
+        "pass": true,
+        "expected": "기준 요청 실행",
+        "actual": "200 / 200"
+      },
+      {
+        "name": "LB → Origin 연결",
+        "pass": true,
+        "expected": "유효한 Origin과 Domain",
+        "actual": "c2-lab2.example.com → training-c2-lab2-aws"
+      },
+      {
+        "name": "정상 사람 요청",
+        "pass": true,
+        "expected": "HTTP 200",
+        "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+      },
+      {
+        "name": "봇 요청",
+        "pass": true,
+        "expected": "HTTP 403",
+        "actual": "HTTP 403 · Blocked · aws-primary · Bot profile Blocking: BadBot rejected"
+      },
+      {
+        "name": "다른 endpoint는 제외",
+        "pass": true,
+        "expected": "HTTP 200",
+        "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+      }
+    ]
+  },
+  "runtime": {
+    "now": 1792459965726,
+    "buckets": {},
+    "identities": {
+      "198.51.100.42|audit-human": 1,
+      "198.51.100.42|audit-normal": 1
+    },
+    "logs": [
+      {
+        "id": "70a03cad-a1ff-4c5d-8f4e-d317c4218e46",
+        "trace": [
+          "START local simulation · support_id=70a03cad-a1ff-4c5d-8f4e-d317c4218e46",
+          "REQUEST GET /health attack_input=Bot client=198.51.100.42/human-ja4",
+          "CONTEXT namespace=training-c2-lab2 lb=c2-lab2-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Blocking rate=Disabled",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792459965726,
+        "request": {
+          "method": "GET",
+          "path": "/health",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "Bot",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/health"
+        },
+        "body": "{\"simulation\":true,\"application\":\"XC Training App\",\"method\":\"GET\",\"path\":\"/health\",\"upstreamPath\":\"/health\",\"message\":\"Local dummy origin response\"}"
+      },
+      {
+        "id": "0f9873d3-de71-4059-be67-bf7b38fc4bcf",
+        "trace": [
+          "START local simulation · support_id=0f9873d3-de71-4059-be67-bf7b38fc4bcf",
+          "REQUEST POST /user/vipsignin attack_input=Bot client=198.51.100.42/human-ja4",
+          "CONTEXT namespace=training-c2-lab2 lb=c2-lab2-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Blocking rate=Disabled",
+          "CLASSIFICATION BadBot · 합성 입력 기반",
+          "RESPONSE status=403 action=Blocked reason=Bot profile Blocking: BadBot rejected",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792459965726,
+        "request": {
+          "method": "POST",
+          "path": "/user/vipsignin",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "Bot",
+          "transport": "HTTP"
+        },
+        "code": 403,
+        "action": "Blocked",
+        "reason": "Bot profile Blocking: BadBot rejected",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/user/vipsignin",
+          "x-demo-bot": "BadBot"
+        },
+        "body": "Request rejected by local simulator\nSupport ID: 0f9873d3-de71-4059-be67-bf7b38fc4bcf"
+      },
+      {
+        "id": "b87879cd-4e22-4b43-8dde-48a384097c49",
+        "trace": [
+          "START local simulation · support_id=b87879cd-4e22-4b43-8dde-48a384097c49",
+          "REQUEST POST /user/vipsignin attack_input=None client=198.51.100.42/human-ja4",
+          "CONTEXT namespace=training-c2-lab2 lb=c2-lab2-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Blocking rate=Disabled",
+          "CLASSIFICATION Human · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792459965726,
+        "request": {
+          "method": "POST",
+          "path": "/user/vipsignin",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/user/vipsignin",
+          "x-demo-bot": "Human"
+        },
+        "body": "{\"simulation\":true,\"message\":\"Synthetic login accepted\",\"user\":\"demo-traveler\",\"session\":\"not-a-real-session\"}"
+      },
+      {
+        "id": "7af78915-6ee1-4b28-9472-4a99185155ad",
+        "trace": [
+          "START local simulation · support_id=7af78915-6ee1-4b28-9472-4a99185155ad",
+          "REQUEST POST /user/vipsignin attack_input=None client=198.51.100.42/audit-normal",
+          "CONTEXT namespace=training-c2-lab2 lb=c2-lab2-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Blocking rate=Disabled",
+          "CLASSIFICATION Human · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792459965726,
+        "request": {
+          "method": "POST",
+          "path": "/user/vipsignin",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "audit-normal",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/user/vipsignin",
+          "x-demo-bot": "Human"
+        },
+        "body": "{\"simulation\":true,\"message\":\"Synthetic login accepted\",\"user\":\"demo-traveler\",\"session\":\"not-a-real-session\"}"
+      },
+      {
+        "id": "3b125472-5e40-4d25-ba51-6d9511f029f2",
+        "trace": [
+          "START local simulation · support_id=3b125472-5e40-4d25-ba51-6d9511f029f2",
+          "REQUEST POST /user/vipsignin attack_input=Bot client=198.51.100.42/audit-human",
+          "CONTEXT namespace=training-c2-lab2 lb=c2-lab2-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Blocking rate=Disabled",
+          "CLASSIFICATION BadBot · 합성 입력 기반",
+          "RESPONSE status=403 action=Blocked reason=Bot profile Blocking: BadBot rejected",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792459965389,
+        "request": {
+          "method": "POST",
+          "path": "/user/vipsignin",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "audit-human",
+          "attack": "Bot",
+          "transport": "HTTP"
+        },
+        "code": 403,
+        "action": "Blocked",
+        "reason": "Bot profile Blocking: BadBot rejected",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/user/vipsignin",
+          "x-demo-bot": "BadBot"
+        },
+        "body": "Request rejected by local simulator\nSupport ID: 3b125472-5e40-4d25-ba51-6d9511f029f2"
+      },
+      {
+        "id": "7e2d9305-7038-4a81-bcd3-78e4685b63a8",
+        "trace": [
+          "START local simulation · support_id=7e2d9305-7038-4a81-bcd3-78e4685b63a8",
+          "REQUEST POST /user/vipsignin attack_input=Bot client=198.51.100.42/baseline-bot",
+          "CONTEXT namespace=training-c2-lab2 lb=c2-lab2-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=Disabled",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792459963942,
+        "request": {
+          "method": "POST",
+          "path": "/user/vipsignin",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "baseline-bot",
+          "attack": "Bot",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/user/vipsignin"
+        },
+        "body": "{\"simulation\":true,\"message\":\"Synthetic login accepted\",\"user\":\"demo-traveler\",\"session\":\"not-a-real-session\"}"
+      },
+      {
+        "id": "3e26c55d-5603-42ed-9daa-fb5e99de350c",
+        "trace": [
+          "START local simulation · support_id=3e26c55d-5603-42ed-9daa-fb5e99de350c",
+          "REQUEST POST /user/vipsignin attack_input=None client=198.51.100.42/human-ja4",
+          "CONTEXT namespace=training-c2-lab2 lb=c2-lab2-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=Disabled",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792459963942,
+        "request": {
+          "method": "POST",
+          "path": "/user/vipsignin",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/user/vipsignin"
+        },
+        "body": "{\"simulation\":true,\"message\":\"Synthetic login accepted\",\"user\":\"demo-traveler\",\"session\":\"not-a-real-session\"}"
+      }
+    ],
+    "discovered": [],
+    "explanation": ""
+  }
+}

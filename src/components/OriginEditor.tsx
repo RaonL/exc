@@ -11,11 +11,14 @@ export function OriginEditor({
   initial,
   close,
   notify,
+  viewOnly = false,
 }: {
   initial?: Origin;
   close: () => void;
   notify: (message: string) => void;
+  viewOnly?: boolean;
 }) {
+  const [readOnly, setReadOnly] = useState(viewOnly);
   const s = useConsole();
   const [opened] = useState(() => ({
     name: initial?.name ?? '',
@@ -90,6 +93,8 @@ export function OriginEditor({
     <>
       <ConfigurationEditor
         kind="Origin Pool"
+        readOnly={readOnly}
+        onEdit={() => setReadOnly(false)}
         submitLabel={initial ? 'Save Origin Pool' : 'Add Origin Pool'}
         name={initial?.name ?? ''}
         namespace={s.namespace}

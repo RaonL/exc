@@ -1,0 +1,1285 @@
+{
+  "checkedAt": "2026-10-20T01:06:24.752Z",
+  "sources": [
+    {
+      "id": "c1-lab1",
+      "url": "https://clouddocs.f5.com/training/community/f5xc/html/class1/lab1.html",
+      "status": 200,
+      "sha256": "9f3ff3c9d58064d2e310f2f1f528569d1ce835c92cf4167cbf562468cab7dd0c",
+      "headings": [
+        {
+          "level": 1,
+          "title": "Lab 1: Deploying F5 Distributed Cloud Proxy Services to Securely Deliver a Public Endpoint"
+        },
+        {
+          "level": 2,
+          "title": "Task 1: Configure Load Balancer and Origin Pool"
+        },
+        {
+          "level": 2,
+          "title": "Task 2: Testing the Application and Viewing Telemetry Data"
+        },
+        {
+          "level": 2,
+          "title": "Task 3: Add an Application Firewall Policy to Protect the Application"
+        },
+        {
+          "level": 2,
+          "title": "Task 4. Test the Application Firewall and View Security Events"
+        }
+      ]
+    },
+    {
+      "id": "c1-lab2",
+      "url": "https://clouddocs.f5.com/training/community/f5xc/html/class1/lab2.html",
+      "status": 200,
+      "sha256": "1707e3028f0f9f6a888b761b101397e999cc4043ca7522af881935f95d5ddedd",
+      "headings": [
+        {
+          "level": 1,
+          "title": "Lab 2: Deploying F5 Distributed Cloud Proxy Services to Securely Deliver a Private Endpoint via Regional Edges"
+        },
+        {
+          "level": 2,
+          "title": "Task 1. Create Private Origin Pool"
+        },
+        {
+          "level": 2,
+          "title": "Task 2. Create and Deploy a HTTP Load Balancer on F5 Distributed Cloud CE"
+        },
+        {
+          "level": 2,
+          "title": "Task 3: Configure WAF Policy"
+        },
+        {
+          "level": 2,
+          "title": "Task 4: Verify Configuration"
+        },
+        {
+          "level": 2,
+          "title": "Task 5: Verify WAF Protection"
+        }
+      ]
+    },
+    {
+      "id": "c1-lab3",
+      "url": "https://clouddocs.f5.com/training/community/f5xc/html/class1/lab3.html",
+      "status": 200,
+      "sha256": "e20c175fca61fc7f48ef95db017a511bb2588c3c239ca65a1901f2c5aab6ac73",
+      "headings": [
+        {
+          "level": 1,
+          "title": "Lab 3: Protecting a Private Endpoint"
+        },
+        {
+          "level": 2,
+          "title": "F5 Distributed Cloud AWS VPC Site"
+        },
+        {
+          "level": 2,
+          "title": "Task 1. Create Private Origin Pool"
+        },
+        {
+          "level": 2,
+          "title": "Task 2. Create and Deploy a HTTP Load Balancer on F5 Distributed Cloud CE"
+        },
+        {
+          "level": 2,
+          "title": "Task 3: Configure WAF Policy"
+        },
+        {
+          "level": 2,
+          "title": "Task 4: Verify Configuration"
+        },
+        {
+          "level": 2,
+          "title": "Task 5: Verify DNS"
+        },
+        {
+          "level": 2,
+          "title": "Task 6: Verify WAF Protection"
+        }
+      ]
+    },
+    {
+      "id": "c1-lab4",
+      "url": "https://clouddocs.f5.com/training/community/f5xc/html/class1/lab4.html",
+      "status": 200,
+      "sha256": "15f4e1164c48259880280fbcaded0226da8dfce9f6f6cb90133e34363e5ae0b7",
+      "headings": [
+        {
+          "level": 1,
+          "title": "Lab 4: F5 Distributed Cloud Security Analytics"
+        }
+      ]
+    },
+    {
+      "id": "c2-lab1",
+      "url": "https://clouddocs.f5.com/training/community/f5xc/html/class2/lab1.html",
+      "status": 200,
+      "sha256": "0c5f276c5f17d8b06057556a7b9adf933c90d8336d262ef5b166b3a7d292ec2e",
+      "headings": [
+        {
+          "level": 1,
+          "title": "Lab 1: Deploying and Managing F5 Distributed Cloud Web Application Firewall Configuration"
+        },
+        {
+          "level": 2,
+          "title": "Task 1: Discover Your Animal (Namespace)"
+        },
+        {
+          "level": 2,
+          "title": "Task 2: Exploring the F5 Distributed Console"
+        },
+        {
+          "level": 2,
+          "title": "Task 3: Configure WAF Policy on the Load Balancer"
+        },
+        {
+          "level": 2,
+          "title": "Task 4: Testing the WAF Policy & Reviewing Event Data"
+        },
+        {
+          "level": 2,
+          "title": "Task 5: Understanding Exclusions and Customizing WAF Policy"
+        }
+      ]
+    },
+    {
+      "id": "c2-lab2",
+      "url": "https://clouddocs.f5.com/training/community/f5xc/html/class2/lab2.html",
+      "status": 200,
+      "sha256": "607a0642a7670519705e15ff61e1ff01abe23b7631426e1ff5fdd54761c440de",
+      "headings": [
+        {
+          "level": 1,
+          "title": "Lab 2: Reviewing Signature-based Bot Strategies and enabling F5 Distributed Cloud Bot Defense"
+        },
+        {
+          "level": 2,
+          "title": "Task 1: Reviewing Signature-based Bot protection"
+        },
+        {
+          "level": 2,
+          "title": "Task 2: Enabling F5 Distributed Cloud Bot Defense"
+        }
+      ]
+    },
+    {
+      "id": "c2-lab3",
+      "url": "https://clouddocs.f5.com/training/community/f5xc/html/class2/lab3.html",
+      "status": 200,
+      "sha256": "cc6879e61c71d23c0423e4795919b903c74820ebe4f6492900b63ccb3681d7df",
+      "headings": [
+        {
+          "level": 1,
+          "title": "Lab 3: Malicious Users"
+        },
+        {
+          "level": 2,
+          "title": "Task 1: Creating a User Identification Policy"
+        },
+        {
+          "level": 2,
+          "title": "Task 2: Enable Malicious User Detection and Mitigation Actions"
+        }
+      ]
+    },
+    {
+      "id": "c2-lab4",
+      "url": "https://clouddocs.f5.com/training/community/f5xc/html/class2/lab4.html",
+      "status": 200,
+      "sha256": "f08defc0ad90c7d18a05a4f63936230cba44d2922b090853105d226f97e10b77",
+      "headings": [
+        {
+          "level": 1,
+          "title": "Lab 4: Web App Scanning"
+        },
+        {
+          "level": 2,
+          "title": "Task 1: View Existing Scan"
+        },
+        {
+          "level": 2,
+          "title": "Task 2: Configure a Web Application Scan"
+        },
+        {
+          "level": 2,
+          "title": "Task 3: View Post Lab Scan"
+        }
+      ]
+    },
+    {
+      "id": "c2-lab5",
+      "url": "https://clouddocs.f5.com/training/community/f5xc/html/class2/lab5.html",
+      "status": 200,
+      "sha256": "59b2d97c7a10c845e4db03034beff8bdfc9b0f054ff162658189395175895ea5",
+      "headings": [
+        {
+          "level": 1,
+          "title": "Lab 5: AI Assistant and Security Operations"
+        },
+        {
+          "level": 2,
+          "title": "Task 1: Exploring AI Assistant"
+        }
+      ]
+    },
+    {
+      "id": "c3-lab1",
+      "url": "https://clouddocs.f5.com/training/community/f5xc/html/class3/lab1.html",
+      "status": 200,
+      "sha256": "ab230a3d2f0831b35714065e963ad658a5650e22b779184e8a753244f9ef345d",
+      "headings": [
+        {
+          "level": 1,
+          "title": "Lab 1 Service Policy"
+        }
+      ]
+    },
+    {
+      "id": "c3-lab2",
+      "url": "https://clouddocs.f5.com/training/community/f5xc/html/class3/lab2.html",
+      "status": 200,
+      "sha256": "d312f8e52b7c9a6bb47286ef81398c99ee8b97af27bcbd8c4b515fd65a32bcb0",
+      "headings": [
+        {
+          "level": 1,
+          "title": "Lab 2: Load Balancer Routes"
+        },
+        {
+          "level": 2,
+          "title": "Task 1: Deploy a Header Route to Steer Traffic for Canary Testing"
+        },
+        {
+          "level": 2,
+          "title": "Task 2: Deploy and apply WAF policy at the route level"
+        },
+        {
+          "level": 2,
+          "title": "Task 3: Deploy routes to modify application responses in transit"
+        }
+      ]
+    },
+    {
+      "id": "c3-lab3",
+      "url": "https://clouddocs.f5.com/training/community/f5xc/html/class3/lab3.html",
+      "status": 200,
+      "sha256": "e832c62e0ecaa776944c905dd3c908e28c58ab5c5834b469e895b068d789a081",
+      "headings": [
+        {
+          "level": 1,
+          "title": "Lab 3: Exploring Security and Performance Dashboard, and Leveraging AI Assistant"
+        },
+        {
+          "level": 2,
+          "title": "Task 1: Review Security Dashboard"
+        },
+        {
+          "level": 2,
+          "title": "Task 2: Review Performance Dashboard"
+        },
+        {
+          "level": 2,
+          "title": "Task 3: Leveraging AI Assistant"
+        }
+      ]
+    },
+    {
+      "id": "c4-lab1",
+      "url": "https://clouddocs.f5.com/training/community/f5xc/html/class4/lab1.html",
+      "status": 200,
+      "sha256": "00750c269ab08a56690736aa3eec0fe28b6fb2ee8401332a1190b2369ea7e030",
+      "headings": [
+        {
+          "level": 1,
+          "title": "Lab 1: Load Balancer and Origin"
+        },
+        {
+          "level": 2,
+          "title": "Task 1: Review Load Balancer and Origin Pool"
+        },
+        {
+          "level": 2,
+          "title": "Task 2: Validate Load Balancer"
+        }
+      ]
+    },
+    {
+      "id": "c4-lab2",
+      "url": "https://clouddocs.f5.com/training/community/f5xc/html/class4/lab2.html",
+      "status": 200,
+      "sha256": "65de846dde8c7547f29ffdf09838068726714159c20898a1bd7a5d97c8f692e0",
+      "headings": [
+        {
+          "level": 1,
+          "title": "Lab 2: API Inventory"
+        },
+        {
+          "level": 2,
+          "title": "Task 1: Simulate Allowed Access to a Shadow API"
+        },
+        {
+          "level": 2,
+          "title": "Task 2: API Definition"
+        },
+        {
+          "level": 2,
+          "title": "Task 3: Enabling API Inventory"
+        },
+        {
+          "level": 2,
+          "title": "Task 4: Simulate Blocked Access to a Shadow API"
+        }
+      ]
+    },
+    {
+      "id": "c4-lab3",
+      "url": "https://clouddocs.f5.com/training/community/f5xc/html/class4/lab3.html",
+      "status": 200,
+      "sha256": "9346d014e38d19de1e01fb5e571e9776cdf76f2ef0e50d98b04e01bcc7a0a6f9",
+      "headings": [
+        {
+          "level": 1,
+          "title": "Lab 3: API Protection"
+        },
+        {
+          "level": 2,
+          "title": "Task 1: Simulate Allowed Access to a Misconfigured API"
+        },
+        {
+          "level": 2,
+          "title": "Task 2: Enabled API Protection"
+        },
+        {
+          "level": 2,
+          "title": "Task 3: Simulate Blocked Access to a Misconfigured API"
+        }
+      ]
+    },
+    {
+      "id": "c4-lab4",
+      "url": "https://clouddocs.f5.com/training/community/f5xc/html/class4/lab4.html",
+      "status": 200,
+      "sha256": "29373c8016b5d0bd13b77b6ca7eb01dc3aec880351d4c2659a1568dd82ee0fcc",
+      "headings": [
+        {
+          "level": 1,
+          "title": "Lab 4: Web Application Firewall (WAF)"
+        },
+        {
+          "level": 2,
+          "title": "Task 1: Simulate an Unmitigated Attack"
+        },
+        {
+          "level": 2,
+          "title": "Task 2: Enabled a WAF Policy"
+        },
+        {
+          "level": 2,
+          "title": "Task 3: Simulate a Mitigated Attack"
+        }
+      ]
+    },
+    {
+      "id": "c4-lab5",
+      "url": "https://clouddocs.f5.com/training/community/f5xc/html/class4/lab5.html",
+      "status": 200,
+      "sha256": "0d40d1920479003392c0ee2ad68a1bddabf5a3629b73d48b3fb065e4cd6eb8d5",
+      "headings": [
+        {
+          "level": 1,
+          "title": "Lab 5: Rate Limiting"
+        },
+        {
+          "level": 2,
+          "title": "Task 1: Simulate Unmitigated Excessive Requests"
+        },
+        {
+          "level": 2,
+          "title": "Task 2: Enabled API Rate-Limiting"
+        },
+        {
+          "level": 2,
+          "title": "Task 3: Simulate Mitigated Excessive Requests"
+        }
+      ]
+    },
+    {
+      "id": "c4-lab6",
+      "url": "https://clouddocs.f5.com/training/community/f5xc/html/class4/lab6.html",
+      "status": 200,
+      "sha256": "9cf9eda517d281aa1a9eb502799c2a30855915e42c7b100be9ddedaa6e26f512",
+      "headings": [
+        {
+          "level": 1,
+          "title": "Lab 6: Security Analytics and Malicious User Detection"
+        },
+        {
+          "level": 2,
+          "title": "Task 1: Review Requests Dashboard"
+        },
+        {
+          "level": 2,
+          "title": "Task 2: Review Security Anatlyics Dashboard"
+        },
+        {
+          "level": 2,
+          "title": "Task 3: Review Malicious User Detection"
+        }
+      ]
+    },
+    {
+      "id": "c4-lab7",
+      "url": "https://clouddocs.f5.com/training/community/f5xc/html/class4/lab7.html",
+      "status": 200,
+      "sha256": "dbf319c7498caf0649ec3499ad2b3a604dbb1f5a3179f166742db02e3ac821b8",
+      "headings": [
+        {
+          "level": 1,
+          "title": "Lab 7: API Discovery Using the BIG-IP Connector"
+        },
+        {
+          "level": 2,
+          "title": "Task 1: Review Customer Edge (CE) Infrastructure"
+        },
+        {
+          "level": 2,
+          "title": "Task 2: Review BIG-IP Connector Service"
+        },
+        {
+          "level": 2,
+          "title": "Task 3: Review Discovered API Service"
+        },
+        {
+          "level": 2,
+          "title": "Task 4: Review Performance and Logs"
+        },
+        {
+          "level": 2,
+          "title": "Task 5: AI Assistant"
+        }
+      ]
+    },
+    {
+      "id": "c5-lab1",
+      "url": "https://clouddocs.f5.com/training/community/f5xc/html/class5/lab1.html",
+      "status": 200,
+      "sha256": "783664c11d1ed09a63dacd9fcf44c231f3d0fd9a6b0c18a5fa1c562b8a01a085",
+      "headings": [
+        {
+          "level": 1,
+          "title": "Lab 1: Explore Load Balancer and Review Traffic Dashboards"
+        },
+        {
+          "level": 2,
+          "title": "Task 1: Review your assigned Namespace and Verify the Application is Up"
+        },
+        {
+          "level": 2,
+          "title": "Task 2: Review the HTTP Load Balancer"
+        },
+        {
+          "level": 2,
+          "title": "Task 3: Generate Attack Traffic with OpenBullet Automated Attack Tool"
+        },
+        {
+          "level": 2,
+          "title": "Task 4: Review the Request Logs"
+        },
+        {
+          "level": 2,
+          "title": "Task 5: Assign a Web Application Firewall Policy and Re-Test"
+        },
+        {
+          "level": 2,
+          "title": "Task 6: Analyze the Request Logs after WAF Policy Enablement"
+        }
+      ]
+    },
+    {
+      "id": "c5-lab2",
+      "url": "https://clouddocs.f5.com/training/community/f5xc/html/class5/lab2.html",
+      "status": 200,
+      "sha256": "aa15f983cff5e2bbb36e1bdb9f31bf4b7f4f2d333ad7e97ab08e178361f0ab55",
+      "headings": [
+        {
+          "level": 1,
+          "title": "Lab 2: Adding a Bot Protection Profile and Testing"
+        },
+        {
+          "level": 2,
+          "title": "Task 1: Create a Bot Protection Profile"
+        }
+      ]
+    },
+    {
+      "id": "c5-lab3",
+      "url": "https://clouddocs.f5.com/training/community/f5xc/html/class5/lab3.html",
+      "status": 200,
+      "sha256": "f05df2eb2093f342ac4ef1787603677381ad2fdd284f920428fbd6ca8526a3c2",
+      "headings": [
+        {
+          "level": 1,
+          "title": "Lab 3: Human-Simulated Stuffing Attack"
+        },
+        {
+          "level": 2,
+          "title": "Task 1: Execute a Human Credential Stuffing Attack"
+        },
+        {
+          "level": 2,
+          "title": "Task 2 : Review the Request Logs"
+        }
+      ]
+    },
+    {
+      "id": "c5-lab4",
+      "url": "https://clouddocs.f5.com/training/community/f5xc/html/class5/lab4.html",
+      "status": 200,
+      "sha256": "2d719ab119e946bc1c1ad66d2e21644354273731addbd03677d03846ede7a04e",
+      "headings": [
+        {
+          "level": 1,
+          "title": "Lab 4: Defend Against an Ongoing Attack"
+        },
+        {
+          "level": 2,
+          "title": "Task 1: Place into Blocking Mode"
+        },
+        {
+          "level": 2,
+          "title": "Task 2: Verify NO added friction to humans using the website"
+        },
+        {
+          "level": 2,
+          "title": "Task 3: Navigate through the Bot defense Dashboards"
+        }
+      ]
+    },
+    {
+      "id": "c6-module1-lab1",
+      "url": "https://clouddocs.f5.com/training/community/f5xc/html/class6/module1/lab1.html",
+      "status": 200,
+      "sha256": "79440525d018788e9cf91342b4dce4e5bbd51db6bb6fe0bf1c141843110b7794",
+      "headings": [
+        {
+          "level": 1,
+          "title": "Lab 1: Exploring Your Pre-Configured Customer Edge (CE) Node"
+        },
+        {
+          "level": 2,
+          "title": "Prerequisite"
+        },
+        {
+          "level": 2,
+          "title": "Task 1: Navigate to Multi-Cloud Network Connect"
+        },
+        {
+          "level": 2,
+          "title": "Task 2: Locate Your Customer Edge Node"
+        },
+        {
+          "level": 2,
+          "title": "Task 3: Review Your Customer Edge Configuration"
+        },
+        {
+          "level": 2,
+          "title": "Task 4: What Happens During CE Deployment"
+        },
+        {
+          "level": 2,
+          "title": "Task 5: Review Network Topology"
+        },
+        {
+          "level": 2,
+          "title": "Lab Summary"
+        }
+      ]
+    },
+    {
+      "id": "c6-module1-lab2",
+      "url": "https://clouddocs.f5.com/training/community/f5xc/html/class6/module1/lab2.html",
+      "status": 200,
+      "sha256": "220c2f01bc96057804ee5aa141c017bfd9da4fcaeaa71e738fb8c3e74cea2759",
+      "headings": [
+        {
+          "level": 1,
+          "title": "Lab 2: Configuring Network Connect with Segments (L3/L4 Routing Firewall)"
+        },
+        {
+          "level": 2,
+          "title": "Prerequisite"
+        },
+        {
+          "level": 2,
+          "title": "Task 1: Understanding the Lab Environment"
+        },
+        {
+          "level": 2,
+          "title": "Task 2: Understanding Network Segments"
+        },
+        {
+          "level": 2,
+          "title": "Task 3: Test Connectivity to AWS Before Segment Attachment"
+        },
+        {
+          "level": 2,
+          "title": "Task 4: Review Routing Information Before Attaching Segment to Your CE Site"
+        },
+        {
+          "level": 2,
+          "title": "Task 5: Attach Segment to Your CE Site"
+        },
+        {
+          "level": 2,
+          "title": "Task 6: Test Connectivity to AWS After Segment Attachment"
+        },
+        {
+          "level": 2,
+          "title": "Task 7: Review Routing Information"
+        },
+        {
+          "level": 2,
+          "title": "Task 8: Understanding Enhanced Firewall Policies"
+        },
+        {
+          "level": 2,
+          "title": "Task 9:Review Pre-Configured Firewall Policy (No Action Required)"
+        },
+        {
+          "level": 2,
+          "title": "Task 9: Apply Enhanced Firewall Policy (Instructor-Led)"
+        },
+        {
+          "level": 2,
+          "title": "Task 10: Verify Firewall Policy Enforcement"
+        },
+        {
+          "level": 2,
+          "title": "Task 11: Review Firewall Events"
+        },
+        {
+          "level": 2,
+          "title": "Lab Summary"
+        }
+      ]
+    },
+    {
+      "id": "c6-module2-lab3",
+      "url": "https://clouddocs.f5.com/training/community/f5xc/html/class6/module2/lab3.html",
+      "status": 200,
+      "sha256": "4e829bbcb411cedc49e6a1bb9ef7e016fca8413835696d08bfd5c4b858c6f85b",
+      "headings": [
+        {
+          "level": 1,
+          "title": "Lab 3: Globally Available Frontend with App Connect"
+        },
+        {
+          "level": 2,
+          "title": "Prerequisite"
+        },
+        {
+          "level": 2,
+          "title": "Task 1: Understanding App Connect"
+        },
+        {
+          "level": 2,
+          "title": "Task 2: Navigate to Multi-Cloud App Connect"
+        },
+        {
+          "level": 2,
+          "title": "Task 3: Create AWS Origin Pool"
+        },
+        {
+          "level": 2,
+          "title": "Task 4: Create Azure Origin Pool"
+        },
+        {
+          "level": 2,
+          "title": "Task 5: Create HTTP Load Balancer"
+        },
+        {
+          "level": 2,
+          "title": "Task 6: Test the Load Balancer"
+        },
+        {
+          "level": 2,
+          "title": "Task 7: Test Failover to Azure"
+        },
+        {
+          "level": 2,
+          "title": "Task 8: Restore AWS Pool"
+        },
+        {
+          "level": 2,
+          "title": "Task 9: Review Performance Monitoring"
+        },
+        {
+          "level": 2,
+          "title": "Task 10: Review Traffic Analytics"
+        },
+        {
+          "level": 2,
+          "title": "Task 11: Review Request Logs"
+        },
+        {
+          "level": 2,
+          "title": "Lab Summary"
+        }
+      ]
+    },
+    {
+      "id": "c6-module2-lab4",
+      "url": "https://clouddocs.f5.com/training/community/f5xc/html/class6/module2/lab4.html",
+      "status": 200,
+      "sha256": "155676b37f5e9f00a0e6011bfd53a3e46b32e16361551c6c9618b9202616224b",
+      "headings": [
+        {
+          "level": 1,
+          "title": "Lab 4: App Connect - Solving IP Overlap"
+        },
+        {
+          "level": 2,
+          "title": "Prerequisite"
+        },
+        {
+          "level": 2,
+          "title": "Task 1: Understanding the Lab Environment"
+        },
+        {
+          "level": 2,
+          "title": "Task 2: Create Backend VIP to Azure"
+        },
+        {
+          "level": 2,
+          "title": "Task 3: Test Internal Load Balancer"
+        },
+        {
+          "level": 2,
+          "title": "Task 4: Create Origin Pool for AWS Diagnostic Tool"
+        },
+        {
+          "level": 2,
+          "title": "Task 5: Create HTTP Load Balancer for Diagnostic Tool"
+        },
+        {
+          "level": 2,
+          "title": "Task 6: Create AWS to Azure Load Balancer"
+        },
+        {
+          "level": 2,
+          "title": "Task 7: Test AWS to Azure Connectivity"
+        },
+        {
+          "level": 2,
+          "title": "Task 8: Adding Security"
+        },
+        {
+          "level": 2,
+          "title": "Test Service Policy"
+        },
+        {
+          "level": 2,
+          "title": "Review Service Policy Logs"
+        },
+        {
+          "level": 2,
+          "title": "Lab Summary"
+        }
+      ]
+    },
+    {
+      "id": "c7-module1",
+      "url": "https://clouddocs.f5.com/training/community/f5xc/html/class7/module1/module1.html",
+      "status": 200,
+      "sha256": "739299075a0c935f1cb4df5f358977ca0baafc50d8f280a60bac7a3c220af0c4",
+      "headings": [
+        {
+          "level": 1,
+          "title": "Module 1 – Vibe Coding a Simple Web App"
+        },
+        {
+          "level": 2,
+          "title": "Narrative"
+        },
+        {
+          "level": 2,
+          "title": "What this module is really about"
+        },
+        {
+          "level": 2,
+          "title": "Real-world parallel"
+        },
+        {
+          "level": 2,
+          "title": "Module 1 Tasks:"
+        }
+      ]
+    },
+    {
+      "id": "c7-module2",
+      "url": "https://clouddocs.f5.com/training/community/f5xc/html/class7/module2/module2.html",
+      "status": 200,
+      "sha256": "af4671986f8c396509b54778135316e29d18ac07d733846762064aef04bbb311",
+      "headings": [
+        {
+          "level": 1,
+          "title": "Module 2 – CI/CD + Basic Runtime Security"
+        },
+        {
+          "level": 2,
+          "title": "Narrative"
+        },
+        {
+          "level": 2,
+          "title": "What this module is really about"
+        },
+        {
+          "level": 2,
+          "title": "Real-world parallel"
+        },
+        {
+          "level": 2,
+          "title": "Module 2 Tasks:"
+        }
+      ]
+    },
+    {
+      "id": "c7-module3",
+      "url": "https://clouddocs.f5.com/training/community/f5xc/html/class7/module3/module3.html",
+      "status": 200,
+      "sha256": "10bf938778d8866e96c568c34e939b9c02c3cbfeff1b1002da1aafd1a997048c",
+      "headings": [
+        {
+          "level": 1,
+          "title": "Module 3 – Deploy Advanced Runtime Security"
+        },
+        {
+          "level": 2,
+          "title": "Narrative"
+        },
+        {
+          "level": 2,
+          "title": "What this module is really about"
+        },
+        {
+          "level": 2,
+          "title": "Real-world parallel"
+        },
+        {
+          "level": 2,
+          "title": "Module 3 Tasks:"
+        }
+      ]
+    },
+    {
+      "id": "c7-module4",
+      "url": "https://clouddocs.f5.com/training/community/f5xc/html/class7/module4/module4.html",
+      "status": 200,
+      "sha256": "e56445b29e13269355209b7f901e00b2ac12560394bc155999ca05a0aaf55427",
+      "headings": [
+        {
+          "level": 1,
+          "title": "Module 4 – Web App Scanning & Conclusion"
+        },
+        {
+          "level": 2,
+          "title": "Narrative"
+        },
+        {
+          "level": 2,
+          "title": "What this module is really about"
+        },
+        {
+          "level": 2,
+          "title": "Real-world takeaway"
+        },
+        {
+          "level": 2,
+          "title": "Module 4 Tasks:"
+        }
+      ]
+    },
+    {
+      "id": "c8-lab1",
+      "url": "https://clouddocs.f5.com/training/community/f5xc/html/class8/lab1.html",
+      "status": 200,
+      "sha256": "75cb015321fa70ee944589305c6c1d83b7f8149f62323dda4c0f2c9e42773586",
+      "headings": [
+        {
+          "level": 1,
+          "title": "Lab 1: Building a Service Policy for Negative Enforcement"
+        },
+        {
+          "level": 2,
+          "title": "Task 1: Exploring the F5 Distributed Console"
+        },
+        {
+          "level": 3,
+          "title": "Narrative Check"
+        },
+        {
+          "level": 2,
+          "title": "Task 2: Negative Enforcement"
+        },
+        {
+          "level": 3,
+          "title": "Narrative Check"
+        },
+        {
+          "level": 2,
+          "title": "Task 3: Observability"
+        },
+        {
+          "level": 3,
+          "title": "Narrative Check"
+        }
+      ]
+    },
+    {
+      "id": "c8-lab2",
+      "url": "https://clouddocs.f5.com/training/community/f5xc/html/class8/lab2.html",
+      "status": 200,
+      "sha256": "1f89fda6c9e9ee840e72fd19fbc4e82b60ecea257481b5adcceadd0f9f450214",
+      "headings": [
+        {
+          "level": 1,
+          "title": "Lab 2: Enabling Positive Application Security with Service Policies"
+        },
+        {
+          "level": 2,
+          "title": "Task 1: Reviewing Current Access Trends"
+        },
+        {
+          "level": 2,
+          "title": "Task 2: Create A Deny-All Enforcement Service Policy"
+        },
+        {
+          "level": 2,
+          "title": "Task 3: Create specific rules define allowed traffic for positive enforcement"
+        },
+        {
+          "level": 3,
+          "title": "Narrative Check"
+        }
+      ]
+    },
+    {
+      "id": "c8-lab3",
+      "url": "https://clouddocs.f5.com/training/community/f5xc/html/class8/lab3.html",
+      "status": 200,
+      "sha256": "c675e5d55aa815609a09c3c19b4df11c98090b88a9ce75aaf11d3ed3770f076b",
+      "headings": [
+        {
+          "level": 1,
+          "title": "Lab 3: Zero Day Exploit Response with Rate Limiting and Custom Service Policies"
+        },
+        {
+          "level": 2,
+          "title": "Task 1: Establishing a Baseline"
+        },
+        {
+          "level": 2,
+          "title": "Task 2: Creating a Rate Limiting Policy"
+        },
+        {
+          "level": 2,
+          "title": "Task 3: Testing Rate Limiting"
+        },
+        {
+          "level": 3,
+          "title": "Narrative Check"
+        },
+        {
+          "level": 2,
+          "title": "Task 4: Create, assign and test a Custom Service Policy"
+        },
+        {
+          "level": 3,
+          "title": "Narrative Check"
+        }
+      ]
+    },
+    {
+      "id": "c7-module1-task1",
+      "url": "https://clouddocs.f5.com/training/community/f5xc/html/class7/module1/task1.html",
+      "headings": [
+        {
+          "level": 1,
+          "title": "Task 1 – Understanding Vibe Coding with Cline Extension"
+        },
+        {
+          "level": 2,
+          "title": "Understanding VS Code, Cline, and Gemini Interaction"
+        },
+        {
+          "level": 3,
+          "title": "How the Interaction Works"
+        },
+        {
+          "level": 3,
+          "title": "New Files Being Created"
+        },
+        {
+          "level": 3,
+          "title": "Command Execution"
+        },
+        {
+          "level": 3,
+          "title": "Automated Testing with Pytest"
+        },
+        {
+          "level": 3,
+          "title": "Save File Prompts"
+        },
+        {
+          "level": 3,
+          "title": "Clean Up as You Go"
+        },
+        {
+          "level": 3,
+          "title": "Cline Errors"
+        },
+        {
+          "level": 3,
+          "title": "Cline Stuck on “Thinking”"
+        },
+        {
+          "level": 2,
+          "title": "Wrap-Up"
+        }
+      ]
+    },
+    {
+      "id": "c7-module1-task2",
+      "url": "https://clouddocs.f5.com/training/community/f5xc/html/class7/module1/task2.html",
+      "headings": [
+        {
+          "level": 1,
+          "title": "Task 2 – Let’s Vibe Code!"
+        },
+        {
+          "level": 2,
+          "title": "Build a Simple Flask Web Application"
+        },
+        {
+          "level": 2,
+          "title": "Run and Test the Application"
+        },
+        {
+          "level": 2,
+          "title": "Wrap-Up"
+        }
+      ]
+    },
+    {
+      "id": "c7-module2-task1",
+      "url": "https://clouddocs.f5.com/training/community/f5xc/html/class7/module2/task1.html",
+      "headings": [
+        {
+          "level": 1,
+          "title": "Task 1 - Deploy F5 AI-generated Application"
+        },
+        {
+          "level": 2,
+          "title": "Access the GitLab Repository"
+        },
+        {
+          "level": 2,
+          "title": "Open the Module 2 Workspace in VS Code"
+        },
+        {
+          "level": 2,
+          "title": "Create the Security Policy File"
+        },
+        {
+          "level": 2,
+          "title": "Commit and Trigger the Pipeline (First Run)"
+        },
+        {
+          "level": 2,
+          "title": "Observe the Pipeline Failure"
+        },
+        {
+          "level": 2,
+          "title": "Fix the Policy and Re-run the Pipeline"
+        },
+        {
+          "level": 2,
+          "title": "Access the Application"
+        },
+        {
+          "level": 2,
+          "title": "Wrap-Up"
+        }
+      ]
+    },
+    {
+      "id": "c7-module2-task2",
+      "url": "https://clouddocs.f5.com/training/community/f5xc/html/class7/module2/task2.html",
+      "headings": [
+        {
+          "level": 1,
+          "title": "Task 2 - Explore F5 AI-generated Application & Runtime Security"
+        },
+        {
+          "level": 2,
+          "title": "Explore the Deployed Application"
+        },
+        {
+          "level": 2,
+          "title": "Explore F5 Distributed Cloud Configuration"
+        },
+        {
+          "level": 2,
+          "title": "Generate Attack Traffic"
+        },
+        {
+          "level": 2,
+          "title": "Review Security Events"
+        },
+        {
+          "level": 2,
+          "title": "Wrap-Up"
+        }
+      ]
+    },
+    {
+      "id": "c7-module3-task1",
+      "url": "https://clouddocs.f5.com/training/community/f5xc/html/class7/module3/task1.html",
+      "headings": [
+        {
+          "level": 1,
+          "title": "Task 1 – Enable F5XC API Discovery"
+        },
+        {
+          "level": 2,
+          "title": "Extend the Application Using Cline"
+        },
+        {
+          "level": 2,
+          "title": "Vibe Coding Experience in VS Code (What You’ll See)"
+        },
+        {
+          "level": 2,
+          "title": "Enable API Discovery Using Policy-as-Code"
+        },
+        {
+          "level": 2,
+          "title": "Commit and Push the Changes"
+        },
+        {
+          "level": 2,
+          "title": "Observe the CI/CD Pipeline"
+        },
+        {
+          "level": 2,
+          "title": "Generate Traffic to Exercise the New API Endpoints"
+        },
+        {
+          "level": 2,
+          "title": "Review API Endpoints in F5 Distributed Cloud"
+        },
+        {
+          "level": 2,
+          "title": "Wrap-Up"
+        }
+      ]
+    },
+    {
+      "id": "c7-module3-task2",
+      "url": "https://clouddocs.f5.com/training/community/f5xc/html/class7/module3/task2.html",
+      "headings": [
+        {
+          "level": 1,
+          "title": "Task 2 – Enable F5 Bot Protection on Login and Contact Pages"
+        },
+        {
+          "level": 2,
+          "title": "Extend the Application with User-Facing Pages"
+        },
+        {
+          "level": 2,
+          "title": "Enable Bot Defense Using Policy-as-Code"
+        },
+        {
+          "level": 2,
+          "title": "Commit and Push the Changes"
+        },
+        {
+          "level": 2,
+          "title": "Observe the CI/CD Pipeline"
+        },
+        {
+          "level": 2,
+          "title": "Test Bot Defense in Browser vs curl (Why Results Differ)"
+        },
+        {
+          "level": 2,
+          "title": "Review Bot Defense in F5 Distributed Cloud"
+        },
+        {
+          "level": 2,
+          "title": "Wrap-Up"
+        }
+      ]
+    },
+    {
+      "id": "c7-module4-task1",
+      "url": "https://clouddocs.f5.com/training/community/f5xc/html/class7/module4/task1.html",
+      "headings": [
+        {
+          "level": 1,
+          "title": "Task 1 – F5XC Web Application Scanning (WAS) as a DAST Tool"
+        },
+        {
+          "level": 2,
+          "title": "What is F5XC Web Application Scanning (F5XC WAS)?"
+        },
+        {
+          "level": 2,
+          "title": "Why F5XC WAS Matters in This Lab"
+        },
+        {
+          "level": 2,
+          "title": "Review: Pre-Scan vs Post-Scan WAF Reports"
+        },
+        {
+          "level": 2,
+          "title": "How F5XC WAS Fits into CI/CD (Conceptually)"
+        },
+        {
+          "level": 2,
+          "title": "What This Task Reinforces"
+        }
+      ]
+    },
+    {
+      "id": "c7-module4-task2",
+      "url": "https://clouddocs.f5.com/training/community/f5xc/html/class7/module4/task2.html",
+      "headings": [
+        {
+          "level": 1,
+          "title": "Task 2 – Lab Conclusion"
+        },
+        {
+          "level": 2,
+          "title": "What You Built (Without Noticing)"
+        },
+        {
+          "level": 2,
+          "title": "What Changed from Module 1 to Module 4"
+        },
+        {
+          "level": 2,
+          "title": "The Loop That Matters"
+        },
+        {
+          "level": 2,
+          "title": "Final Takeaway"
+        }
+      ]
+    }
+  ]
+}

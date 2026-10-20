@@ -147,6 +147,6 @@ export function consoleLab1Checks(data: DemoData, lab: ConsoleLab1) {
   ];
 }
 export function explainConsoleEvent(event: SecurityEvent, wafs: Waf[]) {
-  const waf = wafs.find((w) => w.id === event.evaluatedWafId);
+  const waf = event.policySnapshot ?? wafs.find((w) => w.id === event.evaluatedWafId);
   return `로컬 규칙 기반 설명 · req_id ${event.id}\n${event.method ?? 'GET'} ${event.path}\nHTTP ${event.responseCode ?? 200} · ${event.action}\n${event.reason ?? 'Seeded demo event'}\n적용 정책: ${waf ? `${waf.namespace}/${waf.name}` : '없음'}\n정상 요청과 비교하고, WAF 모드 및 의도한 경로의 예외 설정을 확인하세요. 실제 AI 서비스는 호출하지 않습니다.`;
 }

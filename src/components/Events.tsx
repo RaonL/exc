@@ -27,7 +27,7 @@ export function SecurityEvents({
       (!analytics || e.scenario !== 'Normal HTTP traffic') &&
       (action === 'All actions' || e.action === action) &&
       matchesEventFilter(e, filter) &&
-      `${e.id} ${e.scenario} ${e.source} ${e.path} ${s.lbs.find((l) => l.id === e.lbId)?.name}`
+      `${e.id} ${e.scenario} ${e.catalogMatch?.id ?? ''} ${e.catalogMatch?.name ?? ''} ${e.source} ${e.path} ${s.lbs.find((l) => l.id === e.lbId)?.name}`
         .toLowerCase()
         .includes(search.toLowerCase()),
   );

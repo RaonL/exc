@@ -4,3 +4,8 @@ dist/
 *.local
 test-results/
 *.tsbuildinfo
+output/playwright/
+output/verification/
+.playwright-cli/
+
+output/

@@ -15,11 +15,13 @@ import { Badge, Card, Empty, PageHeading, Stat, TextLink, time } from './common'
 import { Button } from './ui/button';
 import { ActivityPage } from './Administration';
 import type { Workspace, Page } from '../types';
+import { ConsoleHome } from './ConsoleHome';
 export function Home({ page, openLab }: { page: string; openLab: () => void }) {
   const s = useConsole();
   const lbs = s.lbs.filter((l) => l.namespace === s.namespace);
   const activity = s.activity.filter((a) => a.namespace === s.namespace);
   if (page === 'Recent Activity') return <ActivityPage />;
+  if (page === 'Services') return <ConsoleHome />;
   const services: {
     name: Workspace;
     description: string;

@@ -53,6 +53,8 @@ function publish(
       responseCode: l.code,
       responseBody: l.body,
       reason: l.reason,
+      evaluationTrace: l.trace,
+      generatedBy: 'console-request',
     }));
   useConsole.setState({
     namespaces: [...new Set([...core.namespaces, ns])],

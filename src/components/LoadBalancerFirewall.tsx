@@ -4,6 +4,8 @@ import type { LBFieldsProps } from './LoadBalancerBasics';
 import { Field } from './form-fields';
 import { Button } from './ui/button';
 import { Badge } from './common';
+import { ReferenceSelect } from './ReferenceSelect';
+import { useState } from 'react';
 export function FirewallFields({
   form,
   config,
@@ -22,28 +24,37 @@ export function FirewallFields({
   onCreate: () => void;
   onExclusions: (newItem?: boolean) => void;
 }) {
+  const [unmodeled, setUnmodeled] = useState('');
   return (
     <>
       <Field label="Web Application Firewall (WAF)">
-        <select
+        <ReferenceSelect
+          label="Web Application Firewall (WAF)"
           value={enabled ? 'Enable' : 'Disable'}
-          onChange={(e) => onEnabledChange(e.target.value === 'Enable')}
-        >
-          <option>Disable</option>
-          <option disabled={!wafs.length}>Enable</option>
-        </select>
+          onChange={(value) => onEnabledChange(value === 'Enable')}
+          options={[
+            {
+              value: 'Disable',
+              description: 'No WAF configuration for this load balancer',
+              default: true,
+            },
+            { value: 'Enable', description: 'Reference to App Firewall configuration object' },
+          ]}
+        />
       </Field>
       {enabled && (
         <div className="lb-waf-selection">
           <Field label="Enable *">
-            <select required value={form.wafId} onChange={(e) => update('wafId', e.target.value)}>
-              <option value="">Select a Web Application Firewall</option>
-              {wafs.map((w) => (
-                <option key={w.id} value={w.id}>
-                  {w.namespace}/{w.name}
-                </option>
-              ))}
-            </select>
+            <ReferenceSelect
+              label="Enable *"
+              value={form.wafId}
+              onChange={(value) => update('wafId', value)}
+              onAdd={onCreate}
+              options={[
+                { value: '', label: 'Select App Firewall' },
+                ...wafs.map((w) => ({ value: w.id, label: `${w.namespace}/${w.name}` })),
+              ]}
+            />
           </Field>
         </div>
       )}
@@ -84,6 +95,26 @@ export function FirewallFields({
         <Plus size={14} />
         Add Exclusion Rule
       </Button>
+      {['Data Guard Rules', 'Cross-Site Request Forgery Protection', 'GraphQL Inspection'].map(
+        (title) => (
+          <div className="xc-unmodeled-control" key={title}>
+            <h3>{title} ⓘ</h3>
+            <p>
+              <span>⚠</span> Not configured{' '}
+              <button type="button" onClick={() => setUnmodeled(unmodeled === title ? '' : title)}>
+                Configure ›
+              </button>
+              <small>미구현</small>
+            </p>
+            {unmodeled === title && (
+              <p role="status">
+                설정 위치를 보여주는 학습용 화면입니다. 이 보호 기능의 설정·평가 엔진은
+                미구현입니다.
+              </p>
+            )}
+          </div>
+        ),
+      )}
     </>
   );
 }

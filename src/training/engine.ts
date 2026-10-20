@@ -1,5 +1,6 @@
 import { evaluateRequest, lbConfig, originConfig } from '../lib/config';
 import type { Check, Environment, Lab, ProbeResult, RequestInput, Verification } from './types';
+import { dummyAppResponse } from './dummy-app';
 
 export const apiPaths = ['/api/customerlookup/getbyname', '/api/customerlookup/getbydob'];
 export const defaultSource = JSON.stringify(
@@ -7,6 +8,9 @@ export const defaultSource = JSON.stringify(
     name: 'xc-training-app',
     routes: [
       { method: 'GET', path: '/', body: 'Hello XC' },
+      { method: 'GET', path: '/about', body: 'About XC Training App' },
+      { method: 'GET', path: '/login', body: 'Demo login form' },
+      { method: 'GET', path: '/contact', body: 'Demo contact form' },
       { method: 'POST', path: '/login', body: 'Demo login' },
       { method: 'POST', path: '/contact', body: 'Demo contact' },
     ],
@@ -217,7 +221,11 @@ export function pipeline(e: Environment, action: 'Build' | 'Test' | 'Deploy'): E
       throw new Error('현재 소스를 먼저 Build 하세요.');
     if (
       !app.routes!.some((r) => r.method === 'GET' && r.path === '/') ||
-      !app.routes!.some((r) => r.method === 'POST' && r.path === '/login')
+      !app.routes!.some(
+        (r) =>
+          (r.method === 'POST' && r.path === '/login') ||
+          (r.method === 'GET' && r.path === '/about'),
+      )
     )
       throw new Error('GET / 와 POST /login 계약 테스트가 실패했습니다.');
     c.pipeline = ['Build', 'Test'];
@@ -275,7 +283,7 @@ export function sendRequest(
   let code = 200,
     action: ProbeResult['action'] = 'Allowed',
     reason = 'Local origin accepted request',
-    body = 'Demo application response';
+    body = dummyAppResponse(path, input.method, upstreamPath);
   const block = (status: number, why: string) => {
     code = status;
     action = 'Blocked';
@@ -295,6 +303,8 @@ export function sendRequest(
   )
     block(503, 'Origin / Customer Edge unavailable');
   if (code === 200 && ['segments', 'overlap'].includes(lab.exercise)) {
+    if (lab.exercise === 'overlap' && headers.host && !e.lb.domains.includes(headers.host))
+      block(404, 'Internal VIP: Host does not match the configured LB domain');
     if (lab.exercise === 'segments' && (!c.segment || !c.segmentPeer))
       block(503, 'DC and AWS segments are isolated');
     if (lab.exercise === 'overlap' && !c.overlapVip)
@@ -302,6 +312,8 @@ export function sendRequest(
     if (code === 200 && c.firewall && input.transport === 'SSH')
       block(403, 'Enhanced firewall: SSH denied (simulated L4 result)');
   }
+  if (code === 200 && c.policyMode === 'GET only' && input.method !== 'GET')
+    block(403, 'Service policy: only GET is allowed; method ' + input.method + ' denied');
   if (
     code === 200 &&
     c.policyMode === 'Header allowlist' &&
@@ -406,10 +418,24 @@ export function sendRequest(
     );
     if (route) body = route.body;
   }
-  if (code === 200 && path === '/api/customerlookup/getbydob')
-    body = '{"customer":"SYNTHETIC PERSON","ssn":"DEMO-NOT-REAL"}';
+  const supportId = crypto.randomUUID();
+  if (action === 'Blocked') {
+    body = body.replaceAll('{{request_id}}', supportId);
+    if (!body.includes(supportId)) body += `\nSupport ID: ${supportId}`;
+  }
   const result: ProbeResult = {
-    id: crypto.randomUUID(),
+    id: supportId,
+    trace: [
+      `START local simulation · support_id=${supportId}`,
+      `REQUEST ${input.method} ${input.path} attack_input=${input.attack} client=${input.source}/${input.identity}`,
+      `CONTEXT namespace=${e.lb.namespace} lb=${e.lb.name} vip=${lbConfig(e.lb).vip} ce_online=${e.ce.online}`,
+      `ROUTE ${route?.name ?? 'default'} origin=${origin?.name ?? 'none'} healthy=${origin?.healthy ?? false}`,
+      `POLICY waf=${route?.wafId || e.lb.wafId || 'none'} mode=${e.waf.mode} service_policy=${c.policyMode}`,
+      `CONTROLS api_deny=${c.apiDeny} inventory=${c.inventory} bot=${c.botMode} rate=${c.rateLimit ? `${c.rate}/${c.rateWindow}s` : 'Disabled'}`,
+      `CLASSIFICATION ${responseHeaders['x-demo-bot'] ?? 'N/A'} · 합성 입력 기반`,
+      `RESPONSE status=${code} action=${action} reason=${reason}`,
+      'END simulation=true external_requests=0',
+    ],
     at: e.runtime.now,
     request: input,
     code,
@@ -483,6 +509,7 @@ export function referenceConfiguration(environment: Environment, lab: Lab): Envi
       'pipeline',
       'scan',
       'scan-compare',
+      'bot-baseline',
     ].includes(x)
   ) {
     e.lb.wafId = e.waf.id;
@@ -552,6 +579,7 @@ export function referenceConfiguration(environment: Environment, lab: Lab): Envi
   if (x === 'overlap') {
     c.overlapVip = true;
     c.firewall = true;
+    c.policyMode = 'GET only';
   }
   if (x === 'failover') c.failover = true;
   if (['code', 'pipeline', 'advanced', 'scan-compare'].includes(x)) {
@@ -796,6 +824,12 @@ export function verifyLab(
   }
   if (x === 'bot-baseline') {
     check(
+      'WAF 적용 후 재시험',
+      e.lb.wafId === e.waf.id && e.waf.mode === 'Blocking',
+      'WAF attached / Blocking',
+      `${e.lb.wafId || 'none'} / ${e.waf.mode}`,
+    );
+    check(
       '보호 전 기준 상태',
       !e.lb.botDefense && c.botMode === 'Disabled',
       'Bot disabled',
@@ -832,6 +866,9 @@ export function verifyLab(
     check('CE Online', e.ce.online, 'Online', String(e.ce.online));
     probe('HTTP 연결', {}, 200);
     probe('SSH 방화벽', { transport: 'SSH' }, 403);
+    if (x === 'overlap') probe('Task 8 · HEAD 차단', { method: 'HEAD' }, 403);
+    if (x === 'overlap')
+      probe('Task 3 · IP만 접근 시 Host 불일치', { headers: { host: '10.1.1.5' } }, 404);
     e.ce.online = false;
     probe('CE 단절 연결', {}, 503);
     e.ce.online = original.ce.online;
@@ -867,13 +904,13 @@ export function verifyLab(
             const app = manifest(c.source);
             return (
               app.routes!.some((r) => r.path === '/' && r.method === 'GET') &&
-              app.routes!.some((r) => r.path === '/login' && r.method === 'POST')
+              app.routes!.some((r) => r.path === '/about' && r.method === 'GET')
             );
           } catch {
             return false;
           }
         })(),
-        'GET / + POST /login',
+        'GET / + GET /about',
         'Local manifest contract',
       );
   }

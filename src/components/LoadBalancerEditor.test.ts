@@ -174,10 +174,28 @@ it('retains identity, request totals and advanced settings when saving basic edi
 
 it('opens configuration read-only and enters edit mode without saving', async () => {
   await render(useConsole.getState().lbs[0], true);
-  expect(field('Name *').matches(':disabled')).toBe(true);
+  expect(document.querySelector('.xc-read-row')?.textContent).toContain(
+    useConsole.getState().lbs[0].name,
+  );
+  expect(document.querySelector('input[name="lb-name"]')).toBeNull();
   await click('Edit Configuration');
   expect(field('Name *').matches(':disabled')).toBe(false);
   expect(close).not.toHaveBeenCalled();
+});
+
+it('closes only the open WAF dropdown on Escape and retains the parent LB draft', async () => {
+  await render(useConsole.getState().lbs[0]);
+  const trigger = document.querySelector('.xc-select [role="combobox"]') as HTMLButtonElement;
+  await act(async () => trigger.click());
+  expect(trigger.getAttribute('aria-expanded')).toBe('true');
+  await act(async () =>
+    trigger.dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }),
+    ),
+  );
+  expect(close).not.toHaveBeenCalled();
+  expect(document.querySelector('[role="dialog"]')).not.toBeNull();
+  expect(trigger.getAttribute('aria-expanded')).toBe('false');
 });
 
 it('keeps saved domain arrays unchanged while editing, removing and cancelling rows', async () => {

@@ -31,6 +31,7 @@ import { Dialog } from './ui/dialog';
 import { LBForm, ResourceForm } from './forms';
 import { WafEditor } from './SecurityEditors';
 import { OriginEditor } from './OriginEditor';
+import { OriginPoolList } from './OriginPoolList';
 type Notify = (message: string) => void;
 export function LoadBalancers({ notify }: { notify: Notify }) {
   const s = useConsole();
@@ -81,8 +82,11 @@ export function LoadBalancers({ notify }: { notify: Notify }) {
         </span>
         <Badge tone="blue">Namespace: {s.namespace}</Badge>
       </div>
-      <Card>
+      <Card className="xc-lb-table">
         <div className="table-toolbar">
+          <span className="xc-list-count">
+            {lbs.length} item{lbs.length !== 1 ? 's' : ''}
+          </span>
           <SearchInput
             value={search}
             onChange={setSearch}
@@ -113,24 +117,58 @@ export function LoadBalancers({ notify }: { notify: Notify }) {
             <table>
               <thead>
                 <tr>
-                  <th>Name / domains</th>
-                  <th>Type</th>
-                  <th>Health</th>
-                  <th>App Firewall</th>
-                  <th className="numeric">Total requests</th>
+                  <th />
+                  <th>
+                    <input type="checkbox" aria-label="Select all HTTP Load Balancers" />
+                  </th>
+                  <th>Name</th>
+                  <th>Namespace</th>
+                  <th>DNS Info</th>
+                  <th>Validity</th>
+                  <th>Certificate expirat…</th>
+                  <th>Domains</th>
                   <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {lbs.map((l) => {
-                  const waf = s.wafs.find((w) => w.id === l.wafId);
                   return (
                     <tr key={l.id}>
+                      <td>
+                        <button
+                          aria-label={`View configuration ${l.name}`}
+                          onClick={() => {
+                            setViewOnly(true);
+                            setForm(l);
+                          }}
+                        >
+                          ›
+                        </button>
+                      </td>
+                      <td>
+                        <input type="checkbox" aria-label={`Select ${l.name}`} />
+                      </td>
                       <td>
                         <button className="resource-link" onClick={() => s.selectLb(l.id)}>
                           {l.name}
                           <ExternalLink size={12} />
                         </button>
+                      </td>
+                      <td>{l.namespace}</td>
+                      <td>
+                        <span className="xc-dns-state" title="Local simulated status">
+                          {isLbHealthy(l, s.origins)
+                            ? 'VIRTUAL_HOST_READY'
+                            : 'VIRTUAL_HOST_NOT_READY'}
+                        </span>
+                      </td>
+                      <td>
+                        <span className={`xc-validity ${isLbHealthy(l, s.origins) ? 'valid' : ''}`}>
+                          {isLbHealthy(l, s.origins) ? 'Valid' : 'Invalid'}
+                        </span>
+                      </td>
+                      <td>—</td>
+                      <td>
                         <button
                           className="cell-sub resource-link"
                           aria-label={`Open application ${l.name}`}
@@ -139,27 +177,6 @@ export function LoadBalancers({ notify }: { notify: Notify }) {
                           {l.domains.join(', ')} <ExternalLink size={11} />
                         </button>
                       </td>
-                      <td>
-                        <Badge tone="blue">{l.protocol}</Badge>
-                      </td>
-                      <td>
-                        <Status healthy={isLbHealthy(l, s.origins)} />
-                      </td>
-                      <td>
-                        {waf ? (
-                          <>
-                            <button className="resource-link" onClick={() => setInspectWaf(waf)}>
-                              {waf.name}
-                            </button>
-                            <small className="cell-sub">{waf.mode} · Applied</small>
-                          </>
-                        ) : (
-                          <Badge tone={hasWaf(l) ? 'blue' : 'amber'}>
-                            {hasWaf(l) ? 'Route-level WAF' : 'Not configured'}
-                          </Badge>
-                        )}
-                      </td>
-                      <td className="numeric">{l.requests.toLocaleString()}</td>
                       <td>
                         <div className="row-actions">
                           <button
@@ -334,6 +351,7 @@ export function ConfigResources({
   const items = (kind === 'origin' ? s.origins : kind === 'waf' ? s.wafs : s.policies).filter(
     (o) => o.namespace === s.namespace && o.name.includes(search.toLowerCase()),
   );
+  if (['origin'].includes(kind)) return <OriginPoolList notify={notify} />;
   return (
     <>
       <PageHeading

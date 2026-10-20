@@ -124,7 +124,8 @@ describe('Cross-screen simulation contracts', () => {
     const lb = get().lbs[0];
     get().saveLb({ ...lb, wafId: '' });
     get().simulate('SQL Injection', lb.id);
-    expect(get().events[0].action).toBe('Detected');
+    expect(get().events[0].action).toBe('Allowed');
+    expect(get().events[0].reason).toContain('Protection is not enabled');
     get().saveLb({ ...get().lbs[0], wafId: 'waf-standard' });
     get().simulate('SQL Injection', lb.id);
     expect(get().events[0].action).toBe('Blocked');
@@ -136,7 +137,8 @@ describe('Cross-screen simulation contracts', () => {
   ] as const)('respects LB protection flags for %s', (scenario, flag) => {
     get().saveLb({ ...get().lbs[0], [flag]: false });
     get().simulate(scenario, 'lb-social');
-    expect(get().events[0].action).toBe('Detected');
+    expect(get().events[0].action).toBe('Allowed');
+    expect(get().events[0].reason).toContain('without inspection');
     get().saveLb({ ...get().lbs[0], [flag]: true });
     get().simulate(scenario, 'lb-social');
     expect(get().events[0].action).toBe('Blocked');

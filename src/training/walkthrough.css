@@ -1,0 +1,72 @@
+.lab-walkthrough {
+  border: 1px solid #d6e1ef;
+  background: #f7faff;
+  padding: 20px;
+  margin-block: 20px;
+  color: #2c4263;
+}
+.lab-walkthrough h3 {
+  font-size: 15px;
+  margin-bottom: 8px;
+}
+.lab-walkthrough p {
+  font-size: 12px;
+  line-height: 1.8;
+  margin: 8px 0 12px;
+}
+.lab-walkthrough summary {
+  cursor: pointer;
+  padding-block: 12px;
+  font-weight: 600;
+}
+.lab-walkthrough dl > div {
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr);
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid #e0e7f2;
+  font-size: 12px;
+}
+.lab-walkthrough dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.walkthrough-table {
+  overflow: auto;
+}
+.walkthrough-table table {
+  min-width: 500px;
+}
+.lab-walkthrough pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  background: white;
+  padding: 12px;
+  font-size: 11px;
+  max-height: 280px;
+  overflow: auto;
+}
+.lab-walkthrough article {
+  padding: 16px;
+  border: 1px solid #dce4ef;
+  background: white;
+  margin-bottom: 12px;
+}
+.lab-walkthrough h4 {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.lab-walkthrough code {
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 520px) {
+  .lab-walkthrough {
+    padding: 12px;
+  }
+  .lab-walkthrough dl > div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+  }
+}

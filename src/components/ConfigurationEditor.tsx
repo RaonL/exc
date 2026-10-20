@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { Button } from './ui/button';
 import { Badge, download } from './common';
+import { ConfigurationReadView } from './ConfigurationReadView';
 export interface ConfigSection {
   id: string;
   title: string;
@@ -59,6 +60,7 @@ export function ConfigurationEditor({
   resourceContext?: { title: string; trail: string[] };
 }) {
   const editorId = useId();
+  const consoleForm = kind === 'HTTP Load Balancer' || kind === 'App Firewall';
   const [view, setView] = useState('Form');
   const [active, setActive] = useState(sections[0].id);
   const [query, setQuery] = useState('');
@@ -73,7 +75,7 @@ export function ConfigurationEditor({
     requestAnimationFrame(() =>
       body.current
         ?.querySelector(`[data-section="${id}"]`)
-        ?.scrollIntoView({ block: 'start', behavior: 'smooth' }),
+        ?.scrollIntoView({ block: 'start', behavior: 'instant' }),
     );
   };
   return (
@@ -81,6 +83,11 @@ export function ConfigurationEditor({
       <Dialog.Portal>
         <Dialog.Overlay className="dialog-overlay" />
         <Dialog.Content
+          onEscapeKeyDown={(event) => {
+            if (body.current?.querySelector('.xc-select [aria-expanded="true"]'))
+              event.preventDefault();
+          }}
+          data-mode={readOnly ? 'view' : name ? 'edit' : 'new'}
           className={`config-editor ${['HTTP Load Balancer', 'Origin Pool', 'Origin Server', 'Origin Pool with Weight and Priority', 'App Firewall', 'Simple WAF Exclusion Rule', 'WAF Exclusion Rules'].includes(kind) ? 'reference-editor' : ''} ${className}`}
           aria-describedby={`${editorId}-description`}
         >
@@ -140,6 +147,7 @@ export function ConfigurationEditor({
                 </button>
               ))}
             </div>
+            {consoleForm && <span className="editor-learning-label">비공식 학습용 시뮬레이터</span>}
             {onReset && !readOnly && (
               <button
                 type="button"
@@ -175,6 +183,11 @@ export function ConfigurationEditor({
               />
               Show Advanced Fields
             </label>
+            {readOnly && onEdit && (
+              <button type="button" className="xc-edit-configuration" onClick={onEdit}>
+                <Settings2 size={19} /> Edit Configuration
+              </button>
+            )}
           </div>
           <form
             onSubmit={onSave}
@@ -201,6 +214,11 @@ export function ConfigurationEditor({
                 </Badge>
                 <strong>{resourceContext?.title ?? kind}</strong>
                 <small>{name || 'New configuration'}</small>
+                {consoleForm && (
+                  <span className="editor-namespace">
+                    Namespace <strong>{namespace}</strong>
+                  </span>
+                )}
                 {resourceContext && (
                   <ol className="config-resource-trail" aria-label="Parent configuration path">
                     {resourceContext.trail.map((item) => (
@@ -290,7 +308,16 @@ export function ConfigurationEditor({
                           {section.description && (
                             <p className="config-section-description">{section.description}</p>
                           )}
-                          {section.content}
+                          {readOnly ? (
+                            <ConfigurationReadView
+                              kind={kind}
+                              id={section.id}
+                              value={value}
+                              fallback={section.content}
+                            />
+                          ) : (
+                            section.content
+                          )}
                         </div>
                       </section>
                     ))}
@@ -347,7 +374,7 @@ export function ConfigurationEditor({
               )}
               <span>Changes apply to your local training environment.</span>
               <Button type="button" variant="outline" onClick={close}>
-                {cancelLabel ?? (readOnly ? 'Close' : 'Cancel and Exit')}
+                {cancelLabel ?? 'Cancel and Exit'}
               </Button>
               {readOnly ? (
                 onEdit && (

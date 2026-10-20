@@ -19,6 +19,7 @@ const scenarios: Scenario[] = [
   'CE Online',
 ];
 const descriptions: Record<Scenario, string> = {
+  'Catalog Signature': 'Select a signature in Security Catalog to evaluate its stored metadata.',
   'Normal HTTP traffic': 'Generate 1,200 successful HTTP requests to the selected application.',
   'Command Injection': 'Evaluate a simulated command-injection signature. No command is executed.',
   'SQL Injection':
