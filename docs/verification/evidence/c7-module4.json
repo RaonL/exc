@@ -1,0 +1,277 @@
+{
+  "lab": "https://clouddocs.f5.com/training/community/f5xc/html/class7/module4/module4.html",
+  "baseline": {
+    "at": 1792460076497,
+    "codes": [
+      200,
+      200,
+      200
+    ]
+  },
+  "verification": {
+    "at": 1792460078104,
+    "fingerprint": "{\"lb\":{\"id\":\"training-c7-module4-lb\",\"namespace\":\"training-c7-module4\",\"name\":\"c7-module4-lb\",\"domains\":[\"c7-module4.example.com\"],\"protocol\":\"HTTPS\",\"originId\":\"training-c7-module4-aws\",\"wafId\":\"training-c7-module4-waf\",\"apiProtection\":false,\"botDefense\":true,\"ddosProtection\":false,\"requests\":0,\"createdAt\":\"\",\"config\":{\"description\":\"\",\"labels\":\"\",\"vip\":\"Internet\",\"vipAddress\":\"\",\"siteId\":\"\",\"certificate\":\"Automatic\",\"certificateRef\":\"\",\"listenPort\":443,\"redirectHttps\":true,\"hsts\":false,\"tlsLevel\":\"High\",\"routes\":[],\"exclusions\":[],\"cdn\":false,\"timeout\":30,\"apiDiscovery\":false,\"manageDns\":false,\"listenPortChoice\":\"HTTP Listen Port\",\"originWeight\":1,\"originPriority\":1}},\"waf\":{\"id\":\"training-c7-module4-waf\",\"namespace\":\"training-c7-module4\",\"name\":\"c7-module4-appfw\",\"mode\":\"Blocking\"},\"origins\":[{\"id\":\"training-c7-module4-aws\",\"namespace\":\"training-c7-module4\",\"name\":\"aws-primary\",\"endpoint\":\"aws-origin.example.com\",\"port\":80,\"healthy\":true,\"config\":{\"labels\":\"\",\"description\":\"\",\"type\":\"Public DNS\",\"siteId\":\"\",\"network\":\"Inside Network\",\"algorithm\":\"Round Robin\",\"tls\":false,\"sni\":\"\",\"healthCheck\":\"HTTP\",\"healthPath\":\"/health\",\"interval\":15,\"timeout\":3,\"healthyThreshold\":2,\"unhealthyThreshold\":3}},{\"id\":\"training-c7-module4-azure\",\"namespace\":\"training-c7-module4\",\"name\":\"azure-canary\",\"endpoint\":\"azure-origin.example.com\",\"port\":80,\"healthy\":true,\"config\":{\"labels\":\"\",\"description\":\"\",\"type\":\"Public DNS\",\"siteId\":\"\",\"network\":\"Inside Network\",\"algorithm\":\"Round Robin\",\"tls\":false,\"sni\":\"\",\"healthCheck\":\"HTTP\",\"healthPath\":\"/health\",\"interval\":15,\"timeout\":3,\"healthyThreshold\":2,\"unhealthyThreshold\":3}}],\"ce\":{\"id\":\"training-c7-module4-ce\",\"namespace\":\"training-c7-module4\",\"name\":\"c7-module4-customer-edge\",\"kind\":\"CE\",\"region\":\"AWS / ap-northeast-2 (demo)\",\"online\":true,\"address\":\"192.0.2.10\"},\"controls\":{\"policyMode\":\"Disabled\",\"headerName\":\"x-f5-appworld\",\"headerValue\":\"RjUtQXBwd29ybGQ=\",\"allowedCountry\":\"South Korea\",\"deniedCountry\":\"Fiji\",\"blockBadReputation\":false,\"allowedPath\":\"/\",\"canary\":false,\"canaryHeader\":\"X-App-Version\",\"canaryValue\":\"green\",\"rewriteLogin\":false,\"namespaceHeader\":false,\"inventory\":false,\"apiDeny\":false,\"deniedEndpoint\":\"/api/customerlookup/getbydob\",\"schemaValidation\":false,\"apiDiscovery\":false,\"connector\":false,\"rateLimit\":false,\"rate\":3,\"rateWindow\":60,\"ratePath\":\"/api/customerlookup/getbyname\",\"rateMethod\":\"GET\",\"botMode\":\"Blocking\",\"botPath\":\"/login\",\"botExtraPath\":\"\",\"botMethod\":\"POST\",\"telemetry\":false,\"maliciousDetection\":false,\"maliciousMitigation\":false,\"segment\":false,\"segmentPeer\":false,\"firewall\":false,\"failover\":false,\"overlapVip\":false,\"scanProfile\":true,\"scanSchedule\":\"Manual\",\"source\":\"{\\n  \\\"name\\\": \\\"xc-training-app\\\",\\n  \\\"routes\\\": [\\n    {\\n      \\\"method\\\": \\\"GET\\\",\\n      \\\"path\\\": \\\"/\\\",\\n      \\\"body\\\": \\\"Hello XC\\\"\\n    },\\n    {\\n      \\\"method\\\": \\\"GET\\\",\\n      \\\"path\\\": \\\"/about\\\",\\n      \\\"body\\\": \\\"About XC Training App\\\"\\n    },\\n    {\\n      \\\"method\\\": \\\"GET\\\",\\n      \\\"path\\\": \\\"/login\\\",\\n      \\\"body\\\": \\\"Demo login form\\\"\\n    },\\n    {\\n      \\\"method\\\": \\\"GET\\\",\\n      \\\"path\\\": \\\"/contact\\\",\\n      \\\"body\\\": \\\"Demo contact form\\\"\\n    },\\n    {\\n      \\\"method\\\": \\\"POST\\\",\\n      \\\"path\\\": \\\"/login\\\",\\n      \\\"body\\\": \\\"Demo login\\\"\\n    },\\n    {\\n      \\\"method\\\": \\\"POST\\\",\\n      \\\"path\\\": \\\"/contact\\\",\\n      \\\"body\\\": \\\"Demo contact\\\"\\n    }\\n  ]\\n}\",\"deployedSource\":\"{\\n  \\\"name\\\": \\\"xc-training-app\\\",\\n  \\\"routes\\\": [\\n    {\\n      \\\"method\\\": \\\"GET\\\",\\n      \\\"path\\\": \\\"/\\\",\\n      \\\"body\\\": \\\"Hello XC\\\"\\n    },\\n    {\\n      \\\"method\\\": \\\"GET\\\",\\n      \\\"path\\\": \\\"/about\\\",\\n      \\\"body\\\": \\\"About XC Training App\\\"\\n    },\\n    {\\n      \\\"method\\\": \\\"GET\\\",\\n      \\\"path\\\": \\\"/login\\\",\\n      \\\"body\\\": \\\"Demo login form\\\"\\n    },\\n    {\\n      \\\"method\\\": \\\"GET\\\",\\n      \\\"path\\\": \\\"/contact\\\",\\n      \\\"body\\\": \\\"Demo contact form\\\"\\n    },\\n    {\\n      \\\"method\\\": \\\"POST\\\",\\n      \\\"path\\\": \\\"/login\\\",\\n      \\\"body\\\": \\\"Demo login\\\"\\n    },\\n    {\\n      \\\"method\\\": \\\"POST\\\",\\n      \\\"path\\\": \\\"/contact\\\",\\n      \\\"body\\\": \\\"Demo contact\\\"\\n    }\\n  ]\\n}\",\"artifact\":\"local-41793167\",\"pipeline\":[\"Build\",\"Test\",\"Deploy\"]}}",
+    "checks": [
+      {
+        "name": "보호 전 기준 요청 기록",
+        "pass": true,
+        "expected": "기준 요청 실행",
+        "actual": "200 / 200 / 200"
+      },
+      {
+        "name": "LB → Origin 연결",
+        "pass": true,
+        "expected": "유효한 Origin과 Domain",
+        "actual": "c7-module4.example.com → training-c7-module4-aws"
+      },
+      {
+        "name": "현재 소스 artifact",
+        "pass": true,
+        "expected": "Current Build + Test",
+        "actual": "local-41793167 / Build → Test → Deploy"
+      },
+      {
+        "name": "현재 소스 배포",
+        "pass": true,
+        "expected": "Current source deployed",
+        "actual": "Build → Test → Deploy"
+      },
+      {
+        "name": "스캔 보고서 존재",
+        "pass": true,
+        "expected": "Local scan report",
+        "actual": "2026-10-20T01:34:36.357Z"
+      },
+      {
+        "name": "현재 설정에서 보호 적용",
+        "pass": true,
+        "expected": "All 3 findings mitigated",
+        "actual": "SQL Injection: mitigated, Cross-site Scripting: mitigated, Automated login abuse: mitigated"
+      },
+      {
+        "name": "보고서 최신성",
+        "pass": true,
+        "expected": "Current controls reflected in report",
+        "actual": "설정 변경 후 재스캔 필요"
+      }
+    ]
+  },
+  "runtime": {
+    "now": 1792460077694,
+    "buckets": {},
+    "identities": {
+      "198.51.100.42|human-ja4": 3,
+      "198.51.100.42|audit-human": 1
+    },
+    "logs": [
+      {
+        "id": "6e834eb0-7cad-44de-9428-b00560676296",
+        "trace": [
+          "START local simulation · support_id=6e834eb0-7cad-44de-9428-b00560676296",
+          "REQUEST GET / attack_input=None client=198.51.100.42/audit-human",
+          "CONTEXT namespace=training-c7-module4 lb=c7-module4-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=training-c7-module4-waf mode=Blocking service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Blocking rate=Disabled",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460077694,
+        "request": {
+          "method": "GET",
+          "path": "/",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "audit-human",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/"
+        },
+        "body": "Hello XC"
+      },
+      {
+        "id": "ba15fbad-c243-48f9-b553-0776426f5750",
+        "trace": [
+          "START local simulation · support_id=ba15fbad-c243-48f9-b553-0776426f5750",
+          "REQUEST GET / attack_input=XSS client=198.51.100.42/human-ja4",
+          "CONTEXT namespace=training-c7-module4 lb=c7-module4-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=Disabled",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Protection is not enabled; forwarded to aws-primary",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460076357,
+        "request": {
+          "method": "GET",
+          "path": "/",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "XSS",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Protection is not enabled; forwarded to aws-primary",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/"
+        },
+        "body": "{\"simulation\":true,\"application\":\"XC Training App\",\"method\":\"GET\",\"path\":\"/\",\"upstreamPath\":\"/\",\"message\":\"Local dummy origin response\"}"
+      },
+      {
+        "id": "dfa8c3f5-f47d-4303-9595-f4e996f60e6f",
+        "trace": [
+          "START local simulation · support_id=dfa8c3f5-f47d-4303-9595-f4e996f60e6f",
+          "REQUEST GET / attack_input=SQL Injection client=198.51.100.42/human-ja4",
+          "CONTEXT namespace=training-c7-module4 lb=c7-module4-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=Disabled",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Protection is not enabled; forwarded to aws-primary",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460076357,
+        "request": {
+          "method": "GET",
+          "path": "/",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "SQL Injection",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Protection is not enabled; forwarded to aws-primary",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/"
+        },
+        "body": "{\"simulation\":true,\"application\":\"XC Training App\",\"method\":\"GET\",\"path\":\"/\",\"upstreamPath\":\"/\",\"message\":\"Local dummy origin response\"}"
+      },
+      {
+        "id": "818b3686-3437-4636-b759-b3624c4b3f1a",
+        "trace": [
+          "START local simulation · support_id=818b3686-3437-4636-b759-b3624c4b3f1a",
+          "REQUEST GET / attack_input=None client=198.51.100.42/human-ja4",
+          "CONTEXT namespace=training-c7-module4 lb=c7-module4-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=Disabled",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460076357,
+        "request": {
+          "method": "GET",
+          "path": "/",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/"
+        },
+        "body": "{\"simulation\":true,\"application\":\"XC Training App\",\"method\":\"GET\",\"path\":\"/\",\"upstreamPath\":\"/\",\"message\":\"Local dummy origin response\"}"
+      }
+    ],
+    "discovered": [],
+    "explanation": "",
+    "scan": {
+      "at": 1792460076357,
+      "findings": [
+        {
+          "name": "SQL Injection",
+          "severity": "High",
+          "resolved": true
+        },
+        {
+          "name": "Cross-site Scripting",
+          "severity": "High",
+          "resolved": true
+        },
+        {
+          "name": "Automated login abuse",
+          "severity": "Medium",
+          "resolved": true
+        }
+      ]
+    },
+    "scanHistory": [
+      {
+        "at": 1792460076357,
+        "findings": [
+          {
+            "name": "SQL Injection",
+            "severity": "High",
+            "resolved": false
+          },
+          {
+            "name": "Cross-site Scripting",
+            "severity": "High",
+            "resolved": false
+          },
+          {
+            "name": "Automated login abuse",
+            "severity": "Medium",
+            "resolved": false
+          }
+        ]
+      },
+      {
+        "at": 1792460076357,
+        "findings": [
+          {
+            "name": "SQL Injection",
+            "severity": "High",
+            "resolved": true
+          },
+          {
+            "name": "Cross-site Scripting",
+            "severity": "High",
+            "resolved": true
+          },
+          {
+            "name": "Automated login abuse",
+            "severity": "Medium",
+            "resolved": true
+          }
+        ]
+      }
+    ]
+  }
+}

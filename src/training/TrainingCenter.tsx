@@ -21,6 +21,10 @@ import { classes, labById, trainingLabs } from './catalog';
 import { apiPaths, fingerprint, referenceConfiguration, request } from './engine';
 import { effectiveEnvironment, isComplete, selfTestAll, useTraining } from './store';
 import type { Controls, Environment, Lab, RequestInput } from './types';
+import { LabWalkthrough } from './LabWalkthrough';
+import { officialTasks } from './official-tasks';
+import { Observations } from './Observations';
+import { PolicyFile } from './PolicyFile';
 
 function referencePreview(e: Environment, lab: Lab) {
   try {
@@ -195,15 +199,15 @@ export function TrainingCenter() {
           <h1>
             Training Center <Badge tone="blue">SIMULATION</Badge>
           </h1>
-          <p>공식 Class 1–8을 따라 설정하고, 요청을 실행하고, 결과로 확인하세요.</p>
+          <p>공식 Class 1–8 · 커뮤니티 보충 Class 9에서 직접 설정하고 모의 결과를 비교하세요.</p>
         </div>
         <div className="training-summary">
           <strong>
             {complete}
-            <small> / 34</small>
+            <small> / {trainingLabs.length}</small>
           </strong>
           <span>검증 완료 · 브라우저에 저장</span>
-          <progress max={34} value={complete} aria-label="전체 실습 완료율" />
+          <progress max={trainingLabs.length} value={complete} aria-label="전체 실습 완료율" />
         </div>
       </div>
       <div className="training-class-grid">
@@ -272,7 +276,7 @@ export function TrainingCenter() {
           </div>
           <Button variant="outline" size="sm" onClick={() => act(() => setMatrix(selfTestAll()))}>
             <ShieldCheck size={14} />
-            34개 모델 자체 검증
+            {trainingLabs.length}개 모델 자체 검증
           </Button>
         </aside>
         <section className="training-detail">
@@ -285,9 +289,47 @@ export function TrainingCenter() {
               <p>{lab.objective}</p>
             </div>
             <a href={lab.source} target="_blank" rel="noreferrer">
-              공식 실습 원문 <ExternalLink size={13} />
+              {lab.classId === 9 ? '커뮤니티 참고 원문' : '공식 실습 원문'}{' '}
+              <ExternalLink size={13} />
             </a>
           </header>
+          {lab.classId === 9 && (
+            <section className="community-reference">
+              <h3>Class 9 · Community Lab Reference</h3>
+              <p>
+                개인 실습 기록 기반 보충 과정입니다. 그림은 원문 캡처이며 현재 모의 결과가 아닙니다.
+                설정과 로그는 로컬에서 평가합니다.
+              </p>
+              <a
+                href="https://clouddocs.f5.com/training/community/f5xc/html/class2/lab2.html"
+                target="_blank"
+                rel="noreferrer"
+              >
+                공식 Bot 보호 설정 순서 ↗
+              </a>
+              <details>
+                <summary>원문 화면 비교 · WAF / Traffic from Humans</summary>
+                <div className="community-reference-images">
+                  <figure>
+                    <img
+                      src="/references/mettichi/37.png"
+                      alt="원문 XC WAF Custom 설정"
+                      loading="lazy"
+                    />
+                    <figcaption>Blocking / Custom / High and Medium</figcaption>
+                  </figure>
+                  <figure>
+                    <img
+                      src="/references/mettichi/57.png"
+                      alt="원문 XC Traffic from Humans 지도"
+                      loading="lazy"
+                    />
+                    <figcaption>원문 정적 캡처 · 현재 실습 결과 아님</figcaption>
+                  </figure>
+                </div>
+              </details>
+            </section>
+          )}
           <div className="training-tabbar" role="tablist" aria-label="실습 화면">
             {['Guide', 'Environment', 'Test', 'Logs', 'Reference']
               .filter((name) => lab.id !== 'c1-lab1' || ['Guide', 'Reference'].includes(name))
@@ -334,6 +376,24 @@ export function TrainingCenter() {
                 <span>단계별 실습 · 자동 저장 · 독립 Namespace</span>
               </div>
               <ol className="training-steps">
+                {(officialTasks[lab.id] ?? []).map((task, i) => (
+                  <li key={task.title}>
+                    <span>{i + 1}</span>
+                    <div>
+                      <strong>{task.title}</strong>
+                      <p>
+                        <a href={task.source} target="_blank" rel="noreferrer">
+                          공식 Task 원문 ↗
+                        </a>{' '}
+                        · 아래 설정 예제와 요청을 순서대로 실행하세요. 외부 서버·CE·AI·파이프라인은
+                        로컬 모의 환경으로 대체됩니다.
+                      </p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+              <h3>로컬 실행 순서</h3>
+              <ol className="training-steps">
                 {lab.steps.map((step, i) => (
                   <li key={step}>
                     <span>{i + 1}</span>
@@ -344,6 +404,23 @@ export function TrainingCenter() {
                   </li>
                 ))}
               </ol>
+              <LabWalkthrough
+                lab={lab}
+                onUse={(example, times) =>
+                  act(() => {
+                    if (lab.id === 'c1-lab1') {
+                      core.startConsoleLab1();
+                      return;
+                    }
+                    t.start(lab.id);
+                    setInput(example);
+                    setHeaders(JSON.stringify(example.headers, null, 2));
+                    setBody(JSON.stringify(example.body, null, 2));
+                    setRepeat(times);
+                    setTab('Test');
+                  }, '더미 요청을 불러왔습니다. 정책 설정은 변경하지 않았습니다.')
+                }
+              />
               <div className="training-actions">
                 <Button
                   onClick={() =>
@@ -513,13 +590,14 @@ export function TrainingCenter() {
                       }
                     />
                   </Group>
-                  {['header', 'negative', 'positive', 'zero-day'].includes(x) && (
+                  {['header', 'negative', 'positive', 'zero-day', 'overlap'].includes(x) && (
                     <Group title="Service Policy — 로컬 규칙 모델">
                       <Select
                         label="Policy Mode"
                         value={environment.controls.policyMode}
                         values={[
                           'Disabled',
+                          'GET only',
                           'Header allowlist',
                           'Negative enforcement',
                           'Positive enforcement',
@@ -757,6 +835,9 @@ export function TrainingCenter() {
                   )}
                   {lab.classId === 7 && (
                     <Group title="App Source / Local Pipeline">
+                      {x === 'pipeline' && (
+                        <PolicyFile key={lab.id} environment={environment} apply={edit} />
+                      )}
                       <Field label="앱 manifest — 모의 코드 (JSON)">
                         <textarea
                           rows={12}
@@ -900,7 +981,7 @@ export function TrainingCenter() {
                       <Select
                         label="HTTP Method"
                         value={input.method}
-                        values={['GET', 'POST', 'PUT', 'DELETE']}
+                        values={['GET', 'HEAD', 'POST', 'PUT', 'DELETE']}
                         onChange={(method) => setInput({ ...input, method })}
                       />
                       <Field label="Request Path">
@@ -1103,6 +1184,7 @@ export function TrainingCenter() {
             <div className="training-pane">
               {environment ? (
                 <>
+                  <Observations environment={environment} />
                   <div className="training-actions">
                     <Select
                       label="Response Filter"
@@ -1243,7 +1325,12 @@ export function TrainingCenter() {
                                 >
                                   JSON
                                 </button>
-                                {expanded === log.id && <pre>{JSON.stringify(log, null, 2)}</pre>}
+                                {expanded === log.id && (
+                                  <>
+                                    <pre>{log.trace?.join('\n')}</pre>
+                                    <pre>{JSON.stringify(log, null, 2)}</pre>
+                                  </>
+                                )}
                               </td>
                             </tr>
                           ))}
@@ -1326,9 +1413,9 @@ export function TrainingCenter() {
       {matrix && (
         <section className="training-matrix">
           <div>
-            <h2>34개 모델 자체 검증</h2>
+            <h2>{trainingLabs.length}개 모델 자체 검증</h2>
             <Badge tone={matrix.every((m) => m.pass) ? 'green' : 'red'}>
-              {matrix.filter((m) => m.pass).length}/34 PASS
+              {matrix.filter((m) => m.pass).length}/{trainingLabs.length} PASS
             </Badge>
             <Button variant="ghost" onClick={() => setMatrix(undefined)}>
               닫기

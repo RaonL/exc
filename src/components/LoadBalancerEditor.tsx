@@ -192,6 +192,7 @@ export function LBForm({
             {
               id: 'metadata',
               title: 'Metadata',
+              description: '리소스 이름과 설명을 지정합니다. 현재 Namespace 안에 저장됩니다.',
               onReset: () => {
                 update('name', opened.form.name);
                 setConfig((c) => ({
@@ -214,6 +215,8 @@ export function LBForm({
             {
               id: 'domains',
               title: 'Domains and LB Type',
+              description:
+                '요청을 받을 도메인과 HTTP / HTTPS 유형을 선택합니다. 인증서·DNS 설정은 학습용 입력입니다.',
               content: (
                 <DomainFields
                   form={form}
@@ -231,6 +234,8 @@ export function LBForm({
             {
               id: 'origins',
               title: 'Origins',
+              description:
+                '기본 요청을 전달할 Origin Pool을 추가합니다. 중첩 폼의 Apply 후 하단 저장까지 완료하세요.',
               content: (
                 <OriginPoolFields
                   form={form}
@@ -247,7 +252,7 @@ export function LBForm({
               id: 'routes',
               title: 'Routes',
               description:
-                'Rules are evaluated from top to bottom. A request uses the first enabled method/path match.',
+                '위에서부터 첫 번째로 일치하는 활성 Route를 사용합니다. 일치하지 않으면 기본 Origin Pool로 전달합니다.',
               content: (
                 <>
                   {config.routes.length === 0 && (
@@ -431,6 +436,8 @@ export function LBForm({
             {
               id: 'waf',
               title: 'Web Application Firewall',
+              description:
+                'Enable을 선택한 뒤 App Firewall 객체를 연결합니다. 정책 생성만으로는 LB에 적용되지 않습니다.',
               content: (
                 <FirewallFields
                   form={form}
@@ -491,6 +498,24 @@ export function LBForm({
                   value={form.ddosProtection}
                   onChange={(v) => update('ddosProtection', v)}
                 />
+              ),
+            },
+            {
+              id: 'client',
+              title: 'Client-Side Defense',
+              content: (
+                <p className="xc-unmodeled-notice">
+                  Not configured · 미구현: 설정 위치 참고용입니다.
+                </p>
+              ),
+            },
+            {
+              id: 'common',
+              title: 'Common Security Controls',
+              content: (
+                <p className="xc-unmodeled-notice">
+                  Not configured · 미구현: 설정 위치 참고용입니다.
+                </p>
               ),
             },
             {
@@ -572,6 +597,8 @@ export function LBForm({
                 'bot',
                 'api',
                 'dos',
+                'client',
+                'common',
                 'other',
               ].indexOf(a.id) -
               [
@@ -583,6 +610,8 @@ export function LBForm({
                 'bot',
                 'api',
                 'dos',
+                'client',
+                'common',
                 'other',
               ].indexOf(b.id),
           )}

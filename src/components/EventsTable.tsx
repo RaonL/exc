@@ -106,7 +106,7 @@ export function EventsTable({
                     )}
                     <td>
                       <button className="resource-link" onClick={() => inspect(e)}>
-                        {e.scenario}
+                        {e.catalogMatch?.name ?? e.scenario}
                       </button>
                     </td>
                     <td>

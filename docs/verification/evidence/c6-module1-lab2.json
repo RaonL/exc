@@ -1,0 +1,353 @@
+{
+  "lab": "https://clouddocs.f5.com/training/community/f5xc/html/class6/module1/lab2.html",
+  "baseline": {
+    "at": 1792460058948,
+    "codes": [
+      503,
+      503,
+      503
+    ]
+  },
+  "verification": {
+    "at": 1792460060292,
+    "fingerprint": "{\"lb\":{\"id\":\"training-c6-module1-lab2-lb\",\"namespace\":\"training-c6-module1-lab2\",\"name\":\"c6-module1-lab2-lb\",\"domains\":[\"c6-module1-lab2.example.com\"],\"protocol\":\"HTTPS\",\"originId\":\"training-c6-module1-lab2-aws\",\"wafId\":\"\",\"apiProtection\":false,\"botDefense\":false,\"ddosProtection\":false,\"requests\":0,\"createdAt\":\"\",\"config\":{\"description\":\"\",\"labels\":\"\",\"vip\":\"Internet\",\"vipAddress\":\"\",\"siteId\":\"\",\"certificate\":\"Automatic\",\"certificateRef\":\"\",\"listenPort\":443,\"redirectHttps\":true,\"hsts\":false,\"tlsLevel\":\"High\",\"routes\":[],\"exclusions\":[],\"cdn\":false,\"timeout\":30,\"apiDiscovery\":false,\"manageDns\":false,\"listenPortChoice\":\"HTTP Listen Port\",\"originWeight\":1,\"originPriority\":1}},\"waf\":{\"id\":\"training-c6-module1-lab2-waf\",\"namespace\":\"training-c6-module1-lab2\",\"name\":\"c6-module1-lab2-appfw\",\"mode\":\"Monitoring\"},\"origins\":[{\"id\":\"training-c6-module1-lab2-aws\",\"namespace\":\"training-c6-module1-lab2\",\"name\":\"aws-primary\",\"endpoint\":\"10.0.5.253\",\"port\":80,\"healthy\":true,\"config\":{\"labels\":\"\",\"description\":\"\",\"type\":\"IP on Site\",\"siteId\":\"training-c6-module1-lab2-ce\",\"network\":\"Inside Network\",\"algorithm\":\"Round Robin\",\"tls\":false,\"sni\":\"\",\"healthCheck\":\"HTTP\",\"healthPath\":\"/health\",\"interval\":15,\"timeout\":3,\"healthyThreshold\":2,\"unhealthyThreshold\":3}},{\"id\":\"training-c6-module1-lab2-azure\",\"namespace\":\"training-c6-module1-lab2\",\"name\":\"azure-canary\",\"endpoint\":\"azure-origin.example.com\",\"port\":80,\"healthy\":true,\"config\":{\"labels\":\"\",\"description\":\"\",\"type\":\"Public DNS\",\"siteId\":\"\",\"network\":\"Inside Network\",\"algorithm\":\"Round Robin\",\"tls\":false,\"sni\":\"\",\"healthCheck\":\"HTTP\",\"healthPath\":\"/health\",\"interval\":15,\"timeout\":3,\"healthyThreshold\":2,\"unhealthyThreshold\":3}}],\"ce\":{\"id\":\"training-c6-module1-lab2-ce\",\"namespace\":\"training-c6-module1-lab2\",\"name\":\"c6-module1-lab2-customer-edge\",\"kind\":\"CE\",\"region\":\"AWS / ap-northeast-2 (demo)\",\"online\":true,\"address\":\"192.0.2.10\"},\"controls\":{\"policyMode\":\"Disabled\",\"headerName\":\"x-f5-appworld\",\"headerValue\":\"RjUtQXBwd29ybGQ=\",\"allowedCountry\":\"South Korea\",\"deniedCountry\":\"Fiji\",\"blockBadReputation\":false,\"allowedPath\":\"/\",\"canary\":false,\"canaryHeader\":\"X-App-Version\",\"canaryValue\":\"green\",\"rewriteLogin\":false,\"namespaceHeader\":false,\"inventory\":false,\"apiDeny\":false,\"deniedEndpoint\":\"/api/customerlookup/getbydob\",\"schemaValidation\":false,\"apiDiscovery\":false,\"connector\":false,\"rateLimit\":false,\"rate\":3,\"rateWindow\":60,\"ratePath\":\"/api/customerlookup/getbyname\",\"rateMethod\":\"GET\",\"botMode\":\"Disabled\",\"botPath\":\"/user/vipsignin\",\"botExtraPath\":\"\",\"botMethod\":\"POST\",\"telemetry\":false,\"maliciousDetection\":false,\"maliciousMitigation\":false,\"segment\":true,\"segmentPeer\":true,\"firewall\":true,\"failover\":false,\"overlapVip\":false,\"scanProfile\":false,\"scanSchedule\":\"Manual\",\"source\":\"{\\n  \\\"name\\\": \\\"xc-training-app\\\",\\n  \\\"routes\\\": [\\n    {\\n      \\\"method\\\": \\\"GET\\\",\\n      \\\"path\\\": \\\"/\\\",\\n      \\\"body\\\": \\\"Hello XC\\\"\\n    },\\n    {\\n      \\\"method\\\": \\\"GET\\\",\\n      \\\"path\\\": \\\"/about\\\",\\n      \\\"body\\\": \\\"About XC Training App\\\"\\n    },\\n    {\\n      \\\"method\\\": \\\"GET\\\",\\n      \\\"path\\\": \\\"/login\\\",\\n      \\\"body\\\": \\\"Demo login form\\\"\\n    },\\n    {\\n      \\\"method\\\": \\\"GET\\\",\\n      \\\"path\\\": \\\"/contact\\\",\\n      \\\"body\\\": \\\"Demo contact form\\\"\\n    },\\n    {\\n      \\\"method\\\": \\\"POST\\\",\\n      \\\"path\\\": \\\"/login\\\",\\n      \\\"body\\\": \\\"Demo login\\\"\\n    },\\n    {\\n      \\\"method\\\": \\\"POST\\\",\\n      \\\"path\\\": \\\"/contact\\\",\\n      \\\"body\\\": \\\"Demo contact\\\"\\n    }\\n  ]\\n}\",\"deployedSource\":\"\",\"artifact\":\"\",\"pipeline\":[]}}",
+    "checks": [
+      {
+        "name": "보호 전 기준 요청 기록",
+        "pass": true,
+        "expected": "기준 요청 실행",
+        "actual": "503 / 503 / 503"
+      },
+      {
+        "name": "LB → Origin 연결",
+        "pass": true,
+        "expected": "유효한 Origin과 Domain",
+        "actual": "c6-module1-lab2.example.com → training-c6-module1-lab2-aws"
+      },
+      {
+        "name": "CE Online",
+        "pass": true,
+        "expected": "Online",
+        "actual": "true"
+      },
+      {
+        "name": "HTTP 연결",
+        "pass": true,
+        "expected": "HTTP 200",
+        "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+      },
+      {
+        "name": "SSH 방화벽",
+        "pass": true,
+        "expected": "HTTP 403",
+        "actual": "HTTP 403 · Blocked · aws-primary · Enhanced firewall: SSH denied (simulated L4 result)"
+      },
+      {
+        "name": "CE 단절 연결",
+        "pass": true,
+        "expected": "HTTP 503",
+        "actual": "HTTP 503 · Blocked · aws-primary · Origin / Customer Edge unavailable"
+      }
+    ]
+  },
+  "runtime": {
+    "now": 1792460059746,
+    "buckets": {},
+    "identities": {
+      "198.51.100.42|human-ja4": 3,
+      "198.51.100.42|audit-human": 2
+    },
+    "logs": [
+      {
+        "id": "86bd9b8b-3206-4e62-80f9-22e814875411",
+        "trace": [
+          "START local simulation · support_id=86bd9b8b-3206-4e62-80f9-22e814875411",
+          "REQUEST GET / attack_input=None client=198.51.100.42/human-ja4",
+          "CONTEXT namespace=training-c6-module1-lab2 lb=c6-module1-lab2-lb vip=Internet ce_online=false",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=Disabled",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=503 action=Blocked reason=Origin / Customer Edge unavailable",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460059746,
+        "request": {
+          "method": "GET",
+          "path": "/",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 503,
+        "action": "Blocked",
+        "reason": "Origin / Customer Edge unavailable",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/"
+        },
+        "body": "Request rejected by local simulator\nSupport ID: 86bd9b8b-3206-4e62-80f9-22e814875411"
+      },
+      {
+        "id": "a0d04df6-d042-4492-8994-2d50d18c8c3c",
+        "trace": [
+          "START local simulation · support_id=a0d04df6-d042-4492-8994-2d50d18c8c3c",
+          "REQUEST GET / attack_input=None client=198.51.100.42/human-ja4",
+          "CONTEXT namespace=training-c6-module1-lab2 lb=c6-module1-lab2-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=Disabled",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=403 action=Blocked reason=Enhanced firewall: SSH denied (simulated L4 result)",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460059746,
+        "request": {
+          "method": "GET",
+          "path": "/",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "None",
+          "transport": "SSH"
+        },
+        "code": 403,
+        "action": "Blocked",
+        "reason": "Enhanced firewall: SSH denied (simulated L4 result)",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/"
+        },
+        "body": "Request rejected by local simulator\nSupport ID: a0d04df6-d042-4492-8994-2d50d18c8c3c"
+      },
+      {
+        "id": "b3d6bfbf-e641-412f-aab8-c9714c1fdbc0",
+        "trace": [
+          "START local simulation · support_id=b3d6bfbf-e641-412f-aab8-c9714c1fdbc0",
+          "REQUEST GET / attack_input=None client=198.51.100.42/human-ja4",
+          "CONTEXT namespace=training-c6-module1-lab2 lb=c6-module1-lab2-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=Disabled",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460059746,
+        "request": {
+          "method": "GET",
+          "path": "/",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/"
+        },
+        "body": "{\"simulation\":true,\"application\":\"XC Training App\",\"method\":\"GET\",\"path\":\"/\",\"upstreamPath\":\"/\",\"message\":\"Local dummy origin response\"}"
+      },
+      {
+        "id": "e8f5403c-9866-457b-86e2-6ac0f39b3b1e",
+        "trace": [
+          "START local simulation · support_id=e8f5403c-9866-457b-86e2-6ac0f39b3b1e",
+          "REQUEST GET / attack_input=None client=198.51.100.42/audit-human",
+          "CONTEXT namespace=training-c6-module1-lab2 lb=c6-module1-lab2-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=Disabled",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=403 action=Blocked reason=Enhanced firewall: SSH denied (simulated L4 result)",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460059746,
+        "request": {
+          "method": "GET",
+          "path": "/",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "audit-human",
+          "attack": "None",
+          "transport": "SSH"
+        },
+        "code": 403,
+        "action": "Blocked",
+        "reason": "Enhanced firewall: SSH denied (simulated L4 result)",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/"
+        },
+        "body": "Request rejected by local simulator\nSupport ID: e8f5403c-9866-457b-86e2-6ac0f39b3b1e"
+      },
+      {
+        "id": "25944610-7f9c-4e19-9a7e-2ec83c181f25",
+        "trace": [
+          "START local simulation · support_id=25944610-7f9c-4e19-9a7e-2ec83c181f25",
+          "REQUEST GET / attack_input=None client=198.51.100.42/audit-human",
+          "CONTEXT namespace=training-c6-module1-lab2 lb=c6-module1-lab2-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=Disabled",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460059533,
+        "request": {
+          "method": "GET",
+          "path": "/",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "audit-human",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/"
+        },
+        "body": "{\"simulation\":true,\"application\":\"XC Training App\",\"method\":\"GET\",\"path\":\"/\",\"upstreamPath\":\"/\",\"message\":\"Local dummy origin response\"}"
+      },
+      {
+        "id": "004532f1-149e-4067-8334-768312d5b543",
+        "trace": [
+          "START local simulation · support_id=004532f1-149e-4067-8334-768312d5b543",
+          "REQUEST GET / attack_input=XSS client=198.51.100.42/human-ja4",
+          "CONTEXT namespace=training-c6-module1-lab2 lb=c6-module1-lab2-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=Disabled",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=503 action=Blocked reason=DC and AWS segments are isolated",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460058806,
+        "request": {
+          "method": "GET",
+          "path": "/",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "XSS",
+          "transport": "HTTP"
+        },
+        "code": 503,
+        "action": "Blocked",
+        "reason": "DC and AWS segments are isolated",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/"
+        },
+        "body": "Request rejected by local simulator\nSupport ID: 004532f1-149e-4067-8334-768312d5b543"
+      },
+      {
+        "id": "b2926e3a-ef51-43eb-85da-dc69614ccd20",
+        "trace": [
+          "START local simulation · support_id=b2926e3a-ef51-43eb-85da-dc69614ccd20",
+          "REQUEST GET / attack_input=SQL Injection client=198.51.100.42/human-ja4",
+          "CONTEXT namespace=training-c6-module1-lab2 lb=c6-module1-lab2-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=Disabled",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=503 action=Blocked reason=DC and AWS segments are isolated",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460058806,
+        "request": {
+          "method": "GET",
+          "path": "/",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "SQL Injection",
+          "transport": "HTTP"
+        },
+        "code": 503,
+        "action": "Blocked",
+        "reason": "DC and AWS segments are isolated",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/"
+        },
+        "body": "Request rejected by local simulator\nSupport ID: b2926e3a-ef51-43eb-85da-dc69614ccd20"
+      },
+      {
+        "id": "9e2df320-fdf1-4180-8ac0-1b0dffd4ac98",
+        "trace": [
+          "START local simulation · support_id=9e2df320-fdf1-4180-8ac0-1b0dffd4ac98",
+          "REQUEST GET / attack_input=None client=198.51.100.42/human-ja4",
+          "CONTEXT namespace=training-c6-module1-lab2 lb=c6-module1-lab2-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=Disabled",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=503 action=Blocked reason=DC and AWS segments are isolated",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460058806,
+        "request": {
+          "method": "GET",
+          "path": "/",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 503,
+        "action": "Blocked",
+        "reason": "DC and AWS segments are isolated",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/"
+        },
+        "body": "Request rejected by local simulator\nSupport ID: 9e2df320-fdf1-4180-8ac0-1b0dffd4ac98"
+      }
+    ],
+    "discovered": [],
+    "explanation": ""
+  }
+}

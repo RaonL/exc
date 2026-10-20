@@ -4,6 +4,7 @@ import { useConsole } from '../store';
 import { Badge, time } from './common';
 import { Button } from './ui/button';
 import { explainConsoleEvent } from '../lib/console-lab';
+import { CatalogTestLog } from './CatalogTestPanel';
 export function EventDetails({ event, onOpen }: { event: SecurityEvent; onOpen?: () => void }) {
   const s = useConsole();
   const id = useId(),
@@ -58,8 +59,11 @@ export function EventDetails({ event, onOpen }: { event: SecurityEvent; onOpen?:
               'Support ID / req_id': event.id,
               'Duration (simulated)': `${event.durationMs ?? 6} ms`,
               'Event type': event.scenario,
-              'Signature (simulated)':
-                event.scenario === 'Normal HTTP traffic' ? 'None' : event.scenario,
+              'Signature (simulated)': event.catalogMatch
+                ? `${event.catalogMatch.name} (${event.catalogMatch.id})`
+                : event.scenario === 'Normal HTTP traffic'
+                  ? 'None'
+                  : event.scenario,
               Timestamp: time(event.timestamp),
               'Source IP': event.source,
               Country: event.country,
@@ -69,7 +73,9 @@ export function EventDetails({ event, onOpen }: { event: SecurityEvent; onOpen?:
               'HTTP Status': event.responseCode ?? (event.action === 'Blocked' ? 403 : 200),
               'Evaluation Reason': event.reason ?? 'Seeded demo security event',
               'App Firewall':
-                s.wafs.find((w) => w.id === event.evaluatedWafId)?.name ?? 'Not recorded',
+                event.policySnapshot?.name ??
+                s.wafs.find((w) => w.id === event.evaluatedWafId)?.name ??
+                'Not recorded',
               Requests: event.count,
               Namespace: event.namespace,
             }).map(([key, value]) => (
@@ -92,6 +98,8 @@ export function EventDetails({ event, onOpen }: { event: SecurityEvent; onOpen?:
           </pre>
         )}
       </div>
+      {detailTab === 'Information' && event.catalogMatch && <CatalogTestLog event={event} />}
+      {detailTab==='Information'&&!event.catalogMatch&&event.evaluationTrace&&<pre className="event-json">{event.evaluationTrace.join('\n')}</pre>}
       <div className="form-footer">
         <Button
           variant="outline"

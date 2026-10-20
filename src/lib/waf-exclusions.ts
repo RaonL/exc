@@ -1,4 +1,4 @@
-import type { LB, SecurityEvent, WafExclusion, Scenario, SimulatedRequest } from '../types';
+import type { LB, SecurityEvent, WafExclusion, SimulatedRequest } from '../types';
 export const exclusionGuide =
   'https://clouddocs.f5.com/training/community/f5xc/html/class2/lab1.html';
 export const wafAttacks = ['SQL Injection', 'Cross-site Scripting', 'Command Injection'] as const;
@@ -38,7 +38,7 @@ export function exclusionError(rule: WafExclusion): string {
 export function matchesExclusion(
   rule: WafExclusion,
   lb: LB,
-  scenario: Scenario,
+  scenario: string,
   request: SimulatedRequest,
 ): boolean {
   const path = request.path.split('?')[0];

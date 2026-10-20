@@ -1,5 +1,6 @@
 import type { WafConfig } from '../types';
 import { Field } from './form-fields';
+import { ReferenceSelect } from './ReferenceSelect';
 
 export interface WafFieldsProps {
   config: WafConfig;
@@ -9,13 +10,19 @@ export function WafPolicyFields({ config, setting }: WafFieldsProps) {
   return (
     <>
       <Field label="Security Policy">
-        <select
+        <ReferenceSelect
+          label="Security Policy"
           value={config.policy}
-          onChange={(e) => setting('policy', e.target.value as WafConfig['policy'])}
-        >
-          <option>Default</option>
-          <option>Custom</option>
-        </select>
+          onChange={(value) => setting('policy', value as WafConfig['policy'])}
+          options={[
+            {
+              value: 'Default',
+              description: 'Use default application security settings',
+              default: true,
+            },
+            { value: 'Custom', description: 'Customize attack signatures and protection settings' },
+          ]}
+        />
       </Field>
       {config.policy === 'Custom' && (
         <div className="waf-dependent-fields">
@@ -38,7 +45,32 @@ export function WafPolicyFields({ config, setting }: WafFieldsProps) {
             {(config.attackTypes === 'Custom' || config.disabledAttacks.length > 0) && (
               <fieldset className="waf-attack-types">
                 <legend>Disabled Attack Types</legend>
-                {['SQL Injection', 'Cross-site Scripting', 'Command Injection'].map((attack) => (
+                {[
+                  'SQL Injection',
+                  'Cross-site Scripting',
+                  'Command Injection',
+                  'Abuse of Functionality',
+                  'Authentication/Authorization Attacks',
+                  'Buffer Overflow',
+                  'Denial of Service',
+                  'Detection Evasion',
+                  'Directory Indexing',
+                  'HTTP Parser Attack',
+                  'HTTP Response Splitting',
+                  'Information Leakage',
+                  'LDAP Injection',
+                  'Malicious File Upload',
+                  'Non-browser client',
+                  'Other Application Attacks',
+                  'Path Traversal',
+                  'Predictable Resource Location',
+                  'Remote File Include',
+                  'Server Side Code Injection',
+                  'Session Hijacking',
+                  'Trojan/Backdoor/Spyware',
+                  'Vulnerability Scan',
+                  'XPath Injection',
+                ].map((attack) => (
                   <Field label={attack} key={attack}>
                     <input
                       type="checkbox"
@@ -57,14 +89,23 @@ export function WafPolicyFields({ config, setting }: WafFieldsProps) {
               </fieldset>
             )}
             <Field label="Signature Selection by Accuracy">
-              <select
+              <ReferenceSelect
+                label="Signature Selection by Accuracy"
                 value={config.accuracy}
-                onChange={(e) => setting('accuracy', e.target.value as WafConfig['accuracy'])}
-              >
-                <option>High</option>
-                <option>High and Medium</option>
-                <option>High, Medium and Low</option>
-              </select>
+                onChange={(value) => setting('accuracy', value as WafConfig['accuracy'])}
+                options={[
+                  { value: 'High', description: 'Enables only high accuracy signatures' },
+                  {
+                    value: 'High and Medium',
+                    description: 'Enables high and medium accuracy signatures',
+                    default: true,
+                  },
+                  {
+                    value: 'High, Medium and Low',
+                    description: 'Enables high, medium and low accuracy signatures',
+                  },
+                ]}
+              />
             </Field>
             <Field label="High Accuracy Signature Action">
               <select
@@ -76,6 +117,27 @@ export function WafPolicyFields({ config, setting }: WafFieldsProps) {
                 <option>Ignore</option>
               </select>
             </Field>
+            {(['Medium', 'Low'] as const).map((accuracy) => (
+              <Field key={accuracy} label={`${accuracy} Accuracy Signature Action`}>
+                <select
+                  value={
+                    accuracy === 'Medium'
+                      ? (config.mediumAction ?? 'Block')
+                      : (config.lowAction ?? 'Block')
+                  }
+                  onChange={(e) =>
+                    setting(
+                      accuracy === 'Medium' ? 'mediumAction' : 'lowAction',
+                      e.target.value as 'Block' | 'Report' | 'Ignore',
+                    )
+                  }
+                >
+                  <option>Block</option>
+                  <option>Report</option>
+                  <option>Ignore</option>
+                </select>
+              </Field>
+            ))}
             <p className="configuration-help">
               Demo SQLi, XSS and command injection signatures have high accuracy. All three accuracy
               selections include them.

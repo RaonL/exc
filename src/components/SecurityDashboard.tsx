@@ -24,11 +24,12 @@ import {
 } from 'recharts';
 import { useConsole } from '../store';
 import type { SecurityEvent } from '../types';
-import { lbConfig, hasWaf, isLbHealthy } from '../lib/config';
-import { Badge, Card, Empty, PageHeading, SearchInput, Status, download } from './common';
+import { lbConfig, hasWaf } from '../lib/config';
+import { Badge, Card, Empty, PageHeading, SearchInput, download } from './common';
 import { Button } from './ui/button';
 import { Dialog } from './ui/dialog';
 import { EventsTable } from './EventsTable';
+import { WorldEventsMap } from './WorldEventsMap';
 const category = (e: SecurityEvent) =>
   e.scenario === 'L7 DDoS'
     ? 'DDoS'
@@ -75,8 +76,14 @@ export function SecurityDashboard({ openLab }: { openLab: () => void }) {
   const endpoints = s.endpoints.filter(
     (e) => e.namespace === s.namespace && lbs.some((l) => l.id === e.lbId),
   );
-  const total = events.reduce((sum, e) => sum + e.count, 0);
-  const blocked = events.filter((e) => e.action === 'Blocked').reduce((sum, e) => sum + e.count, 0);
+  const requestTotal = s.events
+    .filter(
+      (e) =>
+        e.namespace === s.namespace &&
+        lbs.some((l) => l.id === e.lbId) &&
+        Date.parse(e.timestamp) >= start,
+    )
+    .reduce((n, e) => n + e.count, 0);
   const sources = counts(events, (e) => e.source);
   const paths = counts(events, (e) => e.path);
   const countries = counts(events, (e) => e.country);
@@ -138,7 +145,7 @@ export function SecurityDashboard({ openLab }: { openLab: () => void }) {
         </Button>
       </PageHeading>
       <div className="tabs" role="tablist" aria-label="Security monitoring">
-        {['Dashboard', 'Security Analytics', 'Malicious Users', 'Threat Campaigns'].map((t) => (
+        {['Dashboard', 'Malicious Users', 'Threat Campaigns'].map((t) => (
           <button
             role="tab"
             aria-selected={tab === t}
@@ -223,25 +230,32 @@ export function SecurityDashboard({ openLab }: { openLab: () => void }) {
               {
                 label: 'Threat Intelligence',
                 icon: ShieldAlert,
-                value: total.toLocaleString(),
-                sub: `${blocked.toLocaleString()} requests mitigated`,
+                value: '0',
+                sub: 'Threat Campaigns',
+                secondaryLabel: 'IP Reputation',
+                secondaryValue: String(
+                  events
+                    .filter((e) => /reputation/i.test(e.reason ?? ''))
+                    .reduce((n, e) => n + e.count, 0),
+                ),
                 page: 'Security Analytics' as const,
               },
               {
                 label: 'Bot Traffic',
                 icon: Bot,
-                value: events
-                  .filter((e) => e.scenario === 'Bot Detection')
-                  .reduce((v, e) => v + e.count, 0)
-                  .toLocaleString(),
-                sub: 'Observed bot requests',
+                value: `${requestTotal ? Math.round((events.filter((e) => e.scenario === 'Bot Detection').reduce((n, e) => n + e.count, 0) / requestTotal) * 100) : 0}%`,
+                sub: 'Traffic that comes from Bots',
+                secondaryLabel: 'Traffic that comes from Malicious Bots',
+                secondaryValue: `${requestTotal ? Math.round((events.filter((e) => e.scenario === 'Bot Detection' && e.action === 'Blocked').reduce((n, e) => n + e.count, 0) / requestTotal) * 100) : 0}%`,
                 page: 'Bot Defense' as const,
               },
               {
                 label: 'API Classification',
                 icon: Code2,
                 value: String(endpoints.length),
-                sub: `${endpoints.filter((e) => e.shadow).length} shadow endpoints · current inventory`,
+                sub: 'API Endpoints',
+                secondaryLabel: 'Shadow Endpoints',
+                secondaryValue: String(endpoints.filter((e) => e.shadow).length),
                 page: 'API Discovery' as const,
               },
               {
@@ -251,6 +265,12 @@ export function SecurityDashboard({ openLab }: { openLab: () => void }) {
                   new Set(events.filter((e) => e.scenario === 'L7 DDoS').map((e) => e.lbId)).size,
                 ),
                 sub: 'Load balancers with L7 DDoS events',
+                secondaryLabel: 'Mitigated Requests',
+                secondaryValue: String(
+                  events
+                    .filter((e) => e.scenario === 'L7 DDoS' && e.action === 'Blocked')
+                    .reduce((n, e) => n + e.count, 0),
+                ),
                 page: 'Security Events' as const,
               },
             ].map((kpi) => (
@@ -264,8 +284,15 @@ export function SecurityDashboard({ openLab }: { openLab: () => void }) {
                   {kpi.label}
                   <ArrowRight size={12} />
                 </span>
-                <strong>{kpi.value}</strong>
                 <small>{kpi.sub}</small>
+                <strong>
+                  {kpi.value} {(kpi.value === '0' || kpi.value === '0%') && <em>No Data</em>}
+                </strong>
+                <small className="xc-kpi-secondary">{kpi.secondaryLabel}</small>
+                <strong>
+                  {kpi.secondaryValue}{' '}
+                  {(kpi.secondaryValue === '0' || kpi.secondaryValue === '0%') && <em>No Data</em>}
+                </strong>
               </button>
             ))}
           </div>
@@ -402,25 +429,37 @@ export function SecurityDashboard({ openLab }: { openLab: () => void }) {
               )}
             </Card>
             <Card title="Events by Country" action={<Globe2 size={15} color="#8b9bbd" />}>
-              {countries.length ? (
-                countries.slice(0, 5).map(([country, count]) => (
-                  <button
-                    className="ranking-row"
-                    key={country}
-                    onClick={() =>
-                      drill(
-                        country,
-                        events.filter((e) => e.country === country),
-                      )
-                    }
-                  >
-                    <span>{country}</span>
-                    <strong>{count.toLocaleString()}</strong>
-                  </button>
-                ))
-              ) : (
-                <Empty title="No country data" />
-              )}
+              <WorldEventsMap
+                countries={countries}
+                onSelect={(country) =>
+                  drill(
+                    country,
+                    events.filter((e) => e.country === country),
+                  )
+                }
+              />
+              <details className="xc-country-breakdown">
+                <summary>Country breakdown</summary>
+                {countries.length ? (
+                  countries.slice(0, 5).map(([country, count]) => (
+                    <button
+                      className="ranking-row"
+                      key={country}
+                      onClick={() =>
+                        drill(
+                          country,
+                          events.filter((e) => e.country === country),
+                        )
+                      }
+                    >
+                      <span>{country}</span>
+                      <strong>{count.toLocaleString()}</strong>
+                    </button>
+                  ))
+                ) : (
+                  <Empty title="No country data" />
+                )}
+              </details>
             </Card>
             <Card title="Active Configuration" action={<Badge tone="blue">Current state</Badge>}>
               <div className="active-resource-count">
@@ -449,7 +488,7 @@ export function SecurityDashboard({ openLab }: { openLab: () => void }) {
             </Card>
           </div>
           <Card
-            title="Delivery Resources"
+            title="Application Delivery"
             action={
               <Button variant="outline" size="sm" onClick={exportCsv}>
                 <Download size={12} />
@@ -471,12 +510,12 @@ export function SecurityDashboard({ openLab }: { openLab: () => void }) {
                   <thead>
                     <tr>
                       <th>Name</th>
-                      <th>Health</th>
+                      <th>Threat Level</th>
+                      <th>Bot Traffic</th>
                       <th>Security Events</th>
+                      <th>Malicious Users</th>
+                      <th>DDoS Events</th>
                       <th>WAF</th>
-                      <th>Bot Defense</th>
-                      <th>API Discovery</th>
-                      <th>DDoS</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -498,7 +537,22 @@ export function SecurityDashboard({ openLab }: { openLab: () => void }) {
                             <small className="cell-sub">{l.domains[0]}</small>
                           </td>
                           <td>
-                            <Status healthy={isLbHealthy(l, s.origins)} />
+                            <span>
+                              {events.some((e) => e.lbId === l.id && e.severity === 'High')
+                                ? 'High'
+                                : events.some((e) => e.lbId === l.id)
+                                  ? 'Medium'
+                                  : 'No Data'}
+                            </span>
+                          </td>
+                          <td>
+                            {(() => {
+                              const all = s.events.filter(
+                                  (e) => e.lbId === l.id && Date.parse(e.timestamp) >= start,
+                                ),
+                                count = all.reduce((n, e) => n + e.count, 0);
+                              return `${count ? Math.round((all.filter((e) => e.scenario === 'Bot Detection').reduce((n, e) => n + e.count, 0) / count) * 100) : 0}%`;
+                            })()}
                           </td>
                           <td>
                             <button
@@ -516,18 +570,23 @@ export function SecurityDashboard({ openLab }: { openLab: () => void }) {
                                 .toLocaleString()}
                             </button>
                           </td>
-                          {[
-                            hasWaf(l),
-                            l.botDefense,
-                            lbConfig(l).apiDiscovery,
-                            l.ddosProtection,
-                          ].map((flag, i) => (
-                            <td key={i}>
-                              <Badge tone={flag ? 'green' : 'neutral'}>
-                                {flag ? 'Enabled' : 'Disabled'}
-                              </Badge>
-                            </td>
-                          ))}
+                          <td>
+                            {new Set(
+                              events
+                                .filter(
+                                  (e) =>
+                                    e.lbId === l.id &&
+                                    /fingerprint|malicious/i.test(e.reason ?? ''),
+                                )
+                                .map((e) => e.source),
+                            ).size || '—'}
+                          </td>
+                          <td>
+                            {events
+                              .filter((e) => e.lbId === l.id && e.scenario === 'L7 DDoS')
+                              .reduce((n, e) => n + e.count, 0) || '—'}
+                          </td>
+                          <td>{hasWaf(l) ? 'Enabled' : 'Disabled'}</td>
                         </tr>
                       ))}
                   </tbody>

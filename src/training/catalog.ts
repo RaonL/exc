@@ -45,6 +45,12 @@ export const classes = [
     color: '#b74c64',
   },
 ];
+classes.push({
+  id: 9,
+  title: 'WAAP, Rate Limiting & Bot Defense',
+  subtitle: '커뮤니티 보충 실습 · Mettichi1',
+  color: '#d52b35',
+});
 const labs: Lab[] = [];
 function add(
   classId: number,
@@ -477,5 +483,74 @@ add(
     'Exploit deny 정책으로 x-demo-exploit: true 패턴을 차단합니다.',
   ],
 );
+const communitySource = 'https://github.com/Mettichi1/WAAP-Bot-Detection-with-F5-XC';
+const additions: [string, string, Exercise, string[]][] = [
+  [
+    'lab1',
+    'Publishing & WAF Protection',
+    'waf',
+    [
+      '전용 환경을 준비하고 HTTP LB의 도메인과 Origin을 확인합니다.',
+      '정상·SQL Injection 보호 전 응답을 기록합니다.',
+      'App Firewall에서 Custom / High and Medium을 설정하고 LB의 WAF를 Enable로 연결합니다.',
+      'Monitoring 통과·탐지와 Blocking 403을 비교하고 Support ID를 확인합니다.',
+    ],
+  ],
+  [
+    'lab2',
+    'API Discovery & Endpoint Protection',
+    'endpoint',
+    [
+      '더미 환경을 준비하고 보호 전 API 응답을 기록합니다.',
+      '환경 / 설정에서 API 인벤토리를 활성화합니다.',
+      'API 보호와 차단 대상 /api/customerlookup/getbydob를 설정합니다.',
+      '대상 403과 다른 경로 200을 비교하고 정책 로그를 확인합니다.',
+    ],
+  ],
+  [
+    'lab3',
+    'Service Policies & Rate Limiting',
+    'zero-day',
+    [
+      'GET /ratelimit.php 보호 전 반복 요청을 기록합니다.',
+      '환경 / 설정에서 60초에 3회로 Rate Limiting을 활성화합니다.',
+      '동일 클라이언트 4회 요청으로 200·200·200·429를 확인합니다.',
+      'Exploit deny 정책과 x-demo-exploit: true 모의 헤더를 비교합니다.',
+    ],
+  ],
+  [
+    'lab4',
+    'Signature-Based Bot Protection',
+    'waf',
+    [
+      '전용 환경을 준비하고 콘솔 App Firewall에서 정책을 엽니다.',
+      'Custom → Signature-Based Bot Protection → Custom에서 Malicious Block, Suspicious Report, Good Report를 선택합니다.',
+      'Security Catalog에서 봇과 전용 LB를 선택하고 Monitoring 모의 이벤트를 실행합니다.',
+      'Blocking으로 변경해 Malicious 차단과 Report 통과를 비교합니다. 카탈로그 로그는 콘솔에서 확인하며 이 Lab의 일반 WAF 검증과 별개입니다.',
+    ],
+  ],
+  [
+    'lab5',
+    'Bot Defense & Protected Endpoints',
+    'bot',
+    [
+      '환경을 준비하고 POST /user/vipsignin 봇 요청의 초기 결과를 기록합니다.',
+      'Bot Defense 대상 경로 /user/vipsignin과 POST 메서드를 설정합니다.',
+      'Flag의 통과·탐지 후 Blocking 봇 403을 비교합니다.',
+      '정상 사용자와 다른 경로의 통과를 확인합니다. 경로는 로컬 더미 앱용이며 실제 F5 텔레메트리는 재현하지 않습니다.',
+    ],
+  ],
+];
+for (const [unit, title, exercise, steps] of additions) {
+  add(
+    9,
+    unit,
+    title,
+    exercise,
+    '참고 캡처와 설정 위치를 비교하고 직접 변경 전후 모의 결과를 검증합니다.',
+    steps,
+  );
+  labs[labs.length - 1].source = communitySource;
+}
 export const trainingLabs = labs;
 export const labById = (id: string) => trainingLabs.find((l) => l.id === id) ?? trainingLabs[0];

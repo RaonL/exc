@@ -1,6 +1,7 @@
 export type Workspace =
   'Home' | 'Web App & API Protection' | 'Multi-Cloud Network Connect' | 'Administration';
 export type Page =
+  | 'Security Catalog'
   | 'Training Center'
   | 'Services'
   | 'Dashboard'
@@ -26,6 +27,7 @@ export type Page =
   | 'Audit Logs'
   | 'System Settings';
 export type Scenario =
+  | 'Catalog Signature'
   | 'Normal HTTP traffic'
   | 'SQL Injection'
   | 'Command Injection'
@@ -98,6 +100,25 @@ export interface SecurityEvent {
   generatedBy?: 'console-request';
   durationMs?: number;
   authority?: string;
+  catalogMatch?: CatalogMatch;
+  evaluationTrace?: string[];
+  policySnapshot?: {
+    id: string;
+    name: string;
+    namespace: string;
+    mode: Waf['mode'];
+    config: WafConfig;
+  };
+}
+export interface CatalogMatch {
+  appliesTo?: 'Request' | 'Response';
+  kind: 'signatures' | 'bots';
+  id: string;
+  name: string;
+  attackType: string;
+  accuracy: string;
+  risk: string;
+  botClass?: string;
 }
 export interface RouteRule {
   id: string;
@@ -147,6 +168,12 @@ export interface LBConfig {
   originPriority?: number;
 }
 export interface WafConfig {
+  mediumAction?: 'Block' | 'Report' | 'Ignore';
+  lowAction?: 'Block' | 'Report' | 'Ignore';
+  botProtection?: 'Default' | 'Custom';
+  maliciousBotAction?: 'Block' | 'Report' | 'Ignore';
+  suspiciousBotAction?: 'Block' | 'Report' | 'Ignore';
+  goodBotAction?: 'Block' | 'Report' | 'Ignore';
   description: string;
   labels: string;
   policy: 'Default' | 'Custom';

@@ -63,6 +63,23 @@ async function edit() {
   return original;
 }
 
+it('shows saved Origin values in View and only enables inputs after Edit Configuration', async () => {
+  const original = useConsole.getState().origins[0],
+    before = JSON.stringify(useConsole.getState().origins);
+  await act(async () =>
+    root.render(
+      createElement(OriginEditor, { initial: original, viewOnly: true, close, notify: vi.fn() }),
+    ),
+  );
+  expect(document.querySelector('.xc-read-table')?.textContent).toContain(original.endpoint);
+  expect(document.querySelector('input[required]')).toBeNull();
+  await click('Edit Configuration');
+  expect(field('Name *').matches(':disabled')).toBe(false);
+  await click('Cancel and Exit');
+  expect(JSON.stringify(useConsole.getState().origins)).toBe(before);
+  expect(close).toHaveBeenCalledOnce();
+});
+
 it('resets the opened origin draft without changing stored resources or submitting', async () => {
   const original = await edit();
   const before = JSON.stringify(useConsole.getState().origins);

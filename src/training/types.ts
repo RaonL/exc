@@ -45,6 +45,7 @@ export interface Lab {
 export interface Controls {
   policyMode:
     | 'Disabled'
+    | 'GET only'
     | 'Header allowlist'
     | 'Negative enforcement'
     | 'Positive enforcement'
@@ -105,6 +106,7 @@ export interface RequestInput {
   transport: 'HTTP' | 'SSH';
 }
 export interface ProbeResult {
+  trace?: string[];
   id: string;
   at: number;
   request: RequestInput;

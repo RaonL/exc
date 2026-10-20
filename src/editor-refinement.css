@@ -1,0 +1,258 @@
+/* Training reference variant: toolbar, section rail, scalar fields and item tables. */
+body:has(.lb-editor, .waf-editor) .toast {
+  bottom: 88px;
+}
+:is(.lb-editor, .waf-editor) {
+  --origin-text: #253957;
+  --origin-muted: #586a82;
+  --origin-border: #dce3ed;
+  --origin-accent: #285bd4;
+}
+:is(.lb-editor, .waf-editor) .config-header {
+  display: none;
+}
+:is(.lb-editor, .waf-editor) .config-viewbar {
+  min-height: 52px;
+  height: auto;
+  gap: 16px;
+  padding: 8px 16px;
+}
+.editor-learning-label {
+  font-size: 11px;
+  color: #77520f;
+  background: #fff8e8;
+  border: 1px solid #ead5a0;
+  border-radius: 3px;
+  padding: 4px 8px;
+  white-space: nowrap;
+}
+:is(.lb-editor, .waf-editor) .config-view-tabs {
+  height: 32px;
+  flex-shrink: 0;
+}
+:is(.lb-editor, .waf-editor) .config-view-tabs button {
+  color: #536681;
+  font-size: 12px;
+}
+:is(.lb-editor, .waf-editor) .config-view-tabs button.active {
+  background: #edf3ff;
+  color: #1f53b6;
+  box-shadow: inset 0 -2px #285bd4;
+}
+:is(.lb-editor, .waf-editor) .config-find {
+  min-width: 0;
+}
+:is(.lb-editor, .waf-editor) .config-find input {
+  width: 180px;
+  font-size: 12px;
+}
+:is(.lb-editor, .waf-editor) .advanced-toggle {
+  color: #50617a;
+  font-size: 11px;
+  white-space: nowrap;
+}
+:is(.lb-editor, .waf-editor) .config-navigation {
+  padding: 20px 16px;
+}
+:is(.lb-editor, .waf-editor) .config-resource {
+  padding: 16px;
+}
+:is(.lb-editor, .waf-editor) .config-resource strong {
+  font-size: 14px;
+}
+:is(.lb-editor, .waf-editor) .config-resource small {
+  display: block;
+  color: #586a82;
+  font-size: 12px;
+  margin-top: 4px;
+}
+.editor-namespace {
+  display: block;
+  margin-top: 12px;
+  color: #586a82;
+  font-size: 11px;
+}
+.config-resource .editor-namespace strong {
+  display: block;
+  margin-top: 2px;
+  font-size: 12px;
+  color: #253957;
+}
+:is(.lb-editor, .waf-editor) .config-navigation nav button {
+  padding: 10px 16px;
+  min-height: 40px;
+  color: #465c7b;
+}
+:is(.lb-editor, .waf-editor) .config-navigation nav button.active {
+  border-left-color: #285bd4;
+  background: #edf3ff;
+  color: #1f53b6;
+  font-weight: 600;
+}
+:is(.lb-editor, .waf-editor) .config-navigation > a {
+  color: #315a9d;
+  font-size: 12px;
+}
+:is(.lb-editor, .waf-editor) .config-main {
+  padding: 20px 32px 32px;
+}
+:is(.lb-editor, .waf-editor) .config-section {
+  padding: 20px 24px 8px;
+  margin-bottom: 20px;
+  box-shadow: none;
+  border-radius: 3px;
+}
+:is(.lb-editor, .waf-editor) .config-section-heading {
+  margin-bottom: 16px;
+}
+:is(.lb-editor, .waf-editor) .config-section-heading h2 {
+  font-size: 15px;
+}
+:is(.lb-editor, .waf-editor) .config-section-description {
+  color: #586a82;
+  font-size: 12px;
+  line-height: 1.7;
+  margin: -4px 0 20px;
+  max-width: 800px;
+}
+:is(.lb-editor, .waf-editor) .config-section .field {
+  gap: 8px;
+  margin-bottom: 20px;
+}
+:is(.lb-editor, .waf-editor) .config-section input:not([type='checkbox']),
+:is(.lb-editor, .waf-editor) .config-section select,
+:is(.lb-editor, .waf-editor) .config-section textarea {
+  min-height: 36px;
+  font-size: 13px;
+  border-color: #bcc9da;
+  border-radius: 3px;
+}
+:is(.lb-editor, .waf-editor) .config-section textarea {
+  min-height: 64px;
+}
+:is(.lb-editor, .waf-editor) .config-section input::placeholder {
+  color: #697a91;
+}
+:is(.lb-editor, .waf-editor) .config-footer {
+  padding: 16px 24px;
+  gap: 12px;
+  border-top-color: #d5deeb;
+  box-shadow: none;
+}
+:is(.lb-editor, .waf-editor) .config-footer > span {
+  color: #586a82;
+  font-size: 11px;
+}
+:is(.lb-editor, .waf-editor) .config-footer .btn {
+  min-height: 40px;
+  font-size: 12px;
+}
+:is(.lb-editor, .waf-editor) .config-footer .btn[type='submit'] {
+  background: #285bd4;
+  color: white;
+}
+.lb-editor .lb-table-scroll th {
+  background: #f1f5fa;
+  color: #4e6382;
+  font-weight: 600;
+}
+.lb-editor .lb-type-settings {
+  margin-left: 0;
+  padding: 16px 20px 0;
+  background: #f8faff;
+  border: 1px solid #dce3ed;
+  margin-bottom: 20px;
+}
+.waf-editor .waf-signatures {
+  background: #f8faff;
+  padding: 20px;
+}
+.waf-editor .waf-dependent-fields {
+  border-left: 2px solid #c7d6ed;
+  padding-left: 20px;
+}
+.waf-editor .response-preview {
+  background: #f8faff;
+  border-color: #dce3ed;
+}
+@media (max-width: 1200px) {
+  :is(.lb-editor, .waf-editor) .config-viewbar {
+    flex-wrap: wrap;
+    gap: 8px 16px;
+  }
+  :is(.lb-editor, .waf-editor) .config-reset-all {
+    margin-left: auto;
+  }
+}
+@media (max-width: 700px) {
+  :is(.lb-editor, .waf-editor) .config-viewbar {
+    padding: 8px 12px;
+  }
+  .editor-learning-label {
+    font-size: 10px;
+    padding: 3px 6px;
+  }
+  :is(.lb-editor, .waf-editor) .config-find {
+    display: flex;
+    flex: 1 1 100%;
+  }
+  :is(.lb-editor, .waf-editor) .config-find input {
+    width: 100%;
+  }
+  :is(.lb-editor, .waf-editor) .config-navigation {
+    padding: 0;
+    min-width: 0;
+  }
+  :is(.lb-editor, .waf-editor) .config-navigation .config-resource {
+    display: block;
+    padding: 8px 12px;
+    border-bottom: 1px solid #dce3ed;
+  }
+  :is(.lb-editor, .waf-editor) .config-resource > .badge {
+    float: right;
+  }
+  :is(.lb-editor, .waf-editor) .config-resource strong {
+    margin-top: 0;
+    font-size: 13px;
+  }
+  :is(.lb-editor, .waf-editor) .config-resource small {
+    display: none;
+  }
+  .editor-namespace {
+    margin-top: 2px;
+  }
+  .config-resource .editor-namespace strong {
+    display: inline;
+    margin-left: 8px;
+    font-size: 11px;
+  }
+  :is(.lb-editor, .waf-editor) .config-navigation nav button {
+    padding: 8px 12px;
+  }
+  :is(.lb-editor, .waf-editor) .config-main {
+    padding: 12px;
+  }
+  :is(.lb-editor, .waf-editor) .config-section {
+    padding: 16px 12px 4px;
+    margin-bottom: 12px;
+  }
+  :is(.lb-editor, .waf-editor) .config-section-heading {
+    flex-wrap: wrap;
+  }
+  :is(.lb-editor, .waf-editor) .config-footer {
+    padding: 12px;
+    gap: 8px;
+  }
+  :is(.lb-editor, .waf-editor) .config-footer .btn {
+    flex: 1;
+    margin: 0;
+    padding-inline: 8px;
+  }
+  .waf-editor .waf-signatures,
+  .lb-editor .lb-type-settings {
+    padding: 12px;
+  }
+  .waf-editor .waf-dependent-fields {
+    padding-left: 12px;
+  }
+}

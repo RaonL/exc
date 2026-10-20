@@ -1,0 +1,461 @@
+{
+  "lab": "https://clouddocs.f5.com/training/community/f5xc/html/class2/lab3.html",
+  "baseline": {
+    "at": 1792459967660,
+    "codes": [
+      200,
+      200,
+      200
+    ]
+  },
+  "verification": {
+    "at": 1792459969718,
+    "fingerprint": "{\"lb\":{\"id\":\"training-c2-lab3-lb\",\"namespace\":\"training-c2-lab3\",\"name\":\"c2-lab3-lb\",\"domains\":[\"c2-lab3.example.com\"],\"protocol\":\"HTTPS\",\"originId\":\"training-c2-lab3-aws\",\"wafId\":\"\",\"apiProtection\":false,\"botDefense\":false,\"ddosProtection\":false,\"requests\":0,\"createdAt\":\"\",\"config\":{\"description\":\"\",\"labels\":\"\",\"vip\":\"Internet\",\"vipAddress\":\"\",\"siteId\":\"\",\"certificate\":\"Automatic\",\"certificateRef\":\"\",\"listenPort\":443,\"redirectHttps\":true,\"hsts\":false,\"tlsLevel\":\"High\",\"routes\":[],\"exclusions\":[],\"cdn\":false,\"timeout\":30,\"apiDiscovery\":false,\"manageDns\":false,\"listenPortChoice\":\"HTTP Listen Port\",\"originWeight\":1,\"originPriority\":1}},\"waf\":{\"id\":\"training-c2-lab3-waf\",\"namespace\":\"training-c2-lab3\",\"name\":\"c2-lab3-appfw\",\"mode\":\"Monitoring\"},\"origins\":[{\"id\":\"training-c2-lab3-aws\",\"namespace\":\"training-c2-lab3\",\"name\":\"aws-primary\",\"endpoint\":\"aws-origin.example.com\",\"port\":80,\"healthy\":true,\"config\":{\"labels\":\"\",\"description\":\"\",\"type\":\"Public DNS\",\"siteId\":\"\",\"network\":\"Inside Network\",\"algorithm\":\"Round Robin\",\"tls\":false,\"sni\":\"\",\"healthCheck\":\"HTTP\",\"healthPath\":\"/health\",\"interval\":15,\"timeout\":3,\"healthyThreshold\":2,\"unhealthyThreshold\":3}},{\"id\":\"training-c2-lab3-azure\",\"namespace\":\"training-c2-lab3\",\"name\":\"azure-canary\",\"endpoint\":\"azure-origin.example.com\",\"port\":80,\"healthy\":true,\"config\":{\"labels\":\"\",\"description\":\"\",\"type\":\"Public DNS\",\"siteId\":\"\",\"network\":\"Inside Network\",\"algorithm\":\"Round Robin\",\"tls\":false,\"sni\":\"\",\"healthCheck\":\"HTTP\",\"healthPath\":\"/health\",\"interval\":15,\"timeout\":3,\"healthyThreshold\":2,\"unhealthyThreshold\":3}}],\"ce\":{\"id\":\"training-c2-lab3-ce\",\"namespace\":\"training-c2-lab3\",\"name\":\"c2-lab3-customer-edge\",\"kind\":\"CE\",\"region\":\"AWS / ap-northeast-2 (demo)\",\"online\":true,\"address\":\"192.0.2.10\"},\"controls\":{\"policyMode\":\"Disabled\",\"headerName\":\"x-f5-appworld\",\"headerValue\":\"RjUtQXBwd29ybGQ=\",\"allowedCountry\":\"South Korea\",\"deniedCountry\":\"Fiji\",\"blockBadReputation\":false,\"allowedPath\":\"/\",\"canary\":false,\"canaryHeader\":\"X-App-Version\",\"canaryValue\":\"green\",\"rewriteLogin\":false,\"namespaceHeader\":false,\"inventory\":false,\"apiDeny\":false,\"deniedEndpoint\":\"/api/customerlookup/getbydob\",\"schemaValidation\":false,\"apiDiscovery\":false,\"connector\":false,\"rateLimit\":false,\"rate\":3,\"rateWindow\":60,\"ratePath\":\"/api/customerlookup/getbyname\",\"rateMethod\":\"GET\",\"botMode\":\"Disabled\",\"botPath\":\"/user/vipsignin\",\"botExtraPath\":\"\",\"botMethod\":\"POST\",\"telemetry\":false,\"maliciousDetection\":true,\"maliciousMitigation\":true,\"segment\":false,\"segmentPeer\":false,\"firewall\":false,\"failover\":false,\"overlapVip\":false,\"scanProfile\":false,\"scanSchedule\":\"Manual\",\"source\":\"{\\n  \\\"name\\\": \\\"xc-training-app\\\",\\n  \\\"routes\\\": [\\n    {\\n      \\\"method\\\": \\\"GET\\\",\\n      \\\"path\\\": \\\"/\\\",\\n      \\\"body\\\": \\\"Hello XC\\\"\\n    },\\n    {\\n      \\\"method\\\": \\\"GET\\\",\\n      \\\"path\\\": \\\"/about\\\",\\n      \\\"body\\\": \\\"About XC Training App\\\"\\n    },\\n    {\\n      \\\"method\\\": \\\"GET\\\",\\n      \\\"path\\\": \\\"/login\\\",\\n      \\\"body\\\": \\\"Demo login form\\\"\\n    },\\n    {\\n      \\\"method\\\": \\\"GET\\\",\\n      \\\"path\\\": \\\"/contact\\\",\\n      \\\"body\\\": \\\"Demo contact form\\\"\\n    },\\n    {\\n      \\\"method\\\": \\\"POST\\\",\\n      \\\"path\\\": \\\"/login\\\",\\n      \\\"body\\\": \\\"Demo login\\\"\\n    },\\n    {\\n      \\\"method\\\": \\\"POST\\\",\\n      \\\"path\\\": \\\"/contact\\\",\\n      \\\"body\\\": \\\"Demo contact\\\"\\n    }\\n  ]\\n}\",\"deployedSource\":\"\",\"artifact\":\"\",\"pipeline\":[]}}",
+    "checks": [
+      {
+        "name": "보호 전 기준 요청 기록",
+        "pass": true,
+        "expected": "기준 요청 실행",
+        "actual": "200 / 200 / 200"
+      },
+      {
+        "name": "LB → Origin 연결",
+        "pass": true,
+        "expected": "유효한 Origin과 Domain",
+        "actual": "c2-lab3.example.com → training-c2-lab3-aws"
+      },
+      {
+        "name": "악성 fingerprint #1",
+        "pass": true,
+        "expected": "HTTP 200",
+        "actual": "HTTP 200 · Detected · aws-primary · Malicious fingerprint bad-ja4: 1 requests on shared IP"
+      },
+      {
+        "name": "악성 fingerprint #2",
+        "pass": true,
+        "expected": "HTTP 200",
+        "actual": "HTTP 200 · Detected · aws-primary · Malicious fingerprint bad-ja4: 2 requests on shared IP"
+      },
+      {
+        "name": "악성 fingerprint #3",
+        "pass": true,
+        "expected": "HTTP 403",
+        "actual": "HTTP 403 · Blocked · aws-primary · Temporary block for fingerprint bad-ja4; shared IP is not globally blocked"
+      },
+      {
+        "name": "공유 IP의 정상 fingerprint",
+        "pass": true,
+        "expected": "HTTP 200",
+        "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+      }
+    ]
+  },
+  "runtime": {
+    "now": 1792459969596,
+    "buckets": {},
+    "identities": {
+      "198.51.100.42|audit-bad": 3,
+      "198.51.100.42|audit-good": 1
+    },
+    "logs": [
+      {
+        "id": "db14419d-6ff5-45ad-89f4-04e83ea9a8e6",
+        "trace": [
+          "START local simulation · support_id=db14419d-6ff5-45ad-89f4-04e83ea9a8e6",
+          "REQUEST GET / attack_input=None client=198.51.100.42/good-ja4",
+          "CONTEXT namespace=training-c2-lab3 lb=c2-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=Disabled",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792459969596,
+        "request": {
+          "method": "GET",
+          "path": "/",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "good-ja4",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/"
+        },
+        "body": "{\"simulation\":true,\"application\":\"XC Training App\",\"method\":\"GET\",\"path\":\"/\",\"upstreamPath\":\"/\",\"message\":\"Local dummy origin response\"}"
+      },
+      {
+        "id": "57576f52-304c-462e-baac-9ccb5f5ad949",
+        "trace": [
+          "START local simulation · support_id=57576f52-304c-462e-baac-9ccb5f5ad949",
+          "REQUEST GET / attack_input=Malicious user client=198.51.100.42/bad-ja4",
+          "CONTEXT namespace=training-c2-lab3 lb=c2-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=Disabled",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=403 action=Blocked reason=Temporary block for fingerprint bad-ja4; shared IP is not globally blocked",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792459969596,
+        "request": {
+          "method": "GET",
+          "path": "/",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "bad-ja4",
+          "attack": "Malicious user",
+          "transport": "HTTP"
+        },
+        "code": 403,
+        "action": "Blocked",
+        "reason": "Temporary block for fingerprint bad-ja4; shared IP is not globally blocked",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/"
+        },
+        "body": "Request rejected by local simulator\nSupport ID: 57576f52-304c-462e-baac-9ccb5f5ad949"
+      },
+      {
+        "id": "92146fe6-ba2e-4dd5-b218-50e35f861cb8",
+        "trace": [
+          "START local simulation · support_id=92146fe6-ba2e-4dd5-b218-50e35f861cb8",
+          "REQUEST GET / attack_input=Malicious user client=198.51.100.42/bad-ja4",
+          "CONTEXT namespace=training-c2-lab3 lb=c2-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=Disabled",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Detected reason=Malicious fingerprint bad-ja4: 2 requests on shared IP",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792459969596,
+        "request": {
+          "method": "GET",
+          "path": "/",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "bad-ja4",
+          "attack": "Malicious user",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Detected",
+        "reason": "Malicious fingerprint bad-ja4: 2 requests on shared IP",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/"
+        },
+        "body": "{\"simulation\":true,\"application\":\"XC Training App\",\"method\":\"GET\",\"path\":\"/\",\"upstreamPath\":\"/\",\"message\":\"Local dummy origin response\"}"
+      },
+      {
+        "id": "90730791-8349-458b-abc3-d634646d9319",
+        "trace": [
+          "START local simulation · support_id=90730791-8349-458b-abc3-d634646d9319",
+          "REQUEST GET / attack_input=Malicious user client=198.51.100.42/bad-ja4",
+          "CONTEXT namespace=training-c2-lab3 lb=c2-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=Disabled",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Detected reason=Malicious fingerprint bad-ja4: 1 requests on shared IP",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792459969596,
+        "request": {
+          "method": "GET",
+          "path": "/",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "bad-ja4",
+          "attack": "Malicious user",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Detected",
+        "reason": "Malicious fingerprint bad-ja4: 1 requests on shared IP",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/"
+        },
+        "body": "{\"simulation\":true,\"application\":\"XC Training App\",\"method\":\"GET\",\"path\":\"/\",\"upstreamPath\":\"/\",\"message\":\"Local dummy origin response\"}"
+      },
+      {
+        "id": "8bc2076a-8db6-4447-b0d1-56c45d17e95a",
+        "trace": [
+          "START local simulation · support_id=8bc2076a-8db6-4447-b0d1-56c45d17e95a",
+          "REQUEST GET / attack_input=None client=198.51.100.42/audit-good",
+          "CONTEXT namespace=training-c2-lab3 lb=c2-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=Disabled",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792459969596,
+        "request": {
+          "method": "GET",
+          "path": "/",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "audit-good",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/"
+        },
+        "body": "{\"simulation\":true,\"application\":\"XC Training App\",\"method\":\"GET\",\"path\":\"/\",\"upstreamPath\":\"/\",\"message\":\"Local dummy origin response\"}"
+      },
+      {
+        "id": "3f9000de-5b89-4331-9927-354ebfd3882b",
+        "trace": [
+          "START local simulation · support_id=3f9000de-5b89-4331-9927-354ebfd3882b",
+          "REQUEST GET / attack_input=Malicious user client=198.51.100.42/audit-bad",
+          "CONTEXT namespace=training-c2-lab3 lb=c2-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=Disabled",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=403 action=Blocked reason=Temporary block for fingerprint audit-bad; shared IP is not globally blocked",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792459968916,
+        "request": {
+          "method": "GET",
+          "path": "/",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "audit-bad",
+          "attack": "Malicious user",
+          "transport": "HTTP"
+        },
+        "code": 403,
+        "action": "Blocked",
+        "reason": "Temporary block for fingerprint audit-bad; shared IP is not globally blocked",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/"
+        },
+        "body": "Request rejected by local simulator\nSupport ID: 3f9000de-5b89-4331-9927-354ebfd3882b"
+      },
+      {
+        "id": "8c3f5e7f-f463-4e62-b411-7c879d4aea34",
+        "trace": [
+          "START local simulation · support_id=8c3f5e7f-f463-4e62-b411-7c879d4aea34",
+          "REQUEST GET / attack_input=Malicious user client=198.51.100.42/audit-bad",
+          "CONTEXT namespace=training-c2-lab3 lb=c2-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=Disabled",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Detected reason=Malicious fingerprint audit-bad: 2 requests on shared IP",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792459968910,
+        "request": {
+          "method": "GET",
+          "path": "/",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "audit-bad",
+          "attack": "Malicious user",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Detected",
+        "reason": "Malicious fingerprint audit-bad: 2 requests on shared IP",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/"
+        },
+        "body": "{\"simulation\":true,\"application\":\"XC Training App\",\"method\":\"GET\",\"path\":\"/\",\"upstreamPath\":\"/\",\"message\":\"Local dummy origin response\"}"
+      },
+      {
+        "id": "eea47f6a-dabc-4adf-b9ce-1f362326b1e4",
+        "trace": [
+          "START local simulation · support_id=eea47f6a-dabc-4adf-b9ce-1f362326b1e4",
+          "REQUEST GET / attack_input=Malicious user client=198.51.100.42/audit-bad",
+          "CONTEXT namespace=training-c2-lab3 lb=c2-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=Disabled",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Detected reason=Malicious fingerprint audit-bad: 1 requests on shared IP",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792459968901,
+        "request": {
+          "method": "GET",
+          "path": "/",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "audit-bad",
+          "attack": "Malicious user",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Detected",
+        "reason": "Malicious fingerprint audit-bad: 1 requests on shared IP",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/"
+        },
+        "body": "{\"simulation\":true,\"application\":\"XC Training App\",\"method\":\"GET\",\"path\":\"/\",\"upstreamPath\":\"/\",\"message\":\"Local dummy origin response\"}"
+      },
+      {
+        "id": "392b9389-7dda-4bfb-8d89-47d09926ca81",
+        "trace": [
+          "START local simulation · support_id=392b9389-7dda-4bfb-8d89-47d09926ca81",
+          "REQUEST GET / attack_input=XSS client=198.51.100.42/human-ja4",
+          "CONTEXT namespace=training-c2-lab3 lb=c2-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=Disabled",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Protection is not enabled; forwarded to aws-primary",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792459967480,
+        "request": {
+          "method": "GET",
+          "path": "/",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "XSS",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Protection is not enabled; forwarded to aws-primary",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/"
+        },
+        "body": "{\"simulation\":true,\"application\":\"XC Training App\",\"method\":\"GET\",\"path\":\"/\",\"upstreamPath\":\"/\",\"message\":\"Local dummy origin response\"}"
+      },
+      {
+        "id": "38751c0a-a110-4223-92b1-a6ab79154f86",
+        "trace": [
+          "START local simulation · support_id=38751c0a-a110-4223-92b1-a6ab79154f86",
+          "REQUEST GET / attack_input=SQL Injection client=198.51.100.42/human-ja4",
+          "CONTEXT namespace=training-c2-lab3 lb=c2-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=Disabled",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Protection is not enabled; forwarded to aws-primary",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792459967480,
+        "request": {
+          "method": "GET",
+          "path": "/",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "SQL Injection",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Protection is not enabled; forwarded to aws-primary",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/"
+        },
+        "body": "{\"simulation\":true,\"application\":\"XC Training App\",\"method\":\"GET\",\"path\":\"/\",\"upstreamPath\":\"/\",\"message\":\"Local dummy origin response\"}"
+      },
+      {
+        "id": "b15341a0-4ce1-4849-a67b-955cb38f2fcc",
+        "trace": [
+          "START local simulation · support_id=b15341a0-4ce1-4849-a67b-955cb38f2fcc",
+          "REQUEST GET / attack_input=None client=198.51.100.42/human-ja4",
+          "CONTEXT namespace=training-c2-lab3 lb=c2-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=Disabled",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792459967480,
+        "request": {
+          "method": "GET",
+          "path": "/",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/"
+        },
+        "body": "{\"simulation\":true,\"application\":\"XC Training App\",\"method\":\"GET\",\"path\":\"/\",\"upstreamPath\":\"/\",\"message\":\"Local dummy origin response\"}"
+      }
+    ],
+    "discovered": [],
+    "explanation": ""
+  }
+}

@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { createDemoData } from './data/seed';
 import { evaluateRequest, lbConfig } from './lib/config';
+import { evaluateCatalogRequest } from './lib/catalog-simulation';
 import {
   classifyLocalPath,
   localRequestPath,
@@ -21,6 +22,7 @@ import type {
   User,
   Policy,
   SimulatedRequest,
+  CatalogMatch,
 } from './types';
 const uid = () => crypto.randomUUID();
 const timestamp = () => new Date().toISOString();
@@ -41,6 +43,7 @@ interface Store extends DemoData {
   startConsoleLab1: () => void;
   openApplication: (id: string) => void;
   requestApplication: (id: string, url: string, method: string) => SecurityEvent;
+  runCatalogTest: (lbId: string, match: CatalogMatch, request: SimulatedRequest) => SecurityEvent;
   inspectRequest: (id: string) => void;
   navigate: (workspace: Workspace, page: Page) => void;
   setNamespace: (namespace: string) => void;
@@ -93,6 +96,50 @@ export const useConsole = create<Store>()(
           selectedLbId: '',
         })),
       openApplication: (applicationLbId) => set({ applicationLbId }),
+      runCatalogTest: (lbId, match, request) => {
+        const s = get(),
+          lb = s.lbs.find((l) => l.id === lbId && l.namespace === s.namespace);
+        if (!lb) throw new Error('현재 Namespace의 HTTP Load Balancer를 선택하세요.');
+        const evaluation = evaluateCatalogRequest(lb, s.wafs, s.origins, match, {
+          ...request,
+          authority: lb.domains[0],
+        });
+        const id = uid();
+        const event: SecurityEvent = {
+          id,
+          namespace: lb.namespace,
+          timestamp: timestamp(),
+          lbId,
+          authority: lb.domains[0],
+          scenario: match.kind === 'bots' ? 'Bot Detection' : 'Catalog Signature',
+          source: '198.51.100.42',
+          country: 'South Korea',
+          path: request.path,
+          method: request.method,
+          signatureState: request.signatureState,
+          severity: match.risk === 'High' ? 'High' : match.risk === 'Medium' ? 'Medium' : 'Info',
+          generatedBy: 'console-request',
+          count: 1,
+          catalogMatch: { ...match },
+          ...evaluation,
+        };
+        if (event.action === 'Blocked')
+          event.responseBody =
+            `${event.responseBody ?? 'Request rejected.'}`.replaceAll('{{request_id}}', id) +
+            `\nSupport ID: ${id}`;
+        set({
+          events: [event, ...s.events].slice(0, 1000),
+          lbs: s.lbs.map((l) => (l.id === lbId ? { ...l, requests: l.requests + 1 } : l)),
+          activity: [
+            activity(
+              lb.namespace,
+              `Catalog ${match.kind}/${match.id} · ${event.action} · req_id ${id}`,
+            ),
+            ...s.activity,
+          ].slice(0, 500),
+        });
+        return event;
+      },
       requestApplication: (id, url, method) => {
         const s = get(),
           lb = s.lbs.find((l) => l.id === id && l.namespace === s.namespace);

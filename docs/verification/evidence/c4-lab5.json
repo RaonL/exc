@@ -1,0 +1,838 @@
+{
+  "lab": "https://clouddocs.f5.com/training/community/f5xc/html/class4/lab5.html",
+  "baseline": {
+    "at": 1792460005240,
+    "codes": [
+      200,
+      200,
+      200,
+      200
+    ]
+  },
+  "verification": {
+    "at": 1792460007114,
+    "fingerprint": "{\"lb\":{\"id\":\"training-c4-lab5-lb\",\"namespace\":\"training-c4-lab5\",\"name\":\"c4-lab5-lb\",\"domains\":[\"c4-lab5.example.com\"],\"protocol\":\"HTTPS\",\"originId\":\"training-c4-lab5-aws\",\"wafId\":\"\",\"apiProtection\":false,\"botDefense\":false,\"ddosProtection\":false,\"requests\":0,\"createdAt\":\"\",\"config\":{\"description\":\"\",\"labels\":\"\",\"vip\":\"Internet\",\"vipAddress\":\"\",\"siteId\":\"\",\"certificate\":\"Automatic\",\"certificateRef\":\"\",\"listenPort\":443,\"redirectHttps\":true,\"hsts\":false,\"tlsLevel\":\"High\",\"routes\":[],\"exclusions\":[],\"cdn\":false,\"timeout\":30,\"apiDiscovery\":false,\"manageDns\":false,\"listenPortChoice\":\"HTTP Listen Port\",\"originWeight\":1,\"originPriority\":1}},\"waf\":{\"id\":\"training-c4-lab5-waf\",\"namespace\":\"training-c4-lab5\",\"name\":\"c4-lab5-appfw\",\"mode\":\"Monitoring\"},\"origins\":[{\"id\":\"training-c4-lab5-aws\",\"namespace\":\"training-c4-lab5\",\"name\":\"aws-primary\",\"endpoint\":\"aws-origin.example.com\",\"port\":80,\"healthy\":true,\"config\":{\"labels\":\"\",\"description\":\"\",\"type\":\"Public DNS\",\"siteId\":\"\",\"network\":\"Inside Network\",\"algorithm\":\"Round Robin\",\"tls\":false,\"sni\":\"\",\"healthCheck\":\"HTTP\",\"healthPath\":\"/health\",\"interval\":15,\"timeout\":3,\"healthyThreshold\":2,\"unhealthyThreshold\":3}},{\"id\":\"training-c4-lab5-azure\",\"namespace\":\"training-c4-lab5\",\"name\":\"azure-canary\",\"endpoint\":\"azure-origin.example.com\",\"port\":80,\"healthy\":true,\"config\":{\"labels\":\"\",\"description\":\"\",\"type\":\"Public DNS\",\"siteId\":\"\",\"network\":\"Inside Network\",\"algorithm\":\"Round Robin\",\"tls\":false,\"sni\":\"\",\"healthCheck\":\"HTTP\",\"healthPath\":\"/health\",\"interval\":15,\"timeout\":3,\"healthyThreshold\":2,\"unhealthyThreshold\":3}}],\"ce\":{\"id\":\"training-c4-lab5-ce\",\"namespace\":\"training-c4-lab5\",\"name\":\"c4-lab5-customer-edge\",\"kind\":\"CE\",\"region\":\"AWS / ap-northeast-2 (demo)\",\"online\":true,\"address\":\"192.0.2.10\"},\"controls\":{\"policyMode\":\"Disabled\",\"headerName\":\"x-f5-appworld\",\"headerValue\":\"RjUtQXBwd29ybGQ=\",\"allowedCountry\":\"South Korea\",\"deniedCountry\":\"Fiji\",\"blockBadReputation\":false,\"allowedPath\":\"/\",\"canary\":false,\"canaryHeader\":\"X-App-Version\",\"canaryValue\":\"green\",\"rewriteLogin\":false,\"namespaceHeader\":false,\"inventory\":false,\"apiDeny\":false,\"deniedEndpoint\":\"/api/customerlookup/getbydob\",\"schemaValidation\":false,\"apiDiscovery\":false,\"connector\":false,\"rateLimit\":true,\"rate\":3,\"rateWindow\":60,\"ratePath\":\"/api/customerlookup/getbyname\",\"rateMethod\":\"GET\",\"botMode\":\"Disabled\",\"botPath\":\"/user/vipsignin\",\"botExtraPath\":\"\",\"botMethod\":\"POST\",\"telemetry\":false,\"maliciousDetection\":false,\"maliciousMitigation\":false,\"segment\":false,\"segmentPeer\":false,\"firewall\":false,\"failover\":false,\"overlapVip\":false,\"scanProfile\":false,\"scanSchedule\":\"Manual\",\"source\":\"{\\n  \\\"name\\\": \\\"xc-training-app\\\",\\n  \\\"routes\\\": [\\n    {\\n      \\\"method\\\": \\\"GET\\\",\\n      \\\"path\\\": \\\"/\\\",\\n      \\\"body\\\": \\\"Hello XC\\\"\\n    },\\n    {\\n      \\\"method\\\": \\\"GET\\\",\\n      \\\"path\\\": \\\"/about\\\",\\n      \\\"body\\\": \\\"About XC Training App\\\"\\n    },\\n    {\\n      \\\"method\\\": \\\"GET\\\",\\n      \\\"path\\\": \\\"/login\\\",\\n      \\\"body\\\": \\\"Demo login form\\\"\\n    },\\n    {\\n      \\\"method\\\": \\\"GET\\\",\\n      \\\"path\\\": \\\"/contact\\\",\\n      \\\"body\\\": \\\"Demo contact form\\\"\\n    },\\n    {\\n      \\\"method\\\": \\\"POST\\\",\\n      \\\"path\\\": \\\"/login\\\",\\n      \\\"body\\\": \\\"Demo login\\\"\\n    },\\n    {\\n      \\\"method\\\": \\\"POST\\\",\\n      \\\"path\\\": \\\"/contact\\\",\\n      \\\"body\\\": \\\"Demo contact\\\"\\n    }\\n  ]\\n}\",\"deployedSource\":\"\",\"artifact\":\"\",\"pipeline\":[]}}",
+    "checks": [
+      {
+        "name": "보호 전 기준 요청 기록",
+        "pass": true,
+        "expected": "기준 요청 실행",
+        "actual": "200 / 200 / 200 / 200"
+      },
+      {
+        "name": "LB → Origin 연결",
+        "pass": true,
+        "expected": "유효한 Origin과 Domain",
+        "actual": "c4-lab5.example.com → training-c4-lab5-aws"
+      },
+      {
+        "name": "3 requests / minute",
+        "pass": true,
+        "expected": "3 / 60s",
+        "actual": "3 / 60s"
+      },
+      {
+        "name": "GET /api/customerlookup/getbyname #1",
+        "pass": true,
+        "expected": "HTTP 200",
+        "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+      },
+      {
+        "name": "GET /api/customerlookup/getbyname #2",
+        "pass": true,
+        "expected": "HTTP 200",
+        "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+      },
+      {
+        "name": "GET /api/customerlookup/getbyname #3",
+        "pass": true,
+        "expected": "HTTP 200",
+        "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+      },
+      {
+        "name": "GET /api/customerlookup/getbyname #4",
+        "pass": true,
+        "expected": "HTTP 429",
+        "actual": "HTTP 429 · Blocked · aws-primary · Rate limiter: 3 requests / 60s exceeded"
+      },
+      {
+        "name": "다른 클라이언트 허용",
+        "pass": true,
+        "expected": "HTTP 200",
+        "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+      },
+      {
+        "name": "제한 제외 경로 #1",
+        "pass": true,
+        "expected": "HTTP 200",
+        "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+      },
+      {
+        "name": "제한 제외 경로 #2",
+        "pass": true,
+        "expected": "HTTP 200",
+        "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+      },
+      {
+        "name": "제한 제외 경로 #3",
+        "pass": true,
+        "expected": "HTTP 200",
+        "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+      },
+      {
+        "name": "제한 제외 경로 #4",
+        "pass": true,
+        "expected": "HTTP 200",
+        "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+      },
+      {
+        "name": "제한 제외 경로 #5",
+        "pass": true,
+        "expected": "HTTP 200",
+        "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+      },
+      {
+        "name": "시간 창 만료 후 재허용",
+        "pass": true,
+        "expected": "HTTP 200",
+        "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+      }
+    ]
+  },
+  "runtime": {
+    "now": 1792460006973,
+    "buckets": {
+      "198.51.100.42|audit-human|GET|/api/customerlookup/getbyname": {
+        "start": 1792460006436,
+        "count": 4
+      }
+    },
+    "identities": {
+      "198.51.100.42|audit-human": 5
+    },
+    "logs": [
+      {
+        "id": "82e1629a-079b-48f7-8a7c-a4161a2c1ac3",
+        "trace": [
+          "START local simulation · support_id=82e1629a-079b-48f7-8a7c-a4161a2c1ac3",
+          "REQUEST GET /api/customerlookup/getbyname attack_input=None client=198.51.100.42/human-ja4",
+          "CONTEXT namespace=training-c4-lab5 lb=c4-lab5-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=3/60s",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460067973,
+        "request": {
+          "method": "GET",
+          "path": "/api/customerlookup/getbyname",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/api/customerlookup/getbyname"
+        },
+        "body": "{\"simulation\":true,\"customers\":[{\"customerId\":\"DEMO-C001\",\"name\":\"Demo Customer\",\"status\":\"active\"}]}"
+      },
+      {
+        "id": "2bfff307-a1e3-4e7d-881a-9a30a12f6a8c",
+        "trace": [
+          "START local simulation · support_id=2bfff307-a1e3-4e7d-881a-9a30a12f6a8c",
+          "REQUEST GET /health attack_input=None client=198.51.100.42/human-ja4",
+          "CONTEXT namespace=training-c4-lab5 lb=c4-lab5-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=3/60s",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460006973,
+        "request": {
+          "method": "GET",
+          "path": "/health",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/health"
+        },
+        "body": "{\"simulation\":true,\"application\":\"XC Training App\",\"method\":\"GET\",\"path\":\"/health\",\"upstreamPath\":\"/health\",\"message\":\"Local dummy origin response\"}"
+      },
+      {
+        "id": "f8d0a9f3-2b09-4522-8043-fbac98662259",
+        "trace": [
+          "START local simulation · support_id=f8d0a9f3-2b09-4522-8043-fbac98662259",
+          "REQUEST GET /health attack_input=None client=198.51.100.42/human-ja4",
+          "CONTEXT namespace=training-c4-lab5 lb=c4-lab5-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=3/60s",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460006973,
+        "request": {
+          "method": "GET",
+          "path": "/health",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/health"
+        },
+        "body": "{\"simulation\":true,\"application\":\"XC Training App\",\"method\":\"GET\",\"path\":\"/health\",\"upstreamPath\":\"/health\",\"message\":\"Local dummy origin response\"}"
+      },
+      {
+        "id": "5126d61e-df62-405b-ba61-8c0a7a28c2a2",
+        "trace": [
+          "START local simulation · support_id=5126d61e-df62-405b-ba61-8c0a7a28c2a2",
+          "REQUEST GET /health attack_input=None client=198.51.100.42/human-ja4",
+          "CONTEXT namespace=training-c4-lab5 lb=c4-lab5-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=3/60s",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460006973,
+        "request": {
+          "method": "GET",
+          "path": "/health",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/health"
+        },
+        "body": "{\"simulation\":true,\"application\":\"XC Training App\",\"method\":\"GET\",\"path\":\"/health\",\"upstreamPath\":\"/health\",\"message\":\"Local dummy origin response\"}"
+      },
+      {
+        "id": "617db81e-47b3-4b1e-8302-5fe48f92e5d0",
+        "trace": [
+          "START local simulation · support_id=617db81e-47b3-4b1e-8302-5fe48f92e5d0",
+          "REQUEST GET /health attack_input=None client=198.51.100.42/human-ja4",
+          "CONTEXT namespace=training-c4-lab5 lb=c4-lab5-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=3/60s",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460006973,
+        "request": {
+          "method": "GET",
+          "path": "/health",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/health"
+        },
+        "body": "{\"simulation\":true,\"application\":\"XC Training App\",\"method\":\"GET\",\"path\":\"/health\",\"upstreamPath\":\"/health\",\"message\":\"Local dummy origin response\"}"
+      },
+      {
+        "id": "252a520e-9964-4f3c-93bd-e7965432b9a3",
+        "trace": [
+          "START local simulation · support_id=252a520e-9964-4f3c-93bd-e7965432b9a3",
+          "REQUEST GET /health attack_input=None client=198.51.100.42/human-ja4",
+          "CONTEXT namespace=training-c4-lab5 lb=c4-lab5-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=3/60s",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460006973,
+        "request": {
+          "method": "GET",
+          "path": "/health",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/health"
+        },
+        "body": "{\"simulation\":true,\"application\":\"XC Training App\",\"method\":\"GET\",\"path\":\"/health\",\"upstreamPath\":\"/health\",\"message\":\"Local dummy origin response\"}"
+      },
+      {
+        "id": "1db7d22b-cb6b-4c36-b0c7-e9b5785a22db",
+        "trace": [
+          "START local simulation · support_id=1db7d22b-cb6b-4c36-b0c7-e9b5785a22db",
+          "REQUEST GET /api/customerlookup/getbyname attack_input=None client=198.51.100.43/human-ja4",
+          "CONTEXT namespace=training-c4-lab5 lb=c4-lab5-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=3/60s",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460006973,
+        "request": {
+          "method": "GET",
+          "path": "/api/customerlookup/getbyname",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.43",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/api/customerlookup/getbyname"
+        },
+        "body": "{\"simulation\":true,\"customers\":[{\"customerId\":\"DEMO-C001\",\"name\":\"Demo Customer\",\"status\":\"active\"}]}"
+      },
+      {
+        "id": "3e28e36c-3c50-4e82-8e8d-cddd879dd73e",
+        "trace": [
+          "START local simulation · support_id=3e28e36c-3c50-4e82-8e8d-cddd879dd73e",
+          "REQUEST GET /api/customerlookup/getbyname attack_input=None client=198.51.100.42/human-ja4",
+          "CONTEXT namespace=training-c4-lab5 lb=c4-lab5-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=3/60s",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=429 action=Blocked reason=Rate limiter: 3 requests / 60s exceeded",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460006973,
+        "request": {
+          "method": "GET",
+          "path": "/api/customerlookup/getbyname",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 429,
+        "action": "Blocked",
+        "reason": "Rate limiter: 3 requests / 60s exceeded",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/api/customerlookup/getbyname"
+        },
+        "body": "Request rejected by local simulator\nSupport ID: 3e28e36c-3c50-4e82-8e8d-cddd879dd73e"
+      },
+      {
+        "id": "7dd4a255-b77d-47ef-897f-f06386d35d93",
+        "trace": [
+          "START local simulation · support_id=7dd4a255-b77d-47ef-897f-f06386d35d93",
+          "REQUEST GET /api/customerlookup/getbyname attack_input=None client=198.51.100.42/human-ja4",
+          "CONTEXT namespace=training-c4-lab5 lb=c4-lab5-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=3/60s",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460006973,
+        "request": {
+          "method": "GET",
+          "path": "/api/customerlookup/getbyname",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/api/customerlookup/getbyname"
+        },
+        "body": "{\"simulation\":true,\"customers\":[{\"customerId\":\"DEMO-C001\",\"name\":\"Demo Customer\",\"status\":\"active\"}]}"
+      },
+      {
+        "id": "38b38ba7-f3d9-41ed-a496-d8c07fb5b9be",
+        "trace": [
+          "START local simulation · support_id=38b38ba7-f3d9-41ed-a496-d8c07fb5b9be",
+          "REQUEST GET /api/customerlookup/getbyname attack_input=None client=198.51.100.42/human-ja4",
+          "CONTEXT namespace=training-c4-lab5 lb=c4-lab5-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=3/60s",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460006973,
+        "request": {
+          "method": "GET",
+          "path": "/api/customerlookup/getbyname",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/api/customerlookup/getbyname"
+        },
+        "body": "{\"simulation\":true,\"customers\":[{\"customerId\":\"DEMO-C001\",\"name\":\"Demo Customer\",\"status\":\"active\"}]}"
+      },
+      {
+        "id": "9f8c6013-49f4-4144-9afb-4a389d51f050",
+        "trace": [
+          "START local simulation · support_id=9f8c6013-49f4-4144-9afb-4a389d51f050",
+          "REQUEST GET /api/customerlookup/getbyname attack_input=None client=198.51.100.42/human-ja4",
+          "CONTEXT namespace=training-c4-lab5 lb=c4-lab5-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=3/60s",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460006973,
+        "request": {
+          "method": "GET",
+          "path": "/api/customerlookup/getbyname",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/api/customerlookup/getbyname"
+        },
+        "body": "{\"simulation\":true,\"customers\":[{\"customerId\":\"DEMO-C001\",\"name\":\"Demo Customer\",\"status\":\"active\"}]}"
+      },
+      {
+        "id": "46d11fc3-54b1-46e9-8df0-0096ba09eae0",
+        "trace": [
+          "START local simulation · support_id=46d11fc3-54b1-46e9-8df0-0096ba09eae0",
+          "REQUEST GET /health attack_input=None client=198.51.100.42/audit-human",
+          "CONTEXT namespace=training-c4-lab5 lb=c4-lab5-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=3/60s",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460006973,
+        "request": {
+          "method": "GET",
+          "path": "/health",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "audit-human",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/health"
+        },
+        "body": "{\"simulation\":true,\"application\":\"XC Training App\",\"method\":\"GET\",\"path\":\"/health\",\"upstreamPath\":\"/health\",\"message\":\"Local dummy origin response\"}"
+      },
+      {
+        "id": "49f69b59-31a0-456b-82f0-773097f3adc3",
+        "trace": [
+          "START local simulation · support_id=49f69b59-31a0-456b-82f0-773097f3adc3",
+          "REQUEST GET /api/customerlookup/getbyname attack_input=None client=198.51.100.42/audit-human",
+          "CONTEXT namespace=training-c4-lab5 lb=c4-lab5-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=3/60s",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=429 action=Blocked reason=Rate limiter: 3 requests / 60s exceeded",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460006462,
+        "request": {
+          "method": "GET",
+          "path": "/api/customerlookup/getbyname",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "audit-human",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 429,
+        "action": "Blocked",
+        "reason": "Rate limiter: 3 requests / 60s exceeded",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/api/customerlookup/getbyname"
+        },
+        "body": "Request rejected by local simulator\nSupport ID: 49f69b59-31a0-456b-82f0-773097f3adc3"
+      },
+      {
+        "id": "b71b33ac-4e69-49b3-a374-608afd558748",
+        "trace": [
+          "START local simulation · support_id=b71b33ac-4e69-49b3-a374-608afd558748",
+          "REQUEST GET /api/customerlookup/getbyname attack_input=None client=198.51.100.42/audit-human",
+          "CONTEXT namespace=training-c4-lab5 lb=c4-lab5-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=3/60s",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460006453,
+        "request": {
+          "method": "GET",
+          "path": "/api/customerlookup/getbyname",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "audit-human",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/api/customerlookup/getbyname"
+        },
+        "body": "{\"simulation\":true,\"customers\":[{\"customerId\":\"DEMO-C001\",\"name\":\"Demo Customer\",\"status\":\"active\"}]}"
+      },
+      {
+        "id": "575a34ec-466d-459a-80a0-73cd2b626c54",
+        "trace": [
+          "START local simulation · support_id=575a34ec-466d-459a-80a0-73cd2b626c54",
+          "REQUEST GET /api/customerlookup/getbyname attack_input=None client=198.51.100.42/audit-human",
+          "CONTEXT namespace=training-c4-lab5 lb=c4-lab5-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=3/60s",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460006443,
+        "request": {
+          "method": "GET",
+          "path": "/api/customerlookup/getbyname",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "audit-human",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/api/customerlookup/getbyname"
+        },
+        "body": "{\"simulation\":true,\"customers\":[{\"customerId\":\"DEMO-C001\",\"name\":\"Demo Customer\",\"status\":\"active\"}]}"
+      },
+      {
+        "id": "c98cc8ea-fe43-409c-8527-f654271d42c0",
+        "trace": [
+          "START local simulation · support_id=c98cc8ea-fe43-409c-8527-f654271d42c0",
+          "REQUEST GET /api/customerlookup/getbyname attack_input=None client=198.51.100.42/audit-human",
+          "CONTEXT namespace=training-c4-lab5 lb=c4-lab5-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=3/60s",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460006436,
+        "request": {
+          "method": "GET",
+          "path": "/api/customerlookup/getbyname",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "audit-human",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/api/customerlookup/getbyname"
+        },
+        "body": "{\"simulation\":true,\"customers\":[{\"customerId\":\"DEMO-C001\",\"name\":\"Demo Customer\",\"status\":\"active\"}]}"
+      },
+      {
+        "id": "13a97d63-8c78-4911-82ea-eb9511338415",
+        "trace": [
+          "START local simulation · support_id=13a97d63-8c78-4911-82ea-eb9511338415",
+          "REQUEST GET /api/customerlookup/getbyname attack_input=None client=198.51.100.42/human-ja4",
+          "CONTEXT namespace=training-c4-lab5 lb=c4-lab5-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=Disabled",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460005041,
+        "request": {
+          "method": "GET",
+          "path": "/api/customerlookup/getbyname",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/api/customerlookup/getbyname"
+        },
+        "body": "{\"simulation\":true,\"customers\":[{\"customerId\":\"DEMO-C001\",\"name\":\"Demo Customer\",\"status\":\"active\"}]}"
+      },
+      {
+        "id": "73726df8-c4cf-4263-8274-e8c4f4c4d9bf",
+        "trace": [
+          "START local simulation · support_id=73726df8-c4cf-4263-8274-e8c4f4c4d9bf",
+          "REQUEST GET /api/customerlookup/getbyname attack_input=None client=198.51.100.42/human-ja4",
+          "CONTEXT namespace=training-c4-lab5 lb=c4-lab5-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=Disabled",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460005041,
+        "request": {
+          "method": "GET",
+          "path": "/api/customerlookup/getbyname",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/api/customerlookup/getbyname"
+        },
+        "body": "{\"simulation\":true,\"customers\":[{\"customerId\":\"DEMO-C001\",\"name\":\"Demo Customer\",\"status\":\"active\"}]}"
+      },
+      {
+        "id": "adff255b-fa4a-46f9-aadd-4e91ad2363f1",
+        "trace": [
+          "START local simulation · support_id=adff255b-fa4a-46f9-aadd-4e91ad2363f1",
+          "REQUEST GET /api/customerlookup/getbyname attack_input=None client=198.51.100.42/human-ja4",
+          "CONTEXT namespace=training-c4-lab5 lb=c4-lab5-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=Disabled",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460005041,
+        "request": {
+          "method": "GET",
+          "path": "/api/customerlookup/getbyname",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/api/customerlookup/getbyname"
+        },
+        "body": "{\"simulation\":true,\"customers\":[{\"customerId\":\"DEMO-C001\",\"name\":\"Demo Customer\",\"status\":\"active\"}]}"
+      },
+      {
+        "id": "5bf3de74-7bc9-478e-8ff3-62de8d8aba64",
+        "trace": [
+          "START local simulation · support_id=5bf3de74-7bc9-478e-8ff3-62de8d8aba64",
+          "REQUEST GET /api/customerlookup/getbyname attack_input=None client=198.51.100.42/human-ja4",
+          "CONTEXT namespace=training-c4-lab5 lb=c4-lab5-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=Disabled",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460005041,
+        "request": {
+          "method": "GET",
+          "path": "/api/customerlookup/getbyname",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/api/customerlookup/getbyname"
+        },
+        "body": "{\"simulation\":true,\"customers\":[{\"customerId\":\"DEMO-C001\",\"name\":\"Demo Customer\",\"status\":\"active\"}]}"
+      }
+    ],
+    "discovered": [],
+    "explanation": ""
+  }
+}

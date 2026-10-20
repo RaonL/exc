@@ -1,5 +1,9 @@
 # F5 Distributed Cloud Console Simulator
 
+사용자 제공 XC 화면 캡처 15장 기준의 [UI 반영 내역과 수정 화면](docs/XC-SCREENSHOT-REFINEMENT.md).
+
+Class 1–8의 UI 실습 검증 결과와 공식 Task 대조: [검증 보고서](docs/verification/README.md).
+
 F5 XC 콘솔을 학습하기 위한 **브라우저 로컬 시뮬레이터**입니다. 제공된 Performance Monitoring 스크린샷의 레이아웃을 참고했으며, 모든 데이터와 보안 결과는 더미 데이터입니다. 실제 F5 API, CE/RE, 보안 엔진, 인증 서버에 연결하지 않습니다.
 
 ## 실행
@@ -24,7 +28,19 @@ npx prettier --write src vite.config.ts vitest.config.ts
 
 ## 구현된 기능
 
+### Security Catalog · 사용자 제공 정의 자료
+
+`Web App & API Protection → Overview → Security Catalog`에서 Attack Signatures 9,509개, Bots 2,638개, Threat Campaigns 1,059개, Alert Definitions 237개를 검색하고 상세 원문·원본 JSON을 확인할 수 있습니다. ID/이름/분류 검색, Risk/Severity 필터, 25개 단위 페이지를 제공합니다.
+
+원본은 `public/security-catalog/`의 네 JSON이며 사용자 제공 파일을 그대로 복사했습니다. 각 자료는 해당 카탈로그를 열 때 로컬 서버에서 불러오며 localStorage에 넣지 않습니다. 앱 설정 초기화와 무관하게 유지됩니다. **실제 발생 이벤트나 탐지 엔진/정책 설치 파일이 아닙니다.** 원문 설명과 권고는 파일에 담긴 스냅샷으로 최신성을 검증하지 않았습니다.
+
+시그니처나 봇을 선택한 뒤 상세 패널에서 HTTP LB·Method·Path·Signature State를 지정하고 **Run Catalog Sample · 모의 실행**을 누르세요. **Edit App Firewall**에서 연결 정책을 편집·저장한 후 재실행하면 변경 전후 결과를 비교할 수 있습니다. Monitoring은 매치를 Detected로 기록하고 통과시키며, Blocking은 정책의 정확도·Ignore/Report·스테이징·경로 예외·봇 분류 동작에 따라 결과가 달라집니다. 결과에는 Support ID와 단계별 로그가 생기며, **Security Events**에서도 ID나 카탈로그 이름으로 검색할 수 있습니다. 이전 결과와 실행 당시 정책은 새로고침해도 보존됩니다. [모의 평가 규칙·실습 예시](docs/SECURITY-CATALOG.md).
+
+전체 항목 형식·건수·ID 중복과 잘못된 입력 처리를 테스트합니다. 파일 목록과 SHA-256은 [카탈로그 자료 기록](docs/SECURITY-CATALOG.md)에 남겼습니다.
+
 ### Class 1–8 공식 교육 실습
+
+34개 단원 모두 **실습 가이드 → 더미 데이터로 따라하기**에서 예제 환경·입력할 설정값·요청 JSON·반복 횟수·설정 전후 예상 응답을 볼 수 있습니다. **이 예제를 요청 입력에 불러오기**로 Request Builder를 채운 후 직접 정책을 구성하고 실행하세요. 예제 불러오기는 정책이나 진도를 자동 완료하지 않습니다. Demo Bank 고객, 항공편, 로그인, QR 앱은 더미 응답을 반환합니다. [사용법과 검증 범위](docs/TRAINING.md).
 
 **Class 1 Lab 1은 콘솔 직접 실습으로 보강했습니다.** Training Center의 해당 단원에서 `콘솔에서 실습 시작`을 누르면 빈 Namespace의 Origin Pools로 이동합니다. Origin/LB를 메뉴에서 직접 만들고, 도메인의 Open Application에서 요청을 생성하며, Requests/Security Analytics에서 결과를 확인합니다. [원본 캡처 대응·실행 절차](docs/CLASS1-LAB1.md)를 참고하세요.
 
@@ -174,3 +190,7 @@ docs/
 - Custom signature 모드의 SQLi/XSS는 high-accuracy mock signature로 판정합니다. Threat Campaigns, accuracy selection, 자동 튜닝, log masking의 UI 설정은 저장되며 별도의 실시간 엔진은 없습니다.
 
 React + TypeScript + Vite, Tailwind CSS v4, shadcn/ui 스타일의 로컬 Radix 컴포넌트, Recharts, Lucide React, Zustand를 사용합니다. 실행 시 CDN 폰트나 외부 이미지 요청 없이 동작하며 외부 문서 링크는 사용자 클릭 시 열립니다.
+
+## Class 9 · Community supplement
+
+Training Center includes five community-reference exercises for WAF, API endpoint protection, rate limiting, signature-based bots, and Bot Defense. See [Class 9 details](docs/CLASS9.md). All outcomes are local simulations. Current verification: 212 tests passed and production build passed.

@@ -1,0 +1,1134 @@
+{
+  "lab": "https://clouddocs.f5.com/training/community/f5xc/html/class8/lab3.html",
+  "baseline": {
+    "at": 1792460082951,
+    "codes": [
+      200,
+      200,
+      200,
+      200
+    ]
+  },
+  "verification": {
+    "at": 1792460084336,
+    "fingerprint": "{\"lb\":{\"id\":\"training-c8-lab3-lb\",\"namespace\":\"training-c8-lab3\",\"name\":\"c8-lab3-lb\",\"domains\":[\"c8-lab3.example.com\"],\"protocol\":\"HTTPS\",\"originId\":\"training-c8-lab3-aws\",\"wafId\":\"\",\"apiProtection\":false,\"botDefense\":false,\"ddosProtection\":false,\"requests\":0,\"createdAt\":\"\",\"config\":{\"description\":\"\",\"labels\":\"\",\"vip\":\"Internet\",\"vipAddress\":\"\",\"siteId\":\"\",\"certificate\":\"Automatic\",\"certificateRef\":\"\",\"listenPort\":443,\"redirectHttps\":true,\"hsts\":false,\"tlsLevel\":\"High\",\"routes\":[],\"exclusions\":[],\"cdn\":false,\"timeout\":30,\"apiDiscovery\":false,\"manageDns\":false,\"listenPortChoice\":\"HTTP Listen Port\",\"originWeight\":1,\"originPriority\":1}},\"waf\":{\"id\":\"training-c8-lab3-waf\",\"namespace\":\"training-c8-lab3\",\"name\":\"c8-lab3-appfw\",\"mode\":\"Monitoring\"},\"origins\":[{\"id\":\"training-c8-lab3-aws\",\"namespace\":\"training-c8-lab3\",\"name\":\"aws-primary\",\"endpoint\":\"aws-origin.example.com\",\"port\":80,\"healthy\":true,\"config\":{\"labels\":\"\",\"description\":\"\",\"type\":\"Public DNS\",\"siteId\":\"\",\"network\":\"Inside Network\",\"algorithm\":\"Round Robin\",\"tls\":false,\"sni\":\"\",\"healthCheck\":\"HTTP\",\"healthPath\":\"/health\",\"interval\":15,\"timeout\":3,\"healthyThreshold\":2,\"unhealthyThreshold\":3}},{\"id\":\"training-c8-lab3-azure\",\"namespace\":\"training-c8-lab3\",\"name\":\"azure-canary\",\"endpoint\":\"azure-origin.example.com\",\"port\":80,\"healthy\":true,\"config\":{\"labels\":\"\",\"description\":\"\",\"type\":\"Public DNS\",\"siteId\":\"\",\"network\":\"Inside Network\",\"algorithm\":\"Round Robin\",\"tls\":false,\"sni\":\"\",\"healthCheck\":\"HTTP\",\"healthPath\":\"/health\",\"interval\":15,\"timeout\":3,\"healthyThreshold\":2,\"unhealthyThreshold\":3}}],\"ce\":{\"id\":\"training-c8-lab3-ce\",\"namespace\":\"training-c8-lab3\",\"name\":\"c8-lab3-customer-edge\",\"kind\":\"CE\",\"region\":\"AWS / ap-northeast-2 (demo)\",\"online\":true,\"address\":\"192.0.2.10\"},\"controls\":{\"policyMode\":\"Exploit deny\",\"headerName\":\"x-f5-appworld\",\"headerValue\":\"RjUtQXBwd29ybGQ=\",\"allowedCountry\":\"South Korea\",\"deniedCountry\":\"Fiji\",\"blockBadReputation\":false,\"allowedPath\":\"/\",\"canary\":false,\"canaryHeader\":\"X-App-Version\",\"canaryValue\":\"green\",\"rewriteLogin\":false,\"namespaceHeader\":false,\"inventory\":false,\"apiDeny\":false,\"deniedEndpoint\":\"/api/customerlookup/getbydob\",\"schemaValidation\":false,\"apiDiscovery\":false,\"connector\":false,\"rateLimit\":true,\"rate\":3,\"rateWindow\":60,\"ratePath\":\"/api/customerlookup/getbyname\",\"rateMethod\":\"GET\",\"botMode\":\"Disabled\",\"botPath\":\"/user/vipsignin\",\"botExtraPath\":\"\",\"botMethod\":\"POST\",\"telemetry\":false,\"maliciousDetection\":false,\"maliciousMitigation\":false,\"segment\":false,\"segmentPeer\":false,\"firewall\":false,\"failover\":false,\"overlapVip\":false,\"scanProfile\":false,\"scanSchedule\":\"Manual\",\"source\":\"{\\n  \\\"name\\\": \\\"xc-training-app\\\",\\n  \\\"routes\\\": [\\n    {\\n      \\\"method\\\": \\\"GET\\\",\\n      \\\"path\\\": \\\"/\\\",\\n      \\\"body\\\": \\\"Hello XC\\\"\\n    },\\n    {\\n      \\\"method\\\": \\\"GET\\\",\\n      \\\"path\\\": \\\"/about\\\",\\n      \\\"body\\\": \\\"About XC Training App\\\"\\n    },\\n    {\\n      \\\"method\\\": \\\"GET\\\",\\n      \\\"path\\\": \\\"/login\\\",\\n      \\\"body\\\": \\\"Demo login form\\\"\\n    },\\n    {\\n      \\\"method\\\": \\\"GET\\\",\\n      \\\"path\\\": \\\"/contact\\\",\\n      \\\"body\\\": \\\"Demo contact form\\\"\\n    },\\n    {\\n      \\\"method\\\": \\\"POST\\\",\\n      \\\"path\\\": \\\"/login\\\",\\n      \\\"body\\\": \\\"Demo login\\\"\\n    },\\n    {\\n      \\\"method\\\": \\\"POST\\\",\\n      \\\"path\\\": \\\"/contact\\\",\\n      \\\"body\\\": \\\"Demo contact\\\"\\n    }\\n  ]\\n}\",\"deployedSource\":\"\",\"artifact\":\"\",\"pipeline\":[]}}",
+    "checks": [
+      {
+        "name": "보호 전 기준 요청 기록",
+        "pass": true,
+        "expected": "기준 요청 실행",
+        "actual": "200 / 200 / 200 / 200"
+      },
+      {
+        "name": "LB → Origin 연결",
+        "pass": true,
+        "expected": "유효한 Origin과 Domain",
+        "actual": "c8-lab3.example.com → training-c8-lab3-aws"
+      },
+      {
+        "name": "3 requests / minute",
+        "pass": true,
+        "expected": "3 / 60s",
+        "actual": "3 / 60s"
+      },
+      {
+        "name": "GET /ratelimit.php #1",
+        "pass": true,
+        "expected": "HTTP 200",
+        "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+      },
+      {
+        "name": "GET /ratelimit.php #2",
+        "pass": true,
+        "expected": "HTTP 200",
+        "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+      },
+      {
+        "name": "GET /ratelimit.php #3",
+        "pass": true,
+        "expected": "HTTP 200",
+        "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+      },
+      {
+        "name": "GET /ratelimit.php #4",
+        "pass": true,
+        "expected": "HTTP 429",
+        "actual": "HTTP 429 · Blocked · aws-primary · Rate limiter: 3 requests / 60s exceeded"
+      },
+      {
+        "name": "다른 클라이언트 허용",
+        "pass": true,
+        "expected": "HTTP 200",
+        "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+      },
+      {
+        "name": "POST /auth.php #1",
+        "pass": true,
+        "expected": "HTTP 200",
+        "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+      },
+      {
+        "name": "POST /auth.php #2",
+        "pass": true,
+        "expected": "HTTP 200",
+        "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+      },
+      {
+        "name": "POST /auth.php #3",
+        "pass": true,
+        "expected": "HTTP 200",
+        "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+      },
+      {
+        "name": "POST /auth.php #4",
+        "pass": true,
+        "expected": "HTTP 429",
+        "actual": "HTTP 429 · Blocked · aws-primary · Rate limiter: 3 requests / 60s exceeded"
+      },
+      {
+        "name": "다른 클라이언트 허용",
+        "pass": true,
+        "expected": "HTTP 200",
+        "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+      },
+      {
+        "name": "제한 제외 경로 #1",
+        "pass": true,
+        "expected": "HTTP 200",
+        "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+      },
+      {
+        "name": "제한 제외 경로 #2",
+        "pass": true,
+        "expected": "HTTP 200",
+        "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+      },
+      {
+        "name": "제한 제외 경로 #3",
+        "pass": true,
+        "expected": "HTTP 200",
+        "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+      },
+      {
+        "name": "제한 제외 경로 #4",
+        "pass": true,
+        "expected": "HTTP 200",
+        "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+      },
+      {
+        "name": "제한 제외 경로 #5",
+        "pass": true,
+        "expected": "HTTP 200",
+        "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+      },
+      {
+        "name": "시간 창 만료 후 재허용",
+        "pass": true,
+        "expected": "HTTP 200",
+        "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+      },
+      {
+        "name": "Zero Day 패턴 차단",
+        "pass": true,
+        "expected": "HTTP 403",
+        "actual": "HTTP 403 · Blocked · aws-primary · Custom service policy: exploit request pattern"
+      },
+      {
+        "name": "정상 로그인 유지",
+        "pass": true,
+        "expected": "HTTP 200",
+        "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+      }
+    ]
+  },
+  "runtime": {
+    "now": 1792460083805,
+    "buckets": {
+      "198.51.100.42|audit-human|GET|/ratelimit.php": {
+        "start": 1792460083556,
+        "count": 4
+      }
+    },
+    "identities": {
+      "198.51.100.42|audit-human": 5
+    },
+    "logs": [
+      {
+        "id": "a0513a68-c64d-4568-a91d-d5d40ff2da67",
+        "trace": [
+          "START local simulation · support_id=a0513a68-c64d-4568-a91d-d5d40ff2da67",
+          "REQUEST POST /auth.php attack_input=None client=198.51.100.44/human-ja4",
+          "CONTEXT namespace=training-c8-lab3 lb=c8-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Exploit deny",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=3/60s",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460144805,
+        "request": {
+          "method": "POST",
+          "path": "/auth.php",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.44",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/auth.php"
+        },
+        "body": "{\"simulation\":true,\"application\":\"XC Training App\",\"method\":\"POST\",\"path\":\"/auth.php\",\"upstreamPath\":\"/auth.php\",\"message\":\"Local dummy origin response\"}"
+      },
+      {
+        "id": "07a66cd3-1329-4898-8d25-6d49bf5f4c3a",
+        "trace": [
+          "START local simulation · support_id=07a66cd3-1329-4898-8d25-6d49bf5f4c3a",
+          "REQUEST POST /auth.php attack_input=Exploit client=198.51.100.42/human-ja4",
+          "CONTEXT namespace=training-c8-lab3 lb=c8-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Exploit deny",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=3/60s",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=403 action=Blocked reason=Custom service policy: exploit request pattern",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460144805,
+        "request": {
+          "method": "POST",
+          "path": "/auth.php",
+          "headers": {
+            "x-demo-exploit": "true"
+          },
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "Exploit",
+          "transport": "HTTP"
+        },
+        "code": 403,
+        "action": "Blocked",
+        "reason": "Custom service policy: exploit request pattern",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/auth.php"
+        },
+        "body": "Request rejected by local simulator\nSupport ID: 07a66cd3-1329-4898-8d25-6d49bf5f4c3a"
+      },
+      {
+        "id": "f1d15693-ad52-4d18-80f5-201892d08c5c",
+        "trace": [
+          "START local simulation · support_id=f1d15693-ad52-4d18-80f5-201892d08c5c",
+          "REQUEST GET /ratelimit.php attack_input=None client=198.51.100.42/human-ja4",
+          "CONTEXT namespace=training-c8-lab3 lb=c8-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Exploit deny",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=3/60s",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460144805,
+        "request": {
+          "method": "GET",
+          "path": "/ratelimit.php",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/ratelimit.php"
+        },
+        "body": "{\"simulation\":true,\"application\":\"XC Training App\",\"method\":\"GET\",\"path\":\"/ratelimit.php\",\"upstreamPath\":\"/ratelimit.php\",\"message\":\"Local dummy origin response\"}"
+      },
+      {
+        "id": "5bc580db-07eb-425c-b89a-8a6f6f2b7abe",
+        "trace": [
+          "START local simulation · support_id=5bc580db-07eb-425c-b89a-8a6f6f2b7abe",
+          "REQUEST GET /health attack_input=None client=198.51.100.42/human-ja4",
+          "CONTEXT namespace=training-c8-lab3 lb=c8-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Exploit deny",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=3/60s",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460083805,
+        "request": {
+          "method": "GET",
+          "path": "/health",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/health"
+        },
+        "body": "{\"simulation\":true,\"application\":\"XC Training App\",\"method\":\"GET\",\"path\":\"/health\",\"upstreamPath\":\"/health\",\"message\":\"Local dummy origin response\"}"
+      },
+      {
+        "id": "00d35725-8427-44d9-aa9e-08aafa21a4b1",
+        "trace": [
+          "START local simulation · support_id=00d35725-8427-44d9-aa9e-08aafa21a4b1",
+          "REQUEST GET /health attack_input=None client=198.51.100.42/human-ja4",
+          "CONTEXT namespace=training-c8-lab3 lb=c8-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Exploit deny",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=3/60s",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460083805,
+        "request": {
+          "method": "GET",
+          "path": "/health",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/health"
+        },
+        "body": "{\"simulation\":true,\"application\":\"XC Training App\",\"method\":\"GET\",\"path\":\"/health\",\"upstreamPath\":\"/health\",\"message\":\"Local dummy origin response\"}"
+      },
+      {
+        "id": "060cd957-a01f-44e1-bce3-654652c71ca1",
+        "trace": [
+          "START local simulation · support_id=060cd957-a01f-44e1-bce3-654652c71ca1",
+          "REQUEST GET /health attack_input=None client=198.51.100.42/human-ja4",
+          "CONTEXT namespace=training-c8-lab3 lb=c8-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Exploit deny",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=3/60s",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460083805,
+        "request": {
+          "method": "GET",
+          "path": "/health",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/health"
+        },
+        "body": "{\"simulation\":true,\"application\":\"XC Training App\",\"method\":\"GET\",\"path\":\"/health\",\"upstreamPath\":\"/health\",\"message\":\"Local dummy origin response\"}"
+      },
+      {
+        "id": "4874c1ca-7527-40fe-9b4f-3aefa421a3d4",
+        "trace": [
+          "START local simulation · support_id=4874c1ca-7527-40fe-9b4f-3aefa421a3d4",
+          "REQUEST GET /health attack_input=None client=198.51.100.42/human-ja4",
+          "CONTEXT namespace=training-c8-lab3 lb=c8-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Exploit deny",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=3/60s",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460083805,
+        "request": {
+          "method": "GET",
+          "path": "/health",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/health"
+        },
+        "body": "{\"simulation\":true,\"application\":\"XC Training App\",\"method\":\"GET\",\"path\":\"/health\",\"upstreamPath\":\"/health\",\"message\":\"Local dummy origin response\"}"
+      },
+      {
+        "id": "e158231e-03ed-4aa6-8015-c0414a90d5c0",
+        "trace": [
+          "START local simulation · support_id=e158231e-03ed-4aa6-8015-c0414a90d5c0",
+          "REQUEST GET /health attack_input=None client=198.51.100.42/human-ja4",
+          "CONTEXT namespace=training-c8-lab3 lb=c8-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Exploit deny",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=3/60s",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460083805,
+        "request": {
+          "method": "GET",
+          "path": "/health",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/health"
+        },
+        "body": "{\"simulation\":true,\"application\":\"XC Training App\",\"method\":\"GET\",\"path\":\"/health\",\"upstreamPath\":\"/health\",\"message\":\"Local dummy origin response\"}"
+      },
+      {
+        "id": "9bbc5cb0-60a6-4cc7-9287-9b07df53244e",
+        "trace": [
+          "START local simulation · support_id=9bbc5cb0-60a6-4cc7-9287-9b07df53244e",
+          "REQUEST POST /auth.php attack_input=None client=198.51.100.43/human-ja4",
+          "CONTEXT namespace=training-c8-lab3 lb=c8-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Exploit deny",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=3/60s",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460083805,
+        "request": {
+          "method": "POST",
+          "path": "/auth.php",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.43",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/auth.php"
+        },
+        "body": "{\"simulation\":true,\"application\":\"XC Training App\",\"method\":\"POST\",\"path\":\"/auth.php\",\"upstreamPath\":\"/auth.php\",\"message\":\"Local dummy origin response\"}"
+      },
+      {
+        "id": "1b707ff3-98af-4864-bca2-4a47a8ca65bd",
+        "trace": [
+          "START local simulation · support_id=1b707ff3-98af-4864-bca2-4a47a8ca65bd",
+          "REQUEST POST /auth.php attack_input=None client=198.51.100.42/human-ja4",
+          "CONTEXT namespace=training-c8-lab3 lb=c8-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Exploit deny",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=3/60s",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=429 action=Blocked reason=Rate limiter: 3 requests / 60s exceeded",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460083805,
+        "request": {
+          "method": "POST",
+          "path": "/auth.php",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 429,
+        "action": "Blocked",
+        "reason": "Rate limiter: 3 requests / 60s exceeded",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/auth.php"
+        },
+        "body": "Request rejected by local simulator\nSupport ID: 1b707ff3-98af-4864-bca2-4a47a8ca65bd"
+      },
+      {
+        "id": "d8cd8e7d-3a56-4aa3-af41-f5619e637184",
+        "trace": [
+          "START local simulation · support_id=d8cd8e7d-3a56-4aa3-af41-f5619e637184",
+          "REQUEST POST /auth.php attack_input=None client=198.51.100.42/human-ja4",
+          "CONTEXT namespace=training-c8-lab3 lb=c8-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Exploit deny",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=3/60s",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460083805,
+        "request": {
+          "method": "POST",
+          "path": "/auth.php",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/auth.php"
+        },
+        "body": "{\"simulation\":true,\"application\":\"XC Training App\",\"method\":\"POST\",\"path\":\"/auth.php\",\"upstreamPath\":\"/auth.php\",\"message\":\"Local dummy origin response\"}"
+      },
+      {
+        "id": "d805d147-d895-49ce-a633-09e344a5f6d1",
+        "trace": [
+          "START local simulation · support_id=d805d147-d895-49ce-a633-09e344a5f6d1",
+          "REQUEST POST /auth.php attack_input=None client=198.51.100.42/human-ja4",
+          "CONTEXT namespace=training-c8-lab3 lb=c8-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Exploit deny",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=3/60s",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460083805,
+        "request": {
+          "method": "POST",
+          "path": "/auth.php",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/auth.php"
+        },
+        "body": "{\"simulation\":true,\"application\":\"XC Training App\",\"method\":\"POST\",\"path\":\"/auth.php\",\"upstreamPath\":\"/auth.php\",\"message\":\"Local dummy origin response\"}"
+      },
+      {
+        "id": "c5eba6d7-672c-4caf-8594-fff61c44f82f",
+        "trace": [
+          "START local simulation · support_id=c5eba6d7-672c-4caf-8594-fff61c44f82f",
+          "REQUEST POST /auth.php attack_input=None client=198.51.100.42/human-ja4",
+          "CONTEXT namespace=training-c8-lab3 lb=c8-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Exploit deny",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=3/60s",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460083805,
+        "request": {
+          "method": "POST",
+          "path": "/auth.php",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/auth.php"
+        },
+        "body": "{\"simulation\":true,\"application\":\"XC Training App\",\"method\":\"POST\",\"path\":\"/auth.php\",\"upstreamPath\":\"/auth.php\",\"message\":\"Local dummy origin response\"}"
+      },
+      {
+        "id": "82e76817-c911-475a-b385-4a372d6daf22",
+        "trace": [
+          "START local simulation · support_id=82e76817-c911-475a-b385-4a372d6daf22",
+          "REQUEST GET /ratelimit.php attack_input=None client=198.51.100.43/human-ja4",
+          "CONTEXT namespace=training-c8-lab3 lb=c8-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Exploit deny",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=3/60s",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460083805,
+        "request": {
+          "method": "GET",
+          "path": "/ratelimit.php",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.43",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/ratelimit.php"
+        },
+        "body": "{\"simulation\":true,\"application\":\"XC Training App\",\"method\":\"GET\",\"path\":\"/ratelimit.php\",\"upstreamPath\":\"/ratelimit.php\",\"message\":\"Local dummy origin response\"}"
+      },
+      {
+        "id": "56898064-8982-4328-9121-ab80aa902862",
+        "trace": [
+          "START local simulation · support_id=56898064-8982-4328-9121-ab80aa902862",
+          "REQUEST GET /ratelimit.php attack_input=None client=198.51.100.42/human-ja4",
+          "CONTEXT namespace=training-c8-lab3 lb=c8-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Exploit deny",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=3/60s",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=429 action=Blocked reason=Rate limiter: 3 requests / 60s exceeded",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460083805,
+        "request": {
+          "method": "GET",
+          "path": "/ratelimit.php",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 429,
+        "action": "Blocked",
+        "reason": "Rate limiter: 3 requests / 60s exceeded",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/ratelimit.php"
+        },
+        "body": "Request rejected by local simulator\nSupport ID: 56898064-8982-4328-9121-ab80aa902862"
+      },
+      {
+        "id": "38544dc7-3b21-4f5e-960c-78341403cf08",
+        "trace": [
+          "START local simulation · support_id=38544dc7-3b21-4f5e-960c-78341403cf08",
+          "REQUEST GET /ratelimit.php attack_input=None client=198.51.100.42/human-ja4",
+          "CONTEXT namespace=training-c8-lab3 lb=c8-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Exploit deny",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=3/60s",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460083805,
+        "request": {
+          "method": "GET",
+          "path": "/ratelimit.php",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/ratelimit.php"
+        },
+        "body": "{\"simulation\":true,\"application\":\"XC Training App\",\"method\":\"GET\",\"path\":\"/ratelimit.php\",\"upstreamPath\":\"/ratelimit.php\",\"message\":\"Local dummy origin response\"}"
+      },
+      {
+        "id": "d341f9cb-9b75-4a48-af0b-b8049ca26fa6",
+        "trace": [
+          "START local simulation · support_id=d341f9cb-9b75-4a48-af0b-b8049ca26fa6",
+          "REQUEST GET /ratelimit.php attack_input=None client=198.51.100.42/human-ja4",
+          "CONTEXT namespace=training-c8-lab3 lb=c8-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Exploit deny",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=3/60s",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460083805,
+        "request": {
+          "method": "GET",
+          "path": "/ratelimit.php",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/ratelimit.php"
+        },
+        "body": "{\"simulation\":true,\"application\":\"XC Training App\",\"method\":\"GET\",\"path\":\"/ratelimit.php\",\"upstreamPath\":\"/ratelimit.php\",\"message\":\"Local dummy origin response\"}"
+      },
+      {
+        "id": "0512bd65-6cb7-4442-b91b-f807257832ba",
+        "trace": [
+          "START local simulation · support_id=0512bd65-6cb7-4442-b91b-f807257832ba",
+          "REQUEST GET /ratelimit.php attack_input=None client=198.51.100.42/human-ja4",
+          "CONTEXT namespace=training-c8-lab3 lb=c8-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Exploit deny",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=3/60s",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460083805,
+        "request": {
+          "method": "GET",
+          "path": "/ratelimit.php",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/ratelimit.php"
+        },
+        "body": "{\"simulation\":true,\"application\":\"XC Training App\",\"method\":\"GET\",\"path\":\"/ratelimit.php\",\"upstreamPath\":\"/ratelimit.php\",\"message\":\"Local dummy origin response\"}"
+      },
+      {
+        "id": "7505202d-ac06-41d5-84f6-bdc129116c66",
+        "trace": [
+          "START local simulation · support_id=7505202d-ac06-41d5-84f6-bdc129116c66",
+          "REQUEST GET /health attack_input=None client=198.51.100.42/audit-human",
+          "CONTEXT namespace=training-c8-lab3 lb=c8-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Exploit deny",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=3/60s",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460083805,
+        "request": {
+          "method": "GET",
+          "path": "/health",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "audit-human",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/health"
+        },
+        "body": "{\"simulation\":true,\"application\":\"XC Training App\",\"method\":\"GET\",\"path\":\"/health\",\"upstreamPath\":\"/health\",\"message\":\"Local dummy origin response\"}"
+      },
+      {
+        "id": "0b43b757-f575-4f0d-9707-0dd28d0045b8",
+        "trace": [
+          "START local simulation · support_id=0b43b757-f575-4f0d-9707-0dd28d0045b8",
+          "REQUEST GET /ratelimit.php attack_input=None client=198.51.100.42/audit-human",
+          "CONTEXT namespace=training-c8-lab3 lb=c8-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Exploit deny",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=3/60s",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=429 action=Blocked reason=Rate limiter: 3 requests / 60s exceeded",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460083581,
+        "request": {
+          "method": "GET",
+          "path": "/ratelimit.php",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "audit-human",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 429,
+        "action": "Blocked",
+        "reason": "Rate limiter: 3 requests / 60s exceeded",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/ratelimit.php"
+        },
+        "body": "Request rejected by local simulator\nSupport ID: 0b43b757-f575-4f0d-9707-0dd28d0045b8"
+      },
+      {
+        "id": "96e0e2c1-ffbe-480f-b1db-e44aafa32da8",
+        "trace": [
+          "START local simulation · support_id=96e0e2c1-ffbe-480f-b1db-e44aafa32da8",
+          "REQUEST GET /ratelimit.php attack_input=None client=198.51.100.42/audit-human",
+          "CONTEXT namespace=training-c8-lab3 lb=c8-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Exploit deny",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=3/60s",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460083573,
+        "request": {
+          "method": "GET",
+          "path": "/ratelimit.php",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "audit-human",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/ratelimit.php"
+        },
+        "body": "{\"simulation\":true,\"application\":\"XC Training App\",\"method\":\"GET\",\"path\":\"/ratelimit.php\",\"upstreamPath\":\"/ratelimit.php\",\"message\":\"Local dummy origin response\"}"
+      },
+      {
+        "id": "c4c153ad-de98-4516-82ad-8b51a0409ac7",
+        "trace": [
+          "START local simulation · support_id=c4c153ad-de98-4516-82ad-8b51a0409ac7",
+          "REQUEST GET /ratelimit.php attack_input=None client=198.51.100.42/audit-human",
+          "CONTEXT namespace=training-c8-lab3 lb=c8-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Exploit deny",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=3/60s",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460083566,
+        "request": {
+          "method": "GET",
+          "path": "/ratelimit.php",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "audit-human",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/ratelimit.php"
+        },
+        "body": "{\"simulation\":true,\"application\":\"XC Training App\",\"method\":\"GET\",\"path\":\"/ratelimit.php\",\"upstreamPath\":\"/ratelimit.php\",\"message\":\"Local dummy origin response\"}"
+      },
+      {
+        "id": "36d78dae-65f5-4c14-844c-eb680fae0e19",
+        "trace": [
+          "START local simulation · support_id=36d78dae-65f5-4c14-844c-eb680fae0e19",
+          "REQUEST GET /ratelimit.php attack_input=None client=198.51.100.42/audit-human",
+          "CONTEXT namespace=training-c8-lab3 lb=c8-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Exploit deny",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=3/60s",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460083556,
+        "request": {
+          "method": "GET",
+          "path": "/ratelimit.php",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "audit-human",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/ratelimit.php"
+        },
+        "body": "{\"simulation\":true,\"application\":\"XC Training App\",\"method\":\"GET\",\"path\":\"/ratelimit.php\",\"upstreamPath\":\"/ratelimit.php\",\"message\":\"Local dummy origin response\"}"
+      },
+      {
+        "id": "6da93322-38f1-4561-9721-04ff061167e2",
+        "trace": [
+          "START local simulation · support_id=6da93322-38f1-4561-9721-04ff061167e2",
+          "REQUEST GET /ratelimit.php attack_input=None client=198.51.100.42/human-ja4",
+          "CONTEXT namespace=training-c8-lab3 lb=c8-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=Disabled",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460082810,
+        "request": {
+          "method": "GET",
+          "path": "/ratelimit.php",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/ratelimit.php"
+        },
+        "body": "{\"simulation\":true,\"application\":\"XC Training App\",\"method\":\"GET\",\"path\":\"/ratelimit.php\",\"upstreamPath\":\"/ratelimit.php\",\"message\":\"Local dummy origin response\"}"
+      },
+      {
+        "id": "9b2296d4-abd5-4c5e-9c01-74f784439f04",
+        "trace": [
+          "START local simulation · support_id=9b2296d4-abd5-4c5e-9c01-74f784439f04",
+          "REQUEST GET /ratelimit.php attack_input=None client=198.51.100.42/human-ja4",
+          "CONTEXT namespace=training-c8-lab3 lb=c8-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=Disabled",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460082810,
+        "request": {
+          "method": "GET",
+          "path": "/ratelimit.php",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/ratelimit.php"
+        },
+        "body": "{\"simulation\":true,\"application\":\"XC Training App\",\"method\":\"GET\",\"path\":\"/ratelimit.php\",\"upstreamPath\":\"/ratelimit.php\",\"message\":\"Local dummy origin response\"}"
+      },
+      {
+        "id": "52ea2351-72d6-4961-b854-0fa4602ba745",
+        "trace": [
+          "START local simulation · support_id=52ea2351-72d6-4961-b854-0fa4602ba745",
+          "REQUEST GET /ratelimit.php attack_input=None client=198.51.100.42/human-ja4",
+          "CONTEXT namespace=training-c8-lab3 lb=c8-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=Disabled",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460082810,
+        "request": {
+          "method": "GET",
+          "path": "/ratelimit.php",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/ratelimit.php"
+        },
+        "body": "{\"simulation\":true,\"application\":\"XC Training App\",\"method\":\"GET\",\"path\":\"/ratelimit.php\",\"upstreamPath\":\"/ratelimit.php\",\"message\":\"Local dummy origin response\"}"
+      },
+      {
+        "id": "662d64e1-08c5-48a8-b691-7b8fe2987085",
+        "trace": [
+          "START local simulation · support_id=662d64e1-08c5-48a8-b691-7b8fe2987085",
+          "REQUEST GET /ratelimit.php attack_input=None client=198.51.100.42/human-ja4",
+          "CONTEXT namespace=training-c8-lab3 lb=c8-lab3-lb vip=Internet ce_online=true",
+          "ROUTE default origin=aws-primary healthy=true",
+          "POLICY waf=none mode=Monitoring service_policy=Disabled",
+          "CONTROLS api_deny=false inventory=false bot=Disabled rate=Disabled",
+          "CLASSIFICATION N/A · 합성 입력 기반",
+          "RESPONSE status=200 action=Allowed reason=Local origin accepted request",
+          "END simulation=true external_requests=0"
+        ],
+        "at": 1792460082810,
+        "request": {
+          "method": "GET",
+          "path": "/ratelimit.php",
+          "headers": {},
+          "body": {},
+          "source": "198.51.100.42",
+          "country": "South Korea",
+          "reputation": "Clean",
+          "identity": "human-ja4",
+          "attack": "None",
+          "transport": "HTTP"
+        },
+        "code": 200,
+        "action": "Allowed",
+        "reason": "Local origin accepted request",
+        "origin": "aws-primary",
+        "headers": {
+          "x-demo-release": "stable",
+          "x-demo-upstream-path": "/ratelimit.php"
+        },
+        "body": "{\"simulation\":true,\"application\":\"XC Training App\",\"method\":\"GET\",\"path\":\"/ratelimit.php\",\"upstreamPath\":\"/ratelimit.php\",\"message\":\"Local dummy origin response\"}"
+      }
+    ],
+    "discovered": [],
+    "explanation": ""
+  }
+}

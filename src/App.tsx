@@ -41,6 +41,9 @@ import { TrainingReturn } from './training/TrainingReturn';
 const TrainingCenter = lazy(() =>
   import('./training/TrainingCenter').then((module) => ({ default: module.TrainingCenter })),
 );
+const SecurityCatalog = lazy(() =>
+  import('./components/SecurityCatalog').then((module) => ({ default: module.SecurityCatalog })),
+);
 const workspaces: Workspace[] = [
   'Home',
   'Web App & API Protection',
@@ -60,7 +63,7 @@ const nav: Record<Workspace, NavGroup[]> = {
     {
       label: 'Overview',
       icon: Grid2X2,
-      items: ['Security', 'Overview', 'Security Analytics', 'Security Events'],
+      items: ['Security', 'Overview', 'Security Analytics', 'Security Events', 'Security Catalog'],
     },
     {
       label: 'Manage',
@@ -97,7 +100,9 @@ export default function App() {
   const [lab, setLab] = useState(false);
   const [toast, setToast] = useState('');
   const [sidebar, setSidebar] = useState(false);
-  const [loadBalancersOpen, setLoadBalancersOpen] = useState(true);
+  const [loadBalancersOpen, setLoadBalancersOpen] = useState(false);
+  const [flyoutTop, setFlyoutTop] = useState(450);
+  const [referenceInfo, setReferenceInfo] = useState('');
   const [popover, setPopover] = useState('');
   const [searchOpen, setSearchOpen] = useState(false);
   const [search, setSearch] = useState('');
@@ -127,12 +132,19 @@ export default function App() {
     window.scrollTo({ top: 0 });
   }, [s.workspace, s.page]);
   const go = (workspace: Workspace, page: Page) => {
+    setLoadBalancersOpen(false);
     s.navigate(workspace, page);
     setPopover('');
     setSidebar(false);
   };
   const currentLb = s.lbs.find((l) => l.id === s.selectedLbId);
   const render = () => {
+    if (s.page === 'Security Catalog')
+      return (
+        <Suspense fallback={<p role="status">Loading catalog…</p>}>
+          <SecurityCatalog />
+        </Suspense>
+      );
     if (s.page === 'Training Center')
       return (
         <Suspense fallback={<p>Loading training guide…</p>}>
@@ -207,7 +219,15 @@ export default function App() {
     ),
   ].filter((r) => `${r.label} ${r.detail}`.toLowerCase().includes(search.toLowerCase()));
   return (
-    <div className="app-shell">
+    <div
+      className="app-shell"
+      data-page={s.page}
+      data-workspace={s.workspace}
+      data-lb={!!currentLb}
+    >
+      <a className="skip-link" href="#console-main">
+        Skip to console content
+      </a>
       {sidebar && (
         <button
           className="sidebar-scrim"
@@ -218,10 +238,10 @@ export default function App() {
       <aside className={`sidebar ${sidebar ? 'sidebar-open' : ''}`}>
         <button
           className="brand"
-          aria-label="F5 Distributed Cloud Home"
+          aria-label="XC Simulator Home"
           onClick={() => go('Home', 'Services')}
         >
-          <span className="f5-logo">f5</span>
+          <img className="f5-logo" src="/brand/f5.ico" alt="F5" />
           <span>
             DISTRIBUTED<span>CLOUD</span>
           </span>
@@ -289,21 +309,64 @@ export default function App() {
                 <button
                   className="nav-item nav-parent"
                   aria-expanded={loadBalancersOpen}
-                  onClick={() => setLoadBalancersOpen((v) => !v)}
+                  onClick={(event) => {
+                    setFlyoutTop(
+                      Math.min(
+                        event.currentTarget.getBoundingClientRect().top,
+                        window.innerHeight - 180,
+                      ),
+                    );
+                    setLoadBalancersOpen((v) => !v);
+                  }}
                 >
                   <span>Load Balancers</span>
                   {loadBalancersOpen ? <ChevronDown size={13} /> : <ChevronRight size={13} />}
                 </button>
               )}
+              {group.label === 'Manage' &&
+                s.workspace === 'Web App & API Protection' &&
+                loadBalancersOpen && (
+                  <div className="xc-load-balancers-flyout" style={{ top: flyoutTop }}>
+                    {(['HTTP Load Balancers', 'Origin Pools'] as Page[]).map((page) => (
+                      <button key={page} onClick={() => go(s.workspace, page)}>
+                        {page}
+                      </button>
+                    ))}
+                    <button
+                      onClick={() => {
+                        setLoadBalancersOpen(false);
+                        setReferenceInfo(
+                          'Health Checks: 이 버전은 Origin Pool 안의 HTTP / TCP Health Check 입력을 지원합니다. 독립 Health Check 객체 화면은 미구현입니다.',
+                        );
+                      }}
+                    >
+                      Health Checks
+                    </button>
+                  </div>
+                )}
+              {group.label === 'Manage' &&
+                s.workspace === 'Web App & API Protection' &&
+                ['CDN Distributions', 'BIG-IP Virtual Servers'].map((label) => (
+                  <button
+                    key={label}
+                    className="nav-item xc-support-nav"
+                    onClick={() => setReferenceInfo(label + ' · 독립 콘솔 화면은 미구현입니다.')}
+                  >
+                    {label}
+                  </button>
+                ))}
               {group.items
                 .filter(
                   (page) =>
-                    loadBalancersOpen || !['HTTP Load Balancers', 'Origin Pools'].includes(page),
+                    s.workspace !== 'Web App & API Protection' ||
+                    group.label !== 'Manage' ||
+                    !['HTTP Load Balancers', 'Origin Pools'].includes(page),
                 )
                 .map((page) => (
                   <button
                     key={page}
                     className={`nav-item ${['HTTP Load Balancers', 'Origin Pools'].includes(page) ? 'nav-child' : ''} ${s.page === page ? 'active' : ''}`}
+                    aria-current={s.page === page ? 'page' : undefined}
                     onClick={() => go(s.workspace, page)}
                   >
                     <span>{page === 'Overview' ? 'Performance' : page}</span>
@@ -315,14 +378,54 @@ export default function App() {
                     ].includes(page) && <ChevronRight size={13} />}
                   </button>
                 ))}
+              {group.label === 'Manage' && s.workspace === 'Web App & API Protection' && (
+                <div className="xc-advanced-navigation">
+                  {[
+                    'Rate Limiter Policies',
+                    'Shared Objects',
+                    'AI & ML',
+                    'Public IP Addresses',
+                    'Alerts Management',
+                    'Files',
+                    'API Management',
+                    'Reports',
+                    'Certificate Management',
+                    'Bot Defense Management',
+                  ].map((label) => (
+                    <button
+                      key={label}
+                      className="nav-item"
+                      onClick={() =>
+                        setReferenceInfo(
+                          label +
+                            ' · 이 메뉴의 독립 콘솔 화면은 미구현입니다. 관련 학습 동작은 Training Center에서 사용할 수 있습니다.',
+                        )
+                      }
+                    >
+                      {label}
+                      <ChevronRight size={14} />
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           ))}
         </nav>
         <div className="sidebar-bottom">
+          <details className="xc-learning-tools">
+            <summary>Learning tools · 학습 도구</summary>
+            {(['Security Catalog', 'Security Analytics', 'Security Events'] as Page[]).map(
+              (page) => (
+                <button key={page} onClick={() => go('Web App & API Protection', page)}>
+                  {page}
+                </button>
+              ),
+            )}
+          </details>
           <button onClick={() => go('Home', 'Training Center')}>
             <BookOpen size={17} />
             <span>Training Center</span>
-            <Badge tone="blue">1–8</Badge>
+            <Badge tone="blue">1–9</Badge>
           </button>
           <button onClick={() => setLab(true)}>
             <FlaskConical size={17} />
@@ -341,10 +444,16 @@ export default function App() {
         </div>
       </aside>
       <div className="main-shell">
+        {referenceInfo && (
+          <Dialog open title="Console learning scope" onOpenChange={() => setReferenceInfo('')}>
+            <p>{referenceInfo}</p>
+          </Dialog>
+        )}
         <header className="topbar">
           <button
             className="icon-button mobile-menu"
             aria-label="Open navigation"
+            aria-expanded={sidebar}
             onClick={() => setSidebar((v) => !v)}
           >
             <Menu size={21} />
@@ -359,14 +468,28 @@ export default function App() {
               <ChevronRight size={12} />
               <span>{s.namespace}</span>
               <ChevronRight size={12} />
-              <span>{s.page}</span>
+              <span>
+                {['Security', 'Overview'].includes(s.page)
+                  ? 'Overview'
+                  : ['HTTP Load Balancers', 'Origin Pools'].includes(s.page)
+                    ? 'Manage'
+                    : s.page}
+              </span>
+              {['HTTP Load Balancers', 'Origin Pools'].includes(s.page) && (
+                <>
+                  <ChevronRight size={12} />
+                  <span>Load Balancers</span>
+                </>
+              )}
             </div>
             <div className="header-context">
               {currentLb
                 ? `HTTP Load Balancer: ${currentLb.name}`
-                : s.workspace === 'Web App & API Protection'
-                  ? 'Web App & API Protection'
-                  : s.workspace}
+                : s.page === 'Overview'
+                  ? 'Performance'
+                  : s.page === 'Services'
+                    ? 'Home'
+                    : s.page}
               <ChevronDown size={12} />
               <span>
                 {s.page === 'Overview'
@@ -378,6 +501,7 @@ export default function App() {
             </div>
           </div>
           <div className="topbar-actions">
+            <span className="xc-assistant-orb" aria-label="Local assistant" />
             <button
               className="global-search"
               aria-label="Search console"
@@ -393,7 +517,7 @@ export default function App() {
               onClick={() => setLab(true)}
             >
               <FlaskConical size={13} />
-              <span>Simulation Mode</span>
+              <span>비공식 학습용 시뮬레이터</span>
             </button>
             <div className="topbar-divider" />
             <button
@@ -407,6 +531,7 @@ export default function App() {
             </button>
             <a
               className="support-link"
+              aria-label="F5 documentation and support"
               href="https://docs.cloud.f5.com/docs-v2"
               target="_blank"
               rel="noreferrer"
@@ -464,6 +589,8 @@ export default function App() {
           )}
         </header>
         <main
+          id="console-main"
+          tabIndex={-1}
           className="main-content"
           onClick={() => {
             if (popover) setPopover('');

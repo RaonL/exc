@@ -187,11 +187,12 @@ it('rejects duplicate names in JSON view and clears the error after correction',
 
 it('keeps shared policy read-only and does not offer a save or edit action', async () => {
   await render(sharedBaseWaf);
-  expect(field('Name *').matches(':disabled')).toBe(true);
+  expect(document.querySelector('.xc-read-row')?.textContent).toContain(sharedBaseWaf.name);
+  expect(document.querySelector('input[required]')).toBeNull();
   const labels = [...document.querySelectorAll('button')].map((b) => b.textContent?.trim());
   expect(labels).not.toContain('Edit Configuration');
   expect(labels).not.toContain('Save App Firewall');
-  await click('Close');
+  await click('Cancel and Exit');
   expect(close).toHaveBeenCalledOnce();
 });
 

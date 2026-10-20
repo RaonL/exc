@@ -26,6 +26,7 @@ import { Badge, Card, Empty, Stat, Status, TextLink, download } from './common';
 import { Button } from './ui/button';
 import { EventsTable } from './EventsTable';
 import { RequestTelemetry, MonitoringRange } from './RequestTelemetry';
+import { ReferencePerformance } from './ReferencePerformance';
 const tabs = ['Dashboard', 'Metrics', 'Traffic', 'Origin Servers', 'Alerts', 'Requests', 'Errors'];
 export function Dashboard({ openLab }: { openLab: () => void }) {
   const s = useConsole();
@@ -152,7 +153,7 @@ export function Dashboard({ openLab }: { openLab: () => void }) {
         )}
       </div>
       <div className="tabs" role="tablist" aria-label="Performance monitoring">
-        {tabs.map((t) => (
+        {(s.selectedLbId ? tabs : ['Dashboard', 'Traffic', 'Metrics']).map((t) => (
           <button
             role="tab"
             aria-selected={t === tab}
@@ -160,7 +161,7 @@ export function Dashboard({ openLab }: { openLab: () => void }) {
             className={t === tab ? 'active' : ''}
             onClick={() => setTab(t)}
           >
-            {t}
+            {!s.selectedLbId && t === 'Traffic' ? 'Traffic Graph' : t}
           </button>
         ))}
       </div>
@@ -222,6 +223,7 @@ export function Dashboard({ openLab }: { openLab: () => void }) {
         <>
           {tab === 'Dashboard' && (
             <>
+              {!s.selectedLbId && <ReferencePerformance range={range} />}
               <div className="dashboard-top">
                 <Card title="Application Health" className="health-card">
                   <div className="health-number">
