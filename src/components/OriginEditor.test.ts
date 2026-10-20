@@ -206,3 +206,61 @@ it('clears a stale origin-address error when the invalid input is corrected', as
   await fill(field('IP Address *'), '192.0.2.10');
   expect(document.querySelector('[role="alert"]')).toBeNull();
 });
+
+it('uses the Lab1 default algorithm for new pools while preserving existing configuration', async () => {
+  await act(async () => root.render(createElement(OriginEditor, { close, notify: vi.fn() })));
+  expect(field('LoadBalancer Algorithm *').value).toBe('Load Balancer Override');
+  expect(document.querySelector('[data-section="servers"]')?.textContent).toContain(
+    'Endpoint Selection',
+  );
+  await fill(field('Name *'), 'lab1-default-pool');
+  await click('⊕ Add Item');
+  await fill(field('DNS Name *'), 'demo-app.amer.myedgedemo.com');
+  await click('Apply');
+  await click('Add Origin Pool');
+  await act(async () => {
+    await useConsole.persist.rehydrate();
+  });
+  expect(
+    useConsole.getState().origins.find((o) => o.name === 'lab1-default-pool')?.config?.algorithm,
+  ).toBe('Load Balancer Override');
+});
+
+it('keeps health check edits in a nested draft until Apply and parent Save', async () => {
+  await edit();
+  const before = JSON.stringify(useConsole.getState().origins);
+  await click('Edit health check');
+  await fill(field('HTTP Path'), '/ready');
+  await click('Back');
+  await click('Edit health check');
+  expect(field('HTTP Path').value).toBe('/health');
+  await fill(field('HTTP Path'), '/ready');
+  await click('Apply');
+  expect(JSON.stringify(useConsole.getState().origins)).toBe(before);
+  await click('Save Origin Pool');
+  await act(async () => {
+    await useConsole.persist.rehydrate();
+  });
+  expect(useConsole.getState().origins[0].config?.healthPath).toBe('/ready');
+});
+
+it('filters server rows without removing them and discards the parent from a nested screen', async () => {
+  const original = await edit();
+  const search = document.querySelector(
+    'input[aria-label="Search origin servers"]',
+  ) as HTMLInputElement;
+  expect(search).not.toBeNull();
+  await fill(search, 'no-match');
+  expect(document.querySelector('.origin-server-list tbody')?.textContent).not.toContain(
+    original.endpoint,
+  );
+  await fill(search, '');
+  expect(document.querySelector('.origin-server-list tbody')?.textContent).toContain(
+    original.endpoint,
+  );
+  await click('Edit');
+  await fill(field('IP Address *'), '192.0.2.99');
+  await click('Cancel and Exit');
+  expect(close).toHaveBeenCalledOnce();
+  expect(useConsole.getState().origins[0]).toEqual(original);
+});

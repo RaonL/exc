@@ -13,6 +13,7 @@ export interface ConsoleLab1 {
   startedAt: string;
   reviewedIds: string[];
   guideOpen: boolean;
+  guideStep?: 'origin' | 'lb' | 'baseline' | 'waf' | 'attacks' | 'inspect';
 }
 export const lab1Samples = [
   { label: 'Home', path: '/' },

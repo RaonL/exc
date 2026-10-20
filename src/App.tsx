@@ -34,6 +34,7 @@ import { Home } from './components/Home';
 import { LoadBalancers, ConfigResources, ApiPages, NetworkPages } from './components/Resources';
 import { SecurityEvents } from './components/Events';
 import { Administration } from './components/Administration';
+import { DemoResetControl } from './components/DemoResetControl';
 import { SimulationPanel } from './components/SimulationPanel';
 import { ConsoleApplication } from './components/ConsoleApplication';
 import { ConsoleLab1Bar } from './components/ConsoleLab1';
@@ -501,6 +502,10 @@ export default function App() {
             </div>
           </div>
           <div className="topbar-actions">
+            <DemoResetControl
+              className="console-reset-control"
+              onReset={() => notify('데모 환경을 초기화했습니다.')}
+            />
             <span className="xc-assistant-orb" aria-label="Local assistant" />
             <button
               className="global-search"

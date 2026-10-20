@@ -1,0 +1,537 @@
+/* Guide lives inside the configuration modal, outside its scrolling form fields. */
+.training-detail-with-guide {
+  min-width: 0;
+}
+.training-detail-with-guide.has-lab-guide {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 290px;
+  gap: 12px;
+  align-items: start;
+}
+.training-detail-with-guide > .all-lab-guide {
+  grid-column: 2;
+  grid-row: 1;
+  position: sticky;
+  top: 12px;
+  max-height: calc(100dvh - 120px);
+  border: 1px solid #cfd8ec;
+  border-radius: 5px;
+}
+.training-detail-with-guide .training-detail {
+  min-width: 0;
+}
+.lab-guide-order,
+.lab-guide-reference-details {
+  margin: 14px 0;
+  font-size: 12px;
+  line-height: 1.8;
+}
+.lab-guide-order summary,
+.lab-guide-reference-details summary,
+.lab-request-examples summary {
+  cursor: pointer;
+  color: #4d65ce;
+}
+.lab-guide-order li {
+  margin-bottom: 8px;
+}
+.lab-request-examples {
+  margin: 16px 0;
+  padding: 12px;
+  background: #f8faff;
+  border: 1px solid #dbe3f1;
+  border-radius: 4px;
+}
+.lab-request-examples > div {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  gap: 8px;
+  margin-top: 10px;
+}
+.lab-request-examples article {
+  display: grid;
+  gap: 7px;
+  min-width: 0;
+  padding: 10px;
+  background: white;
+  border: 1px solid #e0e5ef;
+}
+.lab-request-examples code,
+.lab-request-examples small {
+  overflow-wrap: anywhere;
+  font-size: 11px;
+  line-height: 1.7;
+}
+.training-embedded > .training-heading,
+.training-embedded > .training-class-grid,
+.training-embedded > .training-scope,
+.training-embedded .training-lab-nav {
+  display: none;
+}
+.training-embedded > .training-workbench {
+  display: block;
+}
+.dialog-wide:has(.training-embedded) {
+  width: min(1400px, calc(100vw - 24px));
+  max-height: 94dvh;
+  overflow: auto;
+}
+.training-return {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+@media (max-width: 1200px) {
+  .training-detail-with-guide.has-lab-guide {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .training-detail-with-guide > .all-lab-guide {
+    grid-column: 1;
+    grid-row: 1;
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    max-height: 260px;
+  }
+  .training-detail-with-guide.has-lab-guide > .training-detail {
+    grid-row: 2;
+  }
+  .training-detail-with-guide > .all-lab-guide .guide-fields {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    padding-bottom: 6px;
+  }
+  .training-detail-with-guide > .all-lab-guide .guide-fields > li {
+    flex: 0 0 235px;
+    scroll-snap-align: start;
+  }
+  .training-detail-with-guide > .all-lab-guide .guide-instruction,
+  .training-detail-with-guide > .all-lab-guide .guide-legend {
+    display: none;
+  }
+}
+.guide-mobile-instructions {
+  display: none;
+}
+.dialog-wide:has(.guided-application) {
+  width: min(1200px, calc(100vw - 30px));
+}
+.guided-application {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  min-height: 0;
+}
+.guided-application > .console-guide-panel {
+  grid-column: 2;
+  grid-row: 1;
+  max-height: 70vh;
+}
+.guided-application > .console-application {
+  min-width: 0;
+  max-height: 70vh;
+  overflow: auto;
+}
+@media (max-width: 700px) {
+  .guided-application {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+  .guided-application > .console-guide-panel {
+    max-height: 210px;
+  }
+  .guided-application > .console-application {
+    max-height: 50vh;
+  }
+}
+.config-editor .config-layout.with-console-guide {
+  display: grid;
+  grid-template-columns: 210px minmax(0, 1fr) 310px;
+  grid-template-rows: minmax(0, 1fr) auto;
+  overflow: hidden;
+}
+.config-layout.with-console-guide > .config-main {
+  min-width: 0;
+  padding: 18px 22px;
+}
+.config-layout.with-console-guide > .config-navigation {
+  min-width: 0;
+  padding: 12px;
+}
+.config-layout.with-console-guide > .config-navigation nav {
+  padding: 8px;
+}
+.config-layout.with-console-guide > .config-navigation nav button {
+  font-size: 12px;
+  padding: 7px 8px;
+}
+.config-editor .config-layout.with-console-guide:has(> [data-collapsed='true']) {
+  grid-template-columns: 210px minmax(0, 1fr) 58px;
+}
+.console-guide-panel {
+  grid-column: 3;
+  grid-row: 1;
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+  background: #f8faff;
+  border-left: 1px solid #cfd8ec;
+  color: #233455;
+  text-align: left;
+}
+.console-guide-panel > header {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  gap: 7px;
+  align-items: center;
+  padding: 14px 12px;
+  background: #edf2ff;
+  border-bottom: 1px solid #d7dff0;
+  font-size: 12px;
+}
+.console-guide-panel > header button {
+  margin-left: auto;
+  padding: 4px;
+  border-radius: 4px;
+}
+.console-guide-panel button:focus-visible {
+  outline: 2px solid #516af0;
+  outline-offset: 2px;
+}
+.console-guide-content {
+  padding: 12px;
+}
+.console-guide-content h3 {
+  font-size: 15px;
+  font-weight: 650;
+  margin: 12px 0 7px;
+}
+.console-guide-content p {
+  font-size: 12px;
+  line-height: 1.7;
+  margin: 8px 0;
+}
+.console-guide-content .guide-legend {
+  color: #526590;
+  font-size: 11px;
+}
+.guide-namespace {
+  overflow-wrap: anywhere;
+  color: #68758c;
+}
+.guide-namespace b {
+  color: #293d63;
+}
+.guide-phase-switch {
+  display: flex;
+  gap: 4px;
+}
+.guide-phase-switch button {
+  flex: 1;
+  border: 1px solid #cbd5eb;
+  padding: 7px;
+  border-radius: 4px;
+  font-size: 11px;
+}
+.guide-phase-switch button[aria-pressed='true'] {
+  background: #e9edff;
+  border-color: #6b7bf2;
+  color: #4157d9;
+}
+.guide-fields {
+  display: grid;
+  gap: 9px;
+  list-style: none;
+  padding: 0;
+  margin: 12px 0;
+}
+.guide-fields > li {
+  border: 1px solid #dce3ef;
+  border-radius: 5px;
+  padding: 10px;
+  background: white;
+}
+.guide-fields > li[data-current='true'] {
+  border-color: #677df1;
+  box-shadow: 0 0 0 1px #677df125;
+}
+.guide-field-title {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.guide-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 15px;
+  height: 15px;
+  border: 1px solid #92a2bc;
+  border-radius: 3px;
+  background: white;
+  color: #25895c;
+  font-size: 12px;
+  line-height: 1;
+}
+.guide-fields [data-complete='true'] .guide-check,
+.guide-inline.complete .guide-check,
+.lab1-quick-steps .complete .guide-check {
+  border-color: #39a97b;
+  background: #eaf9f1;
+}
+.guide-fields code {
+  display: block;
+  margin: 8px 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  font-size: 12px;
+  color: #344e85;
+  line-height: 1.6;
+}
+.guide-field-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+.guide-field-actions button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: #4e63c2;
+  padding: 3px;
+}
+.guide-readonly,
+.guide-save-note {
+  padding: 9px 10px;
+  background: #fff9e9;
+  border: 1px solid #eadcae;
+  border-radius: 4px;
+  line-height: 1.7;
+}
+.guide-saved {
+  font-size: 11px;
+  padding: 10px;
+  border: 1px solid #d9e0eb;
+  border-radius: 4px;
+  margin: 10px 0;
+}
+.guide-saved.complete {
+  color: #207551;
+  border-color: #b0dbc8;
+  background: #edf9f3;
+}
+.console-guide-content > a {
+  font-size: 11px;
+  color: #5367c5;
+}
+.guide-inline {
+  display: flex !important;
+  align-items: flex-start;
+  gap: 6px;
+  width: fit-content;
+  max-width: 100%;
+  padding: 6px 8px;
+  margin: 6px 0 0;
+  border-radius: 4px;
+  font-size: 11px !important;
+  font-weight: 400 !important;
+  line-height: 1.6;
+  color: #526392 !important;
+  background: #eef3ff;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+.guide-inline b {
+  font-weight: 600;
+}
+.guide-inline .guide-check {
+  margin-top: 1px;
+}
+[data-guide-field]:has(> .guide-inline.current) {
+  outline: 2px solid #8093f5;
+  outline-offset: 5px;
+  border-radius: 4px;
+  scroll-margin-block: 35px;
+}
+.reference-checkbox:has(> .guide-inline) {
+  flex-wrap: wrap;
+}
+.console-guide-panel[data-collapsed='true'] > header > strong,
+.console-guide-panel[data-collapsed='true'] > header > svg {
+  display: none;
+}
+.guide-collapsed-note {
+  writing-mode: vertical-rl;
+  margin: 15px auto;
+  font-size: 12px;
+  color: #5367a4;
+}
+.lab1-quick-start > h3 {
+  font-size: 19px;
+  margin-bottom: 12px;
+}
+.lab1-quick-start > p {
+  font-size: 13px;
+  line-height: 1.8;
+  margin: 12px 0 20px;
+}
+.lab1-quick-steps {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+.lab1-quick-steps article {
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid #dbe2ef;
+  border-radius: 6px;
+  background: #fff;
+}
+.lab1-quick-steps h4 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+.lab1-quick-steps ul {
+  padding: 12px 0 12px 19px;
+  font-size: 12px;
+  line-height: 1.9;
+  overflow-wrap: anywhere;
+}
+.lab1-quick-steps article > button {
+  display: block;
+  width: 100%;
+  padding: 9px 10px;
+  border: 1px solid #798bf0;
+  color: #4359cb;
+  background: #f1f4ff;
+  font-size: 12px;
+  border-radius: 4px;
+}
+.lab1-quick-steps article > button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.lab1-quick-steps small {
+  display: block;
+  color: #7b89a3;
+  margin-top: 9px;
+  font-size: 11px;
+}
+@media (max-width: 1000px) {
+  .config-editor .config-layout.with-console-guide,
+  .config-editor .config-layout.with-console-guide:has(> [data-collapsed='true']) {
+    grid-template-columns: minmax(0, 1fr) 280px;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+  }
+  .config-layout.with-console-guide > .config-navigation {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    padding: 0;
+    max-height: 85px;
+  }
+  .config-layout.with-console-guide > .config-navigation .config-resource,
+  .config-layout.with-console-guide > .config-navigation > a {
+    display: none;
+  }
+  .config-layout.with-console-guide > .config-navigation nav {
+    display: flex;
+    overflow: auto;
+    white-space: nowrap;
+    padding: 7px;
+  }
+  .config-layout.with-console-guide > .config-navigation nav button {
+    flex-shrink: 0;
+  }
+  .config-layout.with-console-guide > .config-main {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .config-layout.with-console-guide > .console-guide-panel {
+    grid-column: 2;
+    grid-row: 2;
+  }
+  .config-layout.with-console-guide > .config-footer {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    position: static;
+  }
+  .console-guide-panel[data-collapsed='true'] > header > strong {
+    display: inline;
+  }
+  .guide-collapsed-note {
+    writing-mode: initial;
+    margin: 15px;
+  }
+}
+@media (max-width: 700px) {
+  .config-editor .config-layout.with-console-guide,
+  .config-editor .config-layout.with-console-guide:has(> [data-collapsed='true']) {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto minmax(0, 1fr) auto;
+  }
+  .config-layout.with-console-guide > .console-guide-panel {
+    grid-column: 1;
+    grid-row: 2;
+    max-height: 280px;
+    border-left: 0;
+    border-bottom: 1px solid #ced8ed;
+  }
+  .config-layout.with-console-guide > .config-main {
+    grid-column: 1;
+    grid-row: 3;
+    min-height: 0;
+    padding: 14px;
+  }
+  .config-layout.with-console-guide > .config-footer {
+    grid-row: 4;
+  }
+  .console-guide-panel > header {
+    padding: 8px 12px;
+  }
+  .console-guide-content {
+    padding: 8px 12px;
+  }
+  .console-guide-content > .guide-namespace,
+  .console-guide-content > .guide-legend,
+  .console-guide-content > .guide-instruction {
+    display: none;
+  }
+  .console-guide-content > h3 {
+    font-size: 12px;
+    margin: 6px 0;
+  }
+  .console-guide-content > .guide-mobile-instructions {
+    display: block;
+    font-size: 11px;
+    margin: 5px 0;
+  }
+  .guide-mobile-instructions summary {
+    color: #4e63c2;
+    cursor: pointer;
+  }
+  .guide-fields {
+    display: flex;
+    overflow-x: auto;
+    padding: 3px;
+    scroll-snap-type: x mandatory;
+    margin: 7px 0;
+  }
+  .guide-fields > li {
+    flex: 0 0 min(260px, 82vw);
+    scroll-snap-align: start;
+  }
+  .console-guide-panel[data-collapsed='true'] .guide-collapsed-note {
+    display: none;
+  }
+  .lab1-quick-steps {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

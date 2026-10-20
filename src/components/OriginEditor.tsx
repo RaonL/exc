@@ -4,9 +4,9 @@ import type { Origin } from '../types';
 import { originConfig } from '../lib/config';
 import { class1Lab1Source } from '../lib/console-lab';
 import { ConfigurationEditor } from './ConfigurationEditor';
-import { Field, ToggleField } from './form-fields';
-import { Button } from './ui/button';
+import { Field } from './form-fields';
 import { OriginServerItem } from './OriginItems';
+import { OriginServerFields, OriginHealthChecks, OriginHealthCheckItem } from './OriginPoolFields';
 export function OriginEditor({
   initial,
   close,
@@ -26,7 +26,13 @@ export function OriginEditor({
     port: initial?.port ?? 443,
     config: {
       ...originConfig(initial),
-      ...(!initial ? { type: 'Public DNS' as const, healthCheck: 'None' as const } : {}),
+      ...(!initial
+        ? {
+            type: 'Public DNS' as const,
+            healthCheck: 'None' as const,
+            algorithm: 'Load Balancer Override' as const,
+          }
+        : {}),
       siteId:
         originConfig(initial).siteId ||
         s.sites.find((site) => site.namespace === s.namespace && site.kind === 'CE')?.id ||
@@ -37,6 +43,7 @@ export function OriginEditor({
   const [endpoint, setEndpoint] = useState(opened.endpoint);
   const [port, setPort] = useState(opened.port);
   const [serverOpen, setServerOpen] = useState(false);
+  const [healthOpen, setHealthOpen] = useState(false);
   const [serverApplied, setServerApplied] = useState(!!initial);
   const [config, setConfig] = useState(opened.config);
   const [error, setError] = useState('');
@@ -99,7 +106,7 @@ export function OriginEditor({
         name={initial?.name ?? ''}
         namespace={s.namespace}
         guide={class1Lab1Source}
-        className="origin-editor"
+        className={`origin-editor origin-lab1-editor ${serverOpen || healthOpen ? 'origin-parent-obscured' : ''}`}
         collapsible
         onReset={() => {
           setName(opened.name);
@@ -158,168 +165,46 @@ export function OriginEditor({
             id: 'servers',
             title: 'Origin Servers',
             content: (
-              <>
-                <div className="reference-items origin-server-list">
-                  <strong>Origin Servers *</strong>
-                  {serverApplied ? (
-                    <div
-                      className="origin-table-scroll"
-                      tabIndex={0}
-                      role="region"
-                      aria-label="Origin servers table"
-                    >
-                      <table>
-                        <thead>
-                          <tr>
-                            <th>Type</th>
-                            <th>Origin Server</th>
-                            <th>Actions</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td>
-                              {config.type === 'Public DNS' ? 'Public DNS Name' : config.type}
-                            </td>
-                            <td>{endpoint}</td>
-                            <td>
-                              <button
-                                type="button"
-                                className="resource-link"
-                                onClick={() => setServerOpen(true)}
-                              >
-                                Edit
-                              </button>{' '}
-                              <button
-                                type="button"
-                                className="resource-link"
-                                onClick={() => {
-                                  setServerApplied(false);
-                                  setEndpoint('');
-                                }}
-                              >
-                                Remove
-                              </button>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  ) : (
-                    <p>There are no items added yet. Start by adding first item.</p>
-                  )}
-                  {!serverApplied && (
-                    <Button type="button" variant="outline" onClick={() => setServerOpen(true)}>
-                      ⊕ Add Item
-                    </Button>
-                  )}
-                </div>
-                <Field label="Origin server Port">
-                  <select value="Port" onChange={() => {}}>
-                    <option>Port</option>
-                  </select>
-                </Field>
-                <Field label="Port *">
-                  <input
-                    type="number"
-                    min={1}
-                    max={65535}
-                    required
-                    value={port}
-                    onChange={(e) => setPort(Number(e.target.value))}
-                  />
-                </Field>
-                <p className="configuration-help origin-simulation-note">
-                  This training subset supports one endpoint per pool. No origin connection is
-                  opened.
-                </p>
-              </>
+              <OriginServerFields
+                endpoint={endpoint}
+                applied={serverApplied}
+                config={config}
+                port={port}
+                setPort={setPort}
+                setting={setting}
+                siteName={s.sites.find((site) => site.id === config.siteId)?.name}
+                edit={() => setServerOpen(true)}
+                remove={() => {
+                  setServerApplied(false);
+                  setEndpoint('');
+                }}
+              />
             ),
           },
           {
             id: 'balancing',
             title: 'Other Settings',
             content: (
-              <Field label="Load Balancer Algorithm">
-                <select
-                  value={config.algorithm}
-                  onChange={(e) => setting('algorithm', e.target.value as typeof config.algorithm)}
-                >
-                  <option>Round Robin</option>
-                  <option>Least Active Requests</option>
-                  <option>Random</option>
-                </select>
-              </Field>
+              <details className="origin-other-settings">
+                <summary>
+                  ⚠ Not configured <span>Configure ›</span>
+                </summary>
+                <p className="configuration-help">
+                  Additional connection options are outside this training subset. Configure the
+                  origin, balancing algorithm, health check and TLS in the sections above.
+                </p>
+              </details>
             ),
           },
           {
             id: 'health',
             title: 'Health Checks',
             content: (
-              <>
-                <Field label="Health Check">
-                  <select
-                    value={config.healthCheck}
-                    onChange={(e) =>
-                      setting('healthCheck', e.target.value as typeof config.healthCheck)
-                    }
-                  >
-                    <option value="None">No Health Check</option>
-                    <option value="HTTP">HTTP HealthCheck</option>
-                    <option value="TCP">TCP HealthCheck</option>
-                  </select>
-                </Field>
-                {config.healthCheck !== 'None' && (
-                  <>
-                    {config.healthCheck === 'HTTP' && (
-                      <Field label="HTTP Path">
-                        <input
-                          value={config.healthPath}
-                          onChange={(e) => setting('healthPath', e.target.value)}
-                        />
-                      </Field>
-                    )}
-                    <div className="form-grid">
-                      <Field label="Interval (seconds)">
-                        <input
-                          type="number"
-                          min={1}
-                          value={config.interval}
-                          onChange={(e) => setting('interval', Number(e.target.value))}
-                        />
-                      </Field>
-                      <Field label="Timeout (seconds)">
-                        <input
-                          type="number"
-                          min={1}
-                          value={config.timeout}
-                          onChange={(e) => setting('timeout', Number(e.target.value))}
-                        />
-                      </Field>
-                      <Field label="Healthy Threshold">
-                        <input
-                          type="number"
-                          min={1}
-                          value={config.healthyThreshold}
-                          onChange={(e) => setting('healthyThreshold', Number(e.target.value))}
-                        />
-                      </Field>
-                      <Field label="Unhealthy Threshold">
-                        <input
-                          type="number"
-                          min={1}
-                          value={config.unhealthyThreshold}
-                          onChange={(e) => setting('unhealthyThreshold', Number(e.target.value))}
-                        />
-                      </Field>
-                    </div>
-                  </>
-                )}
-                <div className="configuration-info">
-                  Health-check parameters are stored for training. Use Simulate failure / Recover in
-                  the pool list to change health deterministically.
-                </div>
-              </>
+              <OriginHealthChecks
+                config={config}
+                edit={() => setHealthOpen(true)}
+                remove={() => setting('healthCheck', 'None')}
+              />
             ),
           },
           {
@@ -327,11 +212,17 @@ export function OriginEditor({
             title: 'TLS',
             content: (
               <>
-                <ToggleField
-                  label="Enable TLS to Origin Servers"
-                  value={config.tls}
-                  onChange={(v) => setting('tls', v)}
-                />
+                <div className="origin-choice">
+                  <Field label="TLS *">
+                    <select
+                      value={config.tls ? 'Enable' : 'Disable'}
+                      onChange={(e) => setting('tls', e.target.value === 'Enable')}
+                    >
+                      <option>Disable</option>
+                      <option>Enable</option>
+                    </select>
+                  </Field>
+                </div>
                 {config.tls && (
                   <Field label="SNI Value">
                     <input
@@ -354,6 +245,19 @@ export function OriginEditor({
             ['metadata', 'servers', 'health', 'tls', 'balancing'].indexOf(b.id),
         )}
       />
+      {healthOpen && (
+        <OriginHealthCheckItem
+          config={config}
+          namespace={s.namespace}
+          close={() => setHealthOpen(false)}
+          cancelAll={close}
+          onApply={(next) => {
+            setConfig(next);
+            setHealthOpen(false);
+            setError('');
+          }}
+        />
+      )}
       {serverOpen && (
         <OriginServerItem
           endpoint={endpoint}
@@ -361,6 +265,7 @@ export function OriginEditor({
           namespace={s.namespace}
           sites={s.sites}
           close={() => setServerOpen(false)}
+          cancelAll={close}
           onApply={(address, next) => {
             setEndpoint(address);
             setConfig(next);

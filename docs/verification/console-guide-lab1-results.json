@@ -1,0 +1,60 @@
+{
+  "date": "2026-10-20",
+  "scope": "Class1 Lab1 easy checklist and guide inside real console configuration forms",
+  "source": "https://clouddocs.f5.com/training/community/f5xc/html/class1/lab1.html",
+  "entry": "Training Center -> Class1 -> Lab1 -> numbered console buttons",
+  "features": [
+    "Six numbered cards with exact namespace-specific values, paths, expected response codes and console links",
+    "Prerequisite hint prevents jumping to WAF/tests before saving a lab load balancer",
+    "Persistent guide inside Origin Pool, nested Origin Server, HTTP LB and nested Origin Pool connection forms",
+    "Find buttons expand a collapsed section, clear section search, scroll and focus the real field",
+    "Target values and visual checkboxes appear beside actual console fields",
+    "Input checkboxes evaluate the unsaved draft; saved stage completion is shown separately",
+    "WAF/basic guide step and expanded state persist in the existing consoleLab1 localStorage state",
+    "Open Application keeps normal/SQLi/XSS/Command Injection checks beside request results",
+    "Event details show where to find Support ID, signature, Information/Request/JSON",
+    "Class1 no longer displays a deletion warning from an unrelated legacy training session"
+  ],
+  "browser": {
+    "tool": "CUA in-app browser native accessibility actions and Playwright locators",
+    "javascript": "Read-only DOM geometry and logs only; no script-driven configuration/state changes",
+    "passed": [
+      "Training card opens the actual Origin Pools menu and the correct namespace",
+      "Name input changes its checklist from unchecked to checked",
+      "Find Origin Servers focuses Add Item; nested dialog retains its own guide",
+      "Wrong DNS stays unchecked; exact demo DNS checks immediately",
+      "Nested Apply returns to the preserved parent draft and guide",
+      "Port 81 is unchecked and 80 is checked; Cancel discards the new duplicate draft",
+      "Guide collapses and expands without losing typed values",
+      "Domain mismatch unchecks, and restoring the lab hostname checks it again",
+      "Switching to WAF instructions does not overwrite LB draft values",
+      "WAF Disable unchecks the reference; Enable + shared/base-appfw checks it",
+      "Save/reload retains the WAF step and saved configuration",
+      "Open Application displays the guide while Home returns 200 and all three attacks return 403",
+      "Security Analytics details include the inline Support ID guide"
+    ],
+    "viewports": [
+      { "width": 1280, "height": 720, "layout": "section navigation, form and checklist columns" },
+      { "width": 624, "height": 892, "documentWidth": 624, "guideBottom": 448, "mainHeight": 388, "footerBottom": 892, "layout": "scrollable checklist above independently scrolling form, fixed visible save footer" }
+    ],
+    "errorsAndWarnings": [],
+    "commandInjectionSupportId": "80617e7e-c73a-403b-bcbf-3567f1ac817f"
+  },
+  "tests": {
+    "fullSuite": { "files": 22, "passed": 227 },
+    "finalRelated": { "files": 3, "passed": 10 },
+    "mutation": "Inverting the origin port check caused the expected test failure; source restored byte-for-byte",
+    "build": "passed",
+    "buildWarning": "Existing main JavaScript chunk size warning remains"
+  },
+  "screenshots": [
+    "output/playwright/console-guide-lab1/lb-waf-guide.png",
+    "output/playwright/console-guide-lab1/request-guide.png",
+    "output/playwright/console-guide-lab1/narrow-guide.png"
+  ],
+  "limits": [
+    "Detailed field markers currently cover Class1 Lab1; other classes keep their existing walkthroughs",
+    "Guide controls never automatically enter settings or manually mark a lab as completed",
+    "Guide input checks never save resource drafts; configuration still uses the existing save/cancel flow"
+  ]
+}

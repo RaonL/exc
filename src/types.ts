@@ -197,7 +197,7 @@ export interface OriginConfig {
   type: 'Public IP' | 'Public DNS' | 'IP on Site' | 'DNS on Site';
   siteId: string;
   network: 'Inside Network' | 'Outside Network';
-  algorithm: 'Round Robin' | 'Least Active Requests' | 'Random';
+  algorithm: 'Load Balancer Override' | 'Round Robin' | 'Least Active Requests' | 'Random';
   tls: boolean;
   sni: string;
   healthCheck: 'None' | 'HTTP' | 'TCP';

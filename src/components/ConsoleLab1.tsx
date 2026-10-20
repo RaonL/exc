@@ -3,14 +3,14 @@ import { useConsole } from '../store';
 import { class1Lab1Source, consoleLab1Checks } from '../lib/console-lab';
 import { Button } from './ui/button';
 import { Badge } from './common';
+import { openGuideStep, type GuideStep } from '../training/console-guide';
 
 export function ConsoleLab1Bar() {
   const s = useConsole(),
     lab = s.consoleLab1;
   if (!lab || s.namespace !== lab.namespace || s.workspace !== 'Web App & API Protection')
     return null;
-  const checks = consoleLab1Checks(s, lab),
-    lb = s.lbs.find((l) => l.namespace === lab.namespace && l.name === `${lab.namespace}-lb`);
+  const checks = consoleLab1Checks(s, lab);
   return (
     <section className="console-lab-guide">
       <div className="console-lab-guide-head">
@@ -37,15 +37,7 @@ export function ConsoleLab1Bar() {
               <button
                 key={check.id}
                 className={check.pass ? 'complete' : ''}
-                onClick={() => {
-                  if ((check.id === 'baseline' || check.id === 'attacks') && lb) {
-                    s.openApplication(lb.id);
-                    return;
-                  }
-                  s.navigate('Web App & API Protection', check.page);
-                  if (lb && ['Overview', 'Security Analytics'].includes(check.page))
-                    useConsole.setState({ selectedLbId: lb.id });
-                }}
+                onClick={() => openGuideStep(check.id as GuideStep)}
               >
                 <span>{check.pass ? <CheckCircle2 size={16} /> : i + 1}</span>
                 <strong>{check.title}</strong>

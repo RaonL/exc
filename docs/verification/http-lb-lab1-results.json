@@ -1,0 +1,79 @@
+{
+  "date": "2026-10-20",
+  "scope": "Class1 Lab1 HTTP Load Balancer create/edit console forms",
+  "source": "https://clouddocs.f5.com/training/community/f5xc/html/class1/lab1.html",
+  "referenceImages": ["lab1-0093.png", "lab1-0103.png", "lab1-0113.png", "lab1-0123.png", "lab1-0303.png", "lab1-0313.png", "lab1-0323.png"],
+  "runtime": "http://127.0.0.1:5173/",
+  "browser": {
+    "tool": "CUA in-app browser accessibility actions and Playwright locators",
+    "note": "Chrome DevTools MCP screenshot/snapshot calls stalled; completed browser assertions used the in-app browser. No JavaScript was used to mutate application state.",
+    "viewportsActuallyMeasured": [
+      {"width": 1280, "height": 720, "documentWidth": 1280, "footerBottom": 720},
+      {"width": 624, "height": 892, "documentWidth": 624, "footerBottom": 892}
+    ],
+    "consoleErrorsAndWarnings": []
+  },
+  "resource": {
+    "namespace": "staging",
+    "name": "staging-lab1-lb",
+    "id": "76eede50-2bc0-4580-879b-2c52db31f9f0",
+    "domain": "staging.lab-sec.f5demos.com",
+    "origin": "staging/staging-lab1-pool",
+    "originId": "6804f2ac-68c5-432b-bc23-57e20e37fe19",
+    "protocol": "HTTP",
+    "listenPort": 80,
+    "manageDns": true,
+    "waf": "shared/base-appfw",
+    "originWeight": 2,
+    "originPriority": 3,
+    "requestsAfterTesting": 4
+  },
+  "passedBrowserChecks": [
+    "Create Origin Pool from the console LB draft; the parent name/domain/HTTP/DNS draft survives nested creation",
+    "Create HTTP/80 LB with origin; reload and inspect persisted configuration",
+    "Actions -> Manage Configuration -> Edit Configuration -> WAF Enable -> shared/base-appfw -> Save -> reload",
+    "Nested origin Weight/Priority edits are discarded by Discard",
+    "Origin selection Apply persists Weight 2 / Priority 3 after parent Save and reload",
+    "View Configuration opens the selected Origin Pool and returns to the connection draft",
+    "Reset confirmation Keep editing leaves the draft intact",
+    "Reset to Defaults preserves name/domain/ID/counters, clears origin/WAF and resets HTTPS/443/default configuration",
+    "Cancel after reset followed by reload retains the saved HTTP/80/DNS/WAF configuration",
+    "Reset All Fields restores the opened origin and WAF configuration",
+    "Reset settings can be saved after reselecting an origin; reload confirms HTTPS/443, WAF disabled, DNS false",
+    "HTTP/80/DNS/shared WAF can be re-enabled and saved after reset",
+    "Cancel new cancelled-lab1-lb creation leaves only the saved LB after reload",
+    "Origin edit/remove icons are visible and clickable; Remove changes only the draft and Reset All Fields restores the reference",
+    "Domain search filters without changing the domain array; adding and removing an alias leaves the original domain",
+    "Normal request returns 200; SQL Injection, XSS and Command Injection return 403 and produce three security events",
+    "624px and 1280px forms have no document overflow and keep the footer at the viewport bottom"
+  ],
+  "supportIds": {
+    "sqlInjection": "294f0b1a-9217-4d3b-b02c-0fd0b68ab209",
+    "xss": "450fc4e9-1e15-4bb9-8c95-c7236176ccc6",
+    "commandInjection": "a6988d39-a848-414f-a824-1fb914e24fa3"
+  },
+  "automated": {
+    "testFiles": 19,
+    "passedTests": 218,
+    "lbEditorTests": 13,
+    "build": "passed",
+    "mutationCheck": "Inverting the reset readOnly guard makes the reset test fail; source restored byte-for-byte and full suite passes",
+    "buildWarning": "Existing main JavaScript chunk exceeds 500 kB"
+  },
+  "resetSemantics": {
+    "Reset All Fields": "Restore opened draft snapshot; no write until Save",
+    "Reset to Defaults": "Preserve name, domains, ID, namespace, creation time and request counters; clear configuration and resource links; no write until Save",
+    "Cancel and Exit": "Discard unsaved LB draft",
+    "globalDemoReset": "Existing System Settings Reset Demo Data remains separate"
+  },
+  "limitations": [
+    "Existing single default Origin Pool model is retained; weight/priority do not run a real balancing engine",
+    "Malware, Data Guard, CSRF, GraphQL and Cookie Protection entries are marked unimplemented",
+    "All DNS, certificates, advertisement and attack handling remain local simulation"
+  ],
+  "screenshots": [
+    "output/playwright/http-lb-lab1/waf-final.png",
+    "output/playwright/http-lb-lab1/origins-final.png",
+    "output/playwright/http-lb-lab1/narrow-624.png"
+  ]
+}

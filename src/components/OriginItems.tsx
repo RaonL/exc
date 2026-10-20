@@ -11,6 +11,7 @@ export function OriginServerItem({
   onApply,
   close,
   sites,
+  cancelAll,
 }: {
   endpoint: string;
   config: OriginConfig;
@@ -18,6 +19,7 @@ export function OriginServerItem({
   onApply: (endpoint: string, config: OriginConfig) => void;
   close: () => void;
   sites: { id: string; namespace: string; name: string }[];
+  cancelAll?: () => void;
 }) {
   const [address, setAddress] = useState(endpoint),
     [draft, setDraft] = useState(config),
@@ -52,6 +54,7 @@ export function OriginServerItem({
       namespace={namespace}
       guide={class1Lab1Source}
       close={close}
+      onCancelAll={cancelAll}
       onSave={apply}
       submitLabel="Apply"
       cancelLabel="Back"
@@ -137,6 +140,9 @@ export function OriginPoolItem({
   namespace,
   onApply,
   close,
+  onCancelAll,
+  onInspect,
+  obscured = false,
 }: {
   origins: Origin[];
   originId: string;
@@ -145,6 +151,9 @@ export function OriginPoolItem({
   namespace: string;
   onApply: (id: string, weight: number, priority: number) => void;
   close: () => void;
+  onCancelAll?: () => void;
+  onInspect?: (id: string, edit: boolean) => void;
+  obscured?: boolean;
 }) {
   const [id, setId] = useState(originId),
     [w, setW] = useState(weight),
@@ -153,8 +162,11 @@ export function OriginPoolItem({
   return (
     <ConfigurationEditor
       kind="Origin Pool with Weight and Priority"
-      className="lb-editor lb-origin-item"
-      resourceContext={{ title: 'HTTP Load Balancer', trail: ['Origins', 'New Item'] }}
+      className={`lb-editor lb-origin-item ${obscured ? 'lb-parent-obscured' : ''}`}
+      resourceContext={{
+        title: 'HTTP Load Balancer',
+        trail: ['Origins', 'Origin Pools', 'New Item'],
+      }}
       collapsible
       onReset={() => {
         setId(originId);
@@ -167,7 +179,8 @@ export function OriginPoolItem({
       guide={class1Lab1Source}
       close={close}
       submitLabel="Apply"
-      cancelLabel="Back"
+      cancelLabel="Discard"
+      onCancelAll={onCancelAll}
       value={{ originId: id, weight: w, priority: p }}
       error={error}
       onSave={(event) => {
@@ -205,6 +218,24 @@ export function OriginPoolItem({
                     ))}
                 </select>
               </Field>
+              {id && onInspect && (
+                <div className="lb-origin-reference-actions">
+                  <button
+                    type="button"
+                    className="resource-link"
+                    onClick={() => onInspect(id, false)}
+                  >
+                    View Configuration ↗
+                  </button>
+                  <button
+                    type="button"
+                    className="resource-link"
+                    onClick={() => onInspect(id, true)}
+                  >
+                    Edit Configuration ↗
+                  </button>
+                </div>
+              )}
               <Field label="Weight">
                 <input
                   type="number"

@@ -138,13 +138,92 @@ it('requires Apply for origin changes and discards the parent draft on Cancel', 
   ) as HTMLButtonElement;
   await act(async () => edit.click());
   await fill(field('Origin Pool *'), useConsole.getState().origins[1].id);
-  await click('Back');
+  await click('Discard');
   expect(document.querySelector('[data-section="origins"]')?.textContent).toContain(
     useConsole.getState().origins[0].name,
   );
   await fill(field('Name *'), 'cancelled-lb');
   await click('Cancel and Exit');
   expect(useConsole.getState().lbs.find((l) => l.id === initial.id)).toEqual(initial);
+});
+
+it('resets settings to defaults only in the draft and can restore opened values', async () => {
+  const initial = useConsole.getState().lbs[0];
+  const persisted = localStorage.getItem('f5-xc-simulator-v1');
+  await render(initial);
+  await fill(field('Description'), 'Unsaved change');
+  await click('LB 설정 초기화');
+  await click('Keep editing');
+  expect(field('Description').value).toBe('Unsaved change');
+  await click('LB 설정 초기화');
+  await click('Reset draft settings');
+  expect(field('Name *').value).toBe(initial.name);
+  expect(domain().value).toBe(initial.domains[0]);
+  expect(field('Load Balancer Type').value).toBe('Automatic');
+  expect(field('Description').value).toBe('');
+  expect(field('Web Application Firewall (WAF)').value).toBe('Disable');
+  expect(document.querySelector('[data-section="origins"]')?.textContent).not.toContain(
+    useConsole.getState().origins[0].name,
+  );
+  expect(localStorage.getItem('f5-xc-simulator-v1')).toBe(persisted);
+  await click('Reset all configuration fields');
+  expect(field('Enable *').value).toBe(initial.wafId);
+  expect(document.querySelector('[data-section="origins"]')?.textContent).toContain(
+    useConsole.getState().origins[0].name,
+  );
+  await click('Cancel and Exit');
+  expect(useConsole.getState().lbs.find((l) => l.id === initial.id)).toEqual(initial);
+});
+
+it('saves reset settings after reselecting an origin while retaining identity and other resources', async () => {
+  const initial = useConsole.getState().lbs[0];
+  const others = useConsole.getState().lbs.filter((l) => l.id !== initial.id);
+  const wafs = useConsole.getState().wafs;
+  const origins = useConsole.getState().origins;
+  await render(initial);
+  await click('LB 설정 초기화');
+  await click('Reset draft settings');
+  await act(async () =>
+    (document.querySelector('[data-section="origins"] .btn') as HTMLButtonElement).click(),
+  );
+  await fill(field('Origin Pool *'), origins[0].id);
+  await click('Apply');
+  await click('Save HTTP Load Balancer');
+  await act(async () => useConsole.persist.rehydrate());
+  expect(useConsole.getState().lbs.find((l) => l.id === initial.id)).toMatchObject({
+    id: initial.id,
+    name: initial.name,
+    namespace: initial.namespace,
+    domains: initial.domains,
+    requests: initial.requests,
+    createdAt: initial.createdAt,
+    protocol: 'HTTPS',
+    wafId: '',
+    originId: origins[0].id,
+    apiProtection: false,
+    botDefense: false,
+    ddosProtection: true,
+    config: { listenPort: 443, routes: [], exclusions: [], timeout: 30, manageDns: false },
+  });
+  expect(useConsole.getState().lbs.filter((l) => l.id !== initial.id)).toEqual(others);
+  expect(useConsole.getState().wafs).toEqual(wafs);
+  expect(useConsole.getState().origins).toEqual(origins);
+});
+
+it('filters domain rows without changing their order and cancels creation without persisting', async () => {
+  const persisted = localStorage.getItem('f5-xc-simulator-v1');
+  await createDraft();
+  await click('Add domain');
+  await fill(domain(2), 'second.example.com');
+  await fill(document.querySelector('[aria-label="Search domains"]') as HTMLInputElement, 'second');
+  expect(domain(1).closest('tr')?.hidden).toBe(true);
+  expect(domain(2).closest('tr')?.hidden).toBe(false);
+  await fill(document.querySelector('[aria-label="Search domains"]') as HTMLInputElement, '');
+  expect(domain(1).value).toBe('lab1-test.lab-sec.f5demos.com');
+  expect(domain(2).value).toBe('second.example.com');
+  await click('Cancel and Exit');
+  expect(localStorage.getItem('f5-xc-simulator-v1')).toBe(persisted);
+  expect(useConsole.getState().lbs.some((l) => l.name === 'lab1-test-lb')).toBe(false);
 });
 
 it('rejects a policy from another namespace even if loaded into an old draft', async () => {

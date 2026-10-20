@@ -109,6 +109,8 @@ export function isComplete(session: Session) {
   );
 }
 interface TrainingState {
+  guideTab: string;
+  setGuideTab: (tab: string) => void;
   selectedClass: number;
   selectedLab: string;
   sessions: Record<string, Session>;
@@ -153,10 +155,13 @@ export const useTraining = create<TrainingState>()(
     (set, get) => ({
       selectedClass: 1,
       selectedLab: trainingLabs[0].id,
+      guideTab: 'Guide',
+      setGuideTab: (guideTab) => set({ guideTab }),
       sessions: {},
       select: (selectedClass, labId) =>
         set({
           selectedClass,
+          guideTab: 'Guide',
           selectedLab: labId ?? trainingLabs.find((l) => l.classId === selectedClass)!.id,
         }),
       start: (id) => {

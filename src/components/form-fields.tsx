@@ -8,6 +8,7 @@ import {
   type HTMLAttributes,
 } from 'react';
 import { Switch } from './ui/switch';
+import { GuideHint, useGuideField } from '../training/GuideFieldContext';
 export function Field({
   label,
   children,
@@ -18,8 +19,9 @@ export function Field({
   hint?: string;
 }) {
   const id = useId();
+  const guide = useGuideField(label);
   return (
-    <label className="field">
+    <label className="field" data-guide-field={guide?.id}>
       <span>{label}</span>
       {Children.map(children, (child) => {
         if (!isValidElement(child) || !['input', 'select', 'textarea'].includes(String(child.type)))
@@ -33,6 +35,7 @@ export function Field({
             undefined,
         });
       })}
+      {guide && <GuideHint id={guide.id} />}
       {hint && <small id={`${id}-hint`}>{hint}</small>}
     </label>
   );
@@ -47,10 +50,12 @@ export function ToggleField({
   onChange: (value: boolean) => void;
 }) {
   const id = useId();
+  const guide = useGuideField(label);
   return (
-    <label className="toggle-field">
+    <label className="toggle-field" data-guide-field={guide?.id}>
       <span>{label}</span>
       <Switch id={id} name={id} checked={value} onCheckedChange={onChange} aria-label={label} />
+      {guide && <GuideHint id={guide.id} />}
     </label>
   );
 }

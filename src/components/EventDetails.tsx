@@ -13,6 +13,12 @@ export function EventDetails({ event, onOpen }: { event: SecurityEvent; onOpen?:
     [explanation, setExplanation] = useState('');
   return (
     <>
+      {s.consoleLab1?.namespace === event.namespace && s.consoleLab1.guideStep === 'inspect' && (
+        <p className="guide-save-note" aria-label="이벤트 확인 가이드">
+          <b>⑥ 차단 이벤트 확인</b> · Information에서 Support ID <code>{event.id}</code>와 signature
+          / action을 확인하세요. 아래 Request와 JSON 탭에서 같은 요청의 상세 정보를 볼 수 있습니다.
+        </p>
+      )}
       <div className="event-detail-tabs" role="tablist" aria-label="Event detail view">
         {tabs.map((tab) => (
           <button
@@ -99,7 +105,9 @@ export function EventDetails({ event, onOpen }: { event: SecurityEvent; onOpen?:
         )}
       </div>
       {detailTab === 'Information' && event.catalogMatch && <CatalogTestLog event={event} />}
-      {detailTab==='Information'&&!event.catalogMatch&&event.evaluationTrace&&<pre className="event-json">{event.evaluationTrace.join('\n')}</pre>}
+      {detailTab === 'Information' && !event.catalogMatch && event.evaluationTrace && (
+        <pre className="event-json">{event.evaluationTrace.join('\n')}</pre>
+      )}
       <div className="form-footer">
         <Button
           variant="outline"

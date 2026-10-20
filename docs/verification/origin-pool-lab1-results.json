@@ -1,0 +1,63 @@
+{
+  "reference": "https://clouddocs.f5.com/training/community/f5xc/html/class1/lab1.html",
+  "referenceImages": [
+    "lab1-0023.png",
+    "lab1-0033.png",
+    "lab1-0043.png",
+    "lab1-0053.png",
+    "lab1-0063.png"
+  ],
+  "additionalReference": "User-provided actual Origin Servers screenshot codex-clipboard-35f07641-d1e1-4559-a32d-4e9c575a1cf2.png",
+  "scope": "Origin Pools console list, View/Edit, Origin Server nested draft, existing local health-check configuration",
+  "automated": {
+    "command": "npm run test",
+    "files": 19,
+    "passed": 215,
+    "addedOriginTests": 3,
+    "mutation": {
+      "condition": "Origin server search match",
+      "detected": true,
+      "sourceRestored": true,
+      "restoredOriginTests": 12
+    }
+  },
+  "build": {
+    "command": "npm run build",
+    "passed": true,
+    "existingLargeChunkWarning": true
+  },
+  "browser": {
+    "tool": "Chrome DevTools MCP",
+    "url": "http://127.0.0.1:5173/",
+    "passed": [
+      "Manage > Load Balancers > Origin Pools menu navigation",
+      "Empty namespace displays central Add Origin Pool card",
+      "Nested Back discards unapplied DNS changes",
+      "Cancel parent after Apply does not create a pool",
+      "Invalid DNS is rejected before Apply",
+      "Creation appears in console list",
+      "Creation and edits persist after reload",
+      "Manage Configuration opens View before Edit",
+      "DNS and port edits are discarded on Cancel",
+      "Labels and description persist",
+      "Existing origin ID, health and LB references remain intact",
+      "Existing seed pool port restored after verification",
+      "Local health-check draft Apply and Save persist",
+      "Demo pool restored to Lab1 port 80, no health check",
+      "320 x 844 Edit and View: document width 320 and footer bottom 844",
+      "No runtime console errors or warnings after final reload"
+    ]
+  },
+  "limitations": [
+    "One origin server per pool, matching the existing simulator data model",
+    "Health checks are local pool configuration, not shared F5 health-check objects",
+    "Endpoint selection is displayed as Local Endpoints Preferred; no real load balancing or health probes"
+  ],
+  "localEvidenceDirectory": "output/playwright/origin-lab1",
+  "screenshots": [
+    "empty.jpg",
+    "server.jpg",
+    "final.jpg",
+    "mobile-320.jpg"
+  ]
+}

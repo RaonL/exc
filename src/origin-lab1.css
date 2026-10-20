@@ -1,0 +1,428 @@
+/* Official Class1 Lab1 images 002–006 and the user's Origin Servers capture. */
+.origin-pool-page:has(.origin-pool-empty) {
+  min-height: calc(100vh - 125px);
+  display: grid;
+  place-items: center;
+}
+.origin-pool-empty {
+  width: min(560px, calc(100% - 36px));
+  padding: 22px 24px;
+  border: 1px solid #e0e4ee;
+  background: white;
+  border-radius: 4px;
+  text-align: center;
+}
+.origin-pool-empty svg {
+  margin: 0 auto 12px;
+}
+.origin-pool-empty h2 {
+  font-size: 21px;
+  font-weight: 650;
+  margin: 0 0 18px;
+}
+.origin-pool-empty .btn {
+  font-size: 14px;
+  min-height: 34px;
+  padding: 5px 18px;
+}
+.origin-editor {
+  --origin-border: #e0e4ee;
+}
+.origin-editor.origin-parent-obscured {
+  visibility: hidden;
+  pointer-events: none;
+}
+.origin-editor .config-viewbar {
+  height: 46px;
+  min-height: 46px;
+  gap: 20px;
+}
+.origin-editor .config-view-tabs {
+  height: 32px;
+}
+.origin-editor .config-view-tabs button {
+  font-size: 14px;
+  padding: 0 20px;
+}
+.origin-editor .config-find input {
+  font-size: 14px;
+  width: 230px;
+}
+.origin-editor .config-find {
+  margin-left: 0;
+}
+.origin-editor .advanced-toggle {
+  display: none;
+}
+.origin-editor[data-mode='new'] .config-resource > small {
+  display: none;
+}
+.origin-editor .config-reset-all {
+  font-size: 13px;
+}
+.origin-editor .config-layout {
+  grid-template-columns: 330px minmax(0, 1fr);
+}
+.origin-editor .config-navigation {
+  padding: 20px 14px 16px 12px;
+}
+.origin-editor .config-resource {
+  padding: 8px 16px 18px;
+  min-height: 76px;
+}
+.origin-editor .config-resource > .badge {
+  margin-left: -16px;
+  padding: 4px 19px;
+  font-size: 12px;
+  background: #ffc400;
+}
+.origin-editor .config-resource > strong {
+  font-size: 15px;
+  margin-top: 10px;
+}
+.origin-editor .config-resource > small {
+  font-size: 16px;
+}
+.origin-editor .config-navigation nav {
+  padding: 7px 16px 15px;
+}
+.origin-editor .config-navigation nav button {
+  font-size: 14px;
+  min-height: 31px;
+  padding: 5px 13px;
+}
+.origin-editor .config-main {
+  padding: 20px 36px 30px 48px;
+}
+.origin-editor .config-section {
+  padding: 20px;
+  margin-bottom: 16px;
+}
+.origin-editor .config-section-heading {
+  margin-bottom: 22px;
+}
+.origin-editor .config-section-heading h2 {
+  font-size: 18px;
+  font-weight: 650;
+}
+.origin-editor .field {
+  position: relative;
+  margin-bottom: 23px;
+}
+.origin-editor .field > span {
+  font-size: 12px;
+  font-weight: 650;
+}
+.origin-editor .field > span:after {
+  content: ' ⓘ' / '';
+  color: #96a3b9;
+  font-weight: 400;
+}
+.origin-editor .field input,
+.origin-editor .field select,
+.origin-editor .field textarea {
+  min-height: 33px;
+  font-size: 14px;
+  padding: 5px 12px;
+}
+.origin-editor .field textarea {
+  min-height: 33px;
+  height: 33px;
+}
+.origin-editor .config-section-body > .field,
+.origin-editor .form-grid .field,
+.origin-editor .origin-choice {
+  max-width: 440px;
+}
+.origin-editor .config-section-body > .field:has(input[placeholder='Add Label']) {
+  max-width: none;
+}
+.origin-editor .origin-choice .field {
+  max-width: none;
+}
+.origin-choice .field:before {
+  content: '↪' / '';
+  position: absolute;
+  top: 29px;
+  left: 10px;
+  z-index: 1;
+  color: #9ca8bd;
+  pointer-events: none;
+}
+.origin-editor .origin-choice select {
+  padding-left: 32px;
+}
+.origin-editor .origin-dependent-field {
+  position: relative;
+  max-width: 440px;
+  margin: -5px 0 25px 34px;
+  padding: 0;
+  border: 0;
+}
+.origin-editor .origin-dependent-field:before {
+  content: '';
+  position: absolute;
+  left: -20px;
+  top: -24px;
+  height: 52px;
+  width: 17px;
+  border-left: 1px solid #cdd5e6;
+  border-bottom: 1px solid #cdd5e6;
+  border-bottom-left-radius: 4px;
+}
+.origin-editor .origin-dependent-field .field {
+  margin-bottom: 0;
+}
+.origin-editor .origin-server-list {
+  padding: 0 0 18px;
+  border: 1px solid var(--origin-border);
+  border-radius: 4px;
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+.origin-editor .origin-server-list > strong {
+  display: block;
+  font-size: 16px;
+  font-weight: 400;
+  padding: 18px 22px 8px;
+}
+.origin-editor .origin-server-list > strong:after {
+  content: ' ⓘ';
+  color: #98a5bb;
+}
+.origin-editor .origin-server-list > p {
+  font-size: 14px;
+  padding: 18px 12px 2px;
+}
+.origin-editor .origin-server-list > .btn,
+.origin-editor .origin-health-list > .btn {
+  display: flex;
+  margin: 14px auto 0;
+  font-size: 14px;
+  min-height: 33px;
+  min-width: 145px;
+  padding: 5px 18px;
+}
+.origin-editor .origin-items-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 20px;
+  color: #98a0b0;
+  font-size: 14px;
+}
+.origin-editor .origin-items-toolbar label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  border: 1px solid #a9b1c0;
+  border-radius: 4px;
+  padding: 0 10px;
+}
+.origin-editor .origin-items-toolbar input {
+  border: 0;
+  min-width: 0;
+  width: 170px;
+  min-height: 32px;
+  padding: 4px 0;
+}
+.origin-editor .origin-server-list table {
+  table-layout: fixed;
+  min-width: 780px;
+  font-size: 14px;
+  width: 100%;
+}
+.origin-editor .origin-server-list th {
+  background: #f6f7fa;
+  font-size: 12px;
+  font-weight: 650;
+}
+.origin-editor .origin-server-list :is(th, td) {
+  padding: 14px 20px;
+  text-align: left;
+}
+.origin-editor .origin-server-list th:first-child {
+  width: 16%;
+}
+.origin-editor .origin-server-list th:nth-child(2) {
+  width: 25%;
+}
+.origin-editor .origin-server-list th:last-child {
+  width: 100px;
+}
+.origin-editor .origin-server-list td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.origin-editor .origin-server-list td:last-child {
+  overflow: visible;
+}
+.origin-editor :is(.origin-server-list, .origin-health-list) td button {
+  display: inline-flex;
+  padding: 4px;
+  color: #98a4b7;
+}
+.origin-editor :is(.origin-server-list, .origin-health-list) td button:hover {
+  color: #5269ff;
+  background: #f2f4ff;
+}
+.origin-editor .origin-health-list {
+  border: 1px solid var(--origin-border);
+  border-radius: 3px;
+  padding-bottom: 16px;
+  overflow-x: auto;
+}
+.origin-editor .xc-read-table {
+  overflow-x: auto;
+}
+.origin-editor .xc-read-table table {
+  min-width: 650px;
+}
+.origin-health-list table {
+  min-width: 470px;
+  width: 100%;
+  font-size: 14px;
+}
+.origin-health-list th {
+  background: #f6f7fa;
+  color: #748199;
+  font-size: 12px;
+}
+.origin-health-list :is(th, td) {
+  padding: 14px 20px;
+}
+.origin-health-list td[colspan] {
+  text-align: center;
+}
+.origin-health-list small {
+  display: block;
+  text-align: center;
+  color: #748199;
+  font-size: 11px;
+  margin: 12px 8px 0;
+}
+.origin-editor .origin-other-settings summary {
+  list-style: none;
+  font-size: 14px;
+  cursor: pointer;
+}
+.origin-other-settings summary span {
+  color: #5269ff;
+}
+.origin-editor .config-footer {
+  min-height: 56px;
+  padding: 9px 20px;
+}
+.origin-editor .config-footer .btn {
+  font-size: 14px;
+  min-height: 34px;
+}
+.origin-editor .config-footer:has(button:nth-of-type(3)) .btn:nth-of-type(2) {
+  margin-right: auto;
+}
+.origin-server-editor .config-resource-trail,
+.origin-health-editor .config-resource-trail {
+  display: block;
+  font-size: 13px;
+}
+.origin-server-editor .config-section-body > .field {
+  max-width: 440px;
+}
+.origin-server-editor .config-resource-trail + nav {
+  border: 0;
+}
+.origin-editor :focus-visible {
+  outline: 2px solid #5269ff;
+  outline-offset: 2px;
+}
+@media (max-width: 1100px) {
+  .origin-editor .config-layout {
+    grid-template-columns: 250px minmax(0, 1fr);
+  }
+  .origin-editor .config-main {
+    padding: 20px;
+  }
+  .origin-editor .config-find input {
+    width: 150px;
+  }
+}
+@media (max-width: 650px) {
+  .origin-editor .config-viewbar {
+    height: auto;
+    min-height: 46px;
+    flex-wrap: wrap;
+    padding: 7px;
+    gap: 8px;
+  }
+  .origin-editor .config-find {
+    margin-left: 0;
+    flex: 1;
+    min-width: 0;
+  }
+  .origin-editor .config-find input {
+    width: 100%;
+  }
+  .origin-editor .config-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    overflow: hidden;
+  }
+  .origin-editor .config-resource,
+  .origin-editor .config-navigation > a {
+    display: none;
+  }
+  .origin-editor .config-navigation {
+    padding: 0;
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .origin-editor .config-navigation nav {
+    display: flex;
+    overflow-x: auto;
+    padding: 5px;
+  }
+  .origin-editor .config-navigation nav button {
+    flex-shrink: 0;
+  }
+  .origin-editor .config-main {
+    padding: 12px;
+    grid-column: 1;
+    grid-row: 2;
+    min-width: 0;
+    min-height: 0;
+    overflow: auto;
+  }
+  .origin-editor .config-section {
+    padding: 14px;
+  }
+  .origin-editor .origin-dependent-field {
+    margin-left: 20px;
+  }
+  .origin-editor .origin-items-toolbar {
+    align-items: stretch;
+    padding: 10px;
+    flex-direction: column;
+  }
+  .origin-editor .origin-items-toolbar input {
+    width: 100%;
+  }
+  .origin-editor .config-footer {
+    padding: 8px;
+    gap: 7px;
+    flex-wrap: wrap;
+    grid-column: 1;
+    grid-row: 3;
+    position: static;
+  }
+  .origin-editor .xc-read-row {
+    flex-wrap: wrap;
+    overflow-wrap: anywhere;
+  }
+  .origin-editor .config-footer .btn {
+    font-size: 12px;
+    padding: 7px 10px;
+  }
+}

@@ -1,8 +1,9 @@
-import { useId, type Dispatch, type SetStateAction } from 'react';
-import { ShieldCheck } from 'lucide-react';
+import { useId, useState, type Dispatch, type SetStateAction } from 'react';
+import { ShieldCheck, Search, Pencil, Trash2, CirclePlus } from 'lucide-react';
 import type { LB, LBConfig, Origin } from '../types';
 import { Field, ToggleField } from './form-fields';
 import { Button } from './ui/button';
+import { GuideHint } from '../training/GuideFieldContext';
 export type LBFieldsProps = {
   form: LB;
   config: LBConfig;
@@ -54,13 +55,26 @@ export function DomainFields({
   setDomains,
 }: LBFieldsProps & { domains: string[]; setDomains: Dispatch<SetStateAction<string[]>> }) {
   const id = useId();
+  const [query, setQuery] = useState('');
   return (
     <>
-      <div className="reference-items lb-domains">
+      <div className="reference-items lb-domains" data-guide-field="lb-domain">
         <strong>Domains *</strong>
-        <small>
-          {domains.length} item{domains.length === 1 ? '' : 's'}
-        </small>
+        <GuideHint id="lb-domain" />
+        <div className="lb-items-toolbar">
+          <small>
+            {domains.length} item{domains.length === 1 ? '' : 's'}
+          </small>
+          <label className="lb-items-search">
+            <Search size={15} />
+            <input
+              aria-label="Search domains"
+              placeholder="Search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+          </label>
+        </div>
         <div className="lb-table-scroll" role="region" aria-label="Domains table" tabIndex={0}>
           <table>
             <thead>
@@ -72,14 +86,14 @@ export function DomainFields({
             </thead>
             <tbody>
               {domains.map((domain, index) => (
-                <tr key={index}>
+                <tr key={index} hidden={!domain.toLowerCase().includes(query.toLowerCase())}>
                   <td>{index + 1}</td>
                   <td>
                     <input
                       id={`${id}-domain-${index}`}
                       name={`domain-${index}`}
                       aria-label={`Domain ${index + 1}`}
-                      required
+                      required={domain.toLowerCase().includes(query.toLowerCase())}
                       value={domain}
                       placeholder="class1-lab1.lab-sec.f5demos.com"
                       onChange={(event) => {
@@ -97,7 +111,7 @@ export function DomainFields({
                       disabled={domains.length === 1}
                       onClick={() => setDomains(domains.filter((_, i) => i !== index))}
                     >
-                      Remove
+                      <Trash2 size={16} />
                     </button>
                   </td>
                 </tr>
@@ -109,9 +123,12 @@ export function DomainFields({
           type="button"
           variant="outline"
           aria-label="Add domain"
-          onClick={() => setDomains([...domains, ''])}
+          onClick={() => {
+            setQuery('');
+            setDomains([...domains, '']);
+          }}
         >
-          + Add Item
+          <CirclePlus size={16} /> Add Item
         </Button>
       </div>
       <div className="form-grid">
@@ -132,7 +149,7 @@ export function DomainFields({
         </Field>
       </div>
       <div className="lb-type-settings">
-        <label className="reference-checkbox">
+        <label className="reference-checkbox" data-guide-field="lb-dns">
           <input
             id={`${id}-dns`}
             name="manage-dns"
@@ -141,6 +158,7 @@ export function DomainFields({
             onChange={(e) => setting('manageDns', e.target.checked)}
           />
           Automatically Manage DNS Records
+          <GuideHint id="lb-dns" />
         </label>
         {form.protocol === 'HTTP' && (
           <Field label="HTTP Listen Port Choice *">
@@ -228,8 +246,9 @@ export function OriginPoolFields({
 }) {
   return (
     <>
-      <div className="reference-items lb-origins">
+      <div className="reference-items lb-origins" data-guide-field="lb-origin">
         <strong>Origin Pools</strong>
+        <GuideHint id="lb-origin" />
         {form.originId ? (
           <div
             className="lb-table-scroll"
@@ -240,29 +259,41 @@ export function OriginPoolFields({
             <table>
               <thead>
                 <tr>
-                  <th>Origin Pool</th>
+                  <th>Type</th>
+                  <th>Name</th>
                   <th>Weight</th>
                   <th>Priority</th>
+                  <th>Endpoint Subsets</th>
                   <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
+                  <td>Origin Pool</td>
                   <td>
                     {namespace}/{origins.find((o) => o.id === form.originId)?.name}
                   </td>
                   <td>{config.originWeight ?? 1}</td>
                   <td>{config.originPriority ?? 1}</td>
+                  <td>—</td>
                   <td>
-                    <button type="button" className="resource-link" onClick={() => onEdit()}>
-                      Edit
+                    <button
+                      type="button"
+                      aria-label="Edit origin pool connection"
+                      title="Edit origin pool connection"
+                      className="resource-link"
+                      onClick={() => onEdit()}
+                    >
+                      <Pencil size={16} />
                     </button>{' '}
                     <button
                       type="button"
                       className="resource-link"
+                      aria-label="Remove origin pool connection"
+                      title="Remove origin pool connection"
                       onClick={() => update('originId', '')}
                     >
-                      Remove
+                      <Trash2 size={16} />
                     </button>
                   </td>
                 </tr>

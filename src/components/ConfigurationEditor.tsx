@@ -15,6 +15,14 @@ import {
 import { Button } from './ui/button';
 import { Badge, download } from './common';
 import { ConfigurationReadView } from './ConfigurationReadView';
+import { useConsole } from '../store';
+import { guideFields, type GuideField, type GuideStep } from '../training/console-guide';
+import { GuideFieldContext } from '../training/GuideFieldContext';
+import { ConsoleGuidePanel } from '../training/ConsoleGuidePanel';
+import { effectiveEnvironment, useTraining } from '../training/store';
+import { labById } from '../training/catalog';
+import { resourceGuideFields } from '../training/lab-guide';
+import { LabGuidePanel } from '../training/LabGuidePanel';
 export interface ConfigSection {
   id: string;
   title: string;
@@ -40,6 +48,8 @@ export function ConfigurationEditor({
   collapsible = false,
   className = '',
   resourceContext,
+  onCancelAll,
+  toolbarActions,
 }: {
   kind: string;
   name: string;
@@ -58,14 +68,56 @@ export function ConfigurationEditor({
   collapsible?: boolean;
   className?: string;
   resourceContext?: { title: string; trail: string[] };
+  onCancelAll?: () => void;
+  toolbarActions?: ReactNode;
 }) {
   const editorId = useId();
-  const consoleForm = kind === 'HTTP Load Balancer' || kind === 'App Firewall';
+  const consoleForm = [
+    'HTTP Load Balancer',
+    'App Firewall',
+    'Origin Pool',
+    'Origin Server',
+    'Health Check',
+  ].includes(kind);
   const [view, setView] = useState('Form');
   const [active, setActive] = useState(sections[0].id);
   const [query, setQuery] = useState('');
   const [advanced, setAdvanced] = useState(false);
   const [collapsed, setCollapsed] = useState<string[]>([]);
+  const [guideFocus, setGuideFocus] = useState('');
+  const consoleState = useConsole();
+  const class1Guided =
+    !!consoleState.consoleLab1 &&
+    consoleState.consoleLab1.namespace === namespace &&
+    [
+      'Origin Pool',
+      'Origin Server',
+      'HTTP Load Balancer',
+      'Origin Pool with Weight and Priority',
+    ].includes(kind);
+  const guideStep: GuideStep =
+    kind === 'Origin Pool' || kind === 'Origin Server'
+      ? 'origin'
+      : kind === 'HTTP Load Balancer' && consoleState.consoleLab1?.guideStep === 'waf'
+        ? 'waf'
+        : 'lb';
+  const training = useTraining();
+  const activeSession = Object.entries(training.sessions).find(
+    ([id, session]) => id !== 'c1-lab1' && session.environment.lb.namespace === namespace,
+  );
+  const activeLab = activeSession ? labById(activeSession[0]) : undefined;
+  const activeEnvironment = activeSession ? effectiveEnvironment(activeSession[1]) : undefined;
+  const otherHints =
+    activeLab && activeEnvironment
+      ? resourceGuideFields(activeLab, activeEnvironment, kind, value)
+      : [];
+  const guided = class1Guided || otherHints.length > 0;
+  const hints = class1Guided ? guideFields(kind, value, consoleState, guideStep) : otherHints;
+  const currentHint =
+    hints.find((field) => field.id === guideFocus)?.id ??
+    hints.find((field) => !field.pass)?.id ??
+    hints[0]?.id ??
+    '';
   const body = useRef<HTMLDivElement>(null);
   const jump = (id: string) => {
     setView('Form');
@@ -78,6 +130,19 @@ export function ConfigurationEditor({
         ?.scrollIntoView({ block: 'start', behavior: 'instant' }),
     );
   };
+  const locateGuideField = (field: GuideField) => {
+    setGuideFocus(field.id);
+    if (field.section) jump(field.section);
+    requestAnimationFrame(() => {
+      const target = body.current?.querySelector<HTMLElement>(`[data-guide-field="${field.id}"]`);
+      target?.scrollIntoView({ block: 'center', behavior: 'instant' });
+      target
+        ?.querySelector<HTMLElement>(
+          'input:not([hidden]):not([aria-label^="Search"]),select:not([hidden]),textarea,button',
+        )
+        ?.focus({ preventScroll: true });
+    });
+  };
   return (
     <Dialog.Root open onOpenChange={close}>
       <Dialog.Portal>
@@ -88,7 +153,7 @@ export function ConfigurationEditor({
               event.preventDefault();
           }}
           data-mode={readOnly ? 'view' : name ? 'edit' : 'new'}
-          className={`config-editor ${['HTTP Load Balancer', 'Origin Pool', 'Origin Server', 'Origin Pool with Weight and Priority', 'App Firewall', 'Simple WAF Exclusion Rule', 'WAF Exclusion Rules'].includes(kind) ? 'reference-editor' : ''} ${className}`}
+          className={`config-editor ${['HTTP Load Balancer', 'Origin Pool', 'Origin Server', 'Health Check', 'Origin Pool with Weight and Priority', 'App Firewall', 'Simple WAF Exclusion Rule', 'WAF Exclusion Rules'].includes(kind) ? 'reference-editor' : ''} ${className}`}
           aria-describedby={`${editorId}-description`}
         >
           <header className="config-header">
@@ -162,6 +227,7 @@ export function ConfigurationEditor({
                 <RotateCcw size={13} /> Reset All Fields
               </button>
             )}
+            {!readOnly && toolbarActions}
             <label className="config-find">
               <Search size={13} />
               <input
@@ -189,214 +255,259 @@ export function ConfigurationEditor({
               </button>
             )}
           </div>
-          <form
-            onSubmit={onSave}
-            className={`config-layout ${advanced ? 'show-advanced' : ''}`}
-            onInvalidCapture={(event) => {
-              const section = (event.target as HTMLElement).closest<HTMLElement>('[data-section]');
-              if (section?.dataset.section) {
-                setCollapsed((items) => items.filter((id) => id !== section.dataset.section));
-                if ((event.target as HTMLElement).closest('[hidden]')) {
-                  event.preventDefault();
-                  const control = event.target as HTMLInputElement;
-                  requestAnimationFrame(() => {
-                    control.focus();
-                    control.reportValidity();
-                  });
+          <GuideFieldContext.Provider value={{ fields: hints, current: currentHint }}>
+            <form
+              onSubmit={onSave}
+              className={`config-layout ${advanced ? 'show-advanced' : ''} ${guided ? 'with-console-guide' : ''}`}
+              onInvalidCapture={(event) => {
+                const section = (event.target as HTMLElement).closest<HTMLElement>(
+                  '[data-section]',
+                );
+                if (section?.dataset.section) {
+                  setCollapsed((items) => items.filter((id) => id !== section.dataset.section));
+                  if ((event.target as HTMLElement).closest('[hidden]')) {
+                    event.preventDefault();
+                    const control = event.target as HTMLInputElement;
+                    requestAnimationFrame(() => {
+                      control.focus();
+                      control.reportValidity();
+                    });
+                  }
                 }
-              }
-            }}
-          >
-            <aside className="config-navigation">
-              <div className="config-resource">
-                <Badge tone={readOnly ? 'blue' : 'amber'}>
-                  {readOnly ? 'View' : name ? 'Edit' : 'New'}
-                </Badge>
-                <strong>{resourceContext?.title ?? kind}</strong>
-                <small>{name || 'New configuration'}</small>
-                {consoleForm && (
-                  <span className="editor-namespace">
-                    Namespace <strong>{namespace}</strong>
-                  </span>
-                )}
-                {resourceContext && (
-                  <ol className="config-resource-trail" aria-label="Parent configuration path">
-                    {resourceContext.trail.map((item) => (
-                      <li key={item}>{item}</li>
-                    ))}
-                  </ol>
-                )}
-              </div>
-              <nav aria-label="Configuration sections">
-                {sections
-                  .filter((section) => section.title.toLowerCase().includes(query.toLowerCase()))
-                  .map((section) => (
-                    <button
-                      type="button"
-                      className={active === section.id ? 'active' : ''}
-                      aria-current={active === section.id ? 'location' : undefined}
-                      onClick={() => jump(section.id)}
-                      key={section.id}
-                    >
-                      {section.title}
-                    </button>
-                  ))}
-              </nav>
-              <a href={guide} target="_blank" rel="noreferrer">
-                <BookOpen size={14} />
-                Official F5 guide ↗
-              </a>
-            </aside>
-            <div
-              className="config-main"
-              ref={body}
-              role="tabpanel"
-              id={`${editorId}-panel`}
-              aria-labelledby={`${editorId}-tab-${view}`}
+              }}
             >
-              {view === 'Form' && (
-                <fieldset disabled={readOnly}>
+              <aside className="config-navigation">
+                <div className="config-resource">
+                  <Badge tone={readOnly ? 'blue' : 'amber'}>
+                    {readOnly ? 'View' : name ? 'Edit' : 'New'}
+                  </Badge>
+                  <strong>{resourceContext?.title ?? kind}</strong>
+                  <small>{name || 'New configuration'}</small>
+                  {consoleForm && (
+                    <span className="editor-namespace">
+                      Namespace <strong>{namespace}</strong>
+                    </span>
+                  )}
+                  {resourceContext && (
+                    <ol className="config-resource-trail" aria-label="Parent configuration path">
+                      {resourceContext.trail.map((item, index) => (
+                        <li key={`${index}-${item}`}>{item}</li>
+                      ))}
+                    </ol>
+                  )}
+                </div>
+                <nav aria-label="Configuration sections">
                   {sections
                     .filter((section) => section.title.toLowerCase().includes(query.toLowerCase()))
                     .map((section) => (
-                      <section
-                        className="config-section"
-                        data-section={section.id}
+                      <button
+                        type="button"
+                        className={active === section.id ? 'active' : ''}
+                        aria-current={active === section.id ? 'location' : undefined}
+                        onClick={() => jump(section.id)}
                         key={section.id}
                       >
-                        <div className="config-section-heading">
-                          <h2>{section.title}</h2>
-                          <HelpCircle size={13} />
-                          <div className="config-section-actions">
-                            {section.onReset && !readOnly && (
-                              <button
-                                type="button"
-                                aria-label={`Reset ${section.title}`}
-                                title="Restore this section's opened values"
-                                onClick={section.onReset}
-                              >
-                                <RotateCcw size={12} /> Reset All Fields
-                              </button>
+                        {section.title}
+                      </button>
+                    ))}
+                </nav>
+                <a href={guide} target="_blank" rel="noreferrer">
+                  <BookOpen size={14} />
+                  Official F5 guide ↗
+                </a>
+              </aside>
+              <div
+                className="config-main"
+                ref={body}
+                role="tabpanel"
+                id={`${editorId}-panel`}
+                aria-labelledby={`${editorId}-tab-${view}`}
+              >
+                {view === 'Form' && (
+                  <fieldset disabled={readOnly}>
+                    {sections
+                      .filter((section) =>
+                        section.title.toLowerCase().includes(query.toLowerCase()),
+                      )
+                      .map((section) => (
+                        <section
+                          className="config-section"
+                          data-section={section.id}
+                          key={section.id}
+                        >
+                          <div className="config-section-heading">
+                            <h2>{section.title}</h2>
+                            <HelpCircle size={13} />
+                            <div className="config-section-actions">
+                              {section.onReset && !readOnly && (
+                                <button
+                                  type="button"
+                                  aria-label={`Reset ${section.title}`}
+                                  title="Restore this section's opened values"
+                                  onClick={section.onReset}
+                                >
+                                  <RotateCcw size={12} /> Reset All Fields
+                                </button>
+                              )}
+                              {collapsible && (
+                                <button
+                                  type="button"
+                                  aria-label={`${collapsed.includes(section.id) ? 'Expand' : 'Collapse'} ${section.title}`}
+                                  aria-expanded={!collapsed.includes(section.id)}
+                                  aria-controls={`${editorId}-section-${section.id}`}
+                                  onClick={() =>
+                                    setCollapsed((items) =>
+                                      items.includes(section.id)
+                                        ? items.filter((id) => id !== section.id)
+                                        : [...items, section.id],
+                                    )
+                                  }
+                                >
+                                  <ChevronUp
+                                    size={15}
+                                    className={collapsed.includes(section.id) ? 'is-collapsed' : ''}
+                                  />
+                                </button>
+                              )}
+                            </div>
+                          </div>
+                          <div
+                            className="config-section-body"
+                            id={`${editorId}-section-${section.id}`}
+                            hidden={collapsed.includes(section.id)}
+                          >
+                            {section.description && (
+                              <p className="config-section-description">{section.description}</p>
                             )}
-                            {collapsible && (
-                              <button
-                                type="button"
-                                aria-label={`${collapsed.includes(section.id) ? 'Expand' : 'Collapse'} ${section.title}`}
-                                aria-expanded={!collapsed.includes(section.id)}
-                                aria-controls={`${editorId}-section-${section.id}`}
-                                onClick={() =>
-                                  setCollapsed((items) =>
-                                    items.includes(section.id)
-                                      ? items.filter((id) => id !== section.id)
-                                      : [...items, section.id],
-                                  )
-                                }
-                              >
-                                <ChevronUp
-                                  size={15}
-                                  className={collapsed.includes(section.id) ? 'is-collapsed' : ''}
-                                />
-                              </button>
+                            {readOnly ? (
+                              <ConfigurationReadView
+                                kind={kind}
+                                id={section.id}
+                                value={value}
+                                fallback={section.content}
+                              />
+                            ) : (
+                              section.content
                             )}
                           </div>
-                        </div>
-                        <div
-                          className="config-section-body"
-                          id={`${editorId}-section-${section.id}`}
-                          hidden={collapsed.includes(section.id)}
-                        >
-                          {section.description && (
-                            <p className="config-section-description">{section.description}</p>
-                          )}
-                          {readOnly ? (
-                            <ConfigurationReadView
-                              kind={kind}
-                              id={section.id}
-                              value={value}
-                              fallback={section.content}
-                            />
-                          ) : (
-                            section.content
-                          )}
-                        </div>
-                      </section>
-                    ))}
-                </fieldset>
-              )}
-              {view === 'JSON' && (
-                <div className="config-json">
-                  <div>
-                    <h2>Configuration JSON</h2>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() =>
-                        download(
-                          `${name || 'resource'}-configuration.json`,
-                          JSON.stringify(value, null, 2),
-                        )
-                      }
-                    >
-                      Download JSON
-                    </Button>
+                        </section>
+                      ))}
+                  </fieldset>
+                )}
+                {view === 'JSON' && (
+                  <div className="config-json">
+                    <div>
+                      <h2>Configuration JSON</h2>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() =>
+                          download(
+                            `${name || 'resource'}-configuration.json`,
+                            JSON.stringify(value, null, 2),
+                          )
+                        }
+                      >
+                        Download JSON
+                      </Button>
+                    </div>
+                    <p>Simulator data model. This is not a payload for the F5 API.</p>
+                    <pre>{JSON.stringify(value, null, 2)}</pre>
                   </div>
-                  <p>Simulator data model. This is not a payload for the F5 API.</p>
-                  <pre>{JSON.stringify(value, null, 2)}</pre>
-                </div>
+                )}
+                {view === 'Documentation' && (
+                  <div className="config-documentation">
+                    <BookOpen size={30} />
+                    <h2>{kind} configuration guide</h2>
+                    <p>
+                      Use the official guide to compare each configuration section with the F5
+                      Distributed Cloud Console. This editor implements a training subset with local
+                      data.
+                    </p>
+                    <a href={guide} target="_blank" rel="noreferrer">
+                      Read official F5 documentation ↗
+                    </a>
+                    <h3>Sections in this simulator</h3>
+                    {sections.map((section) => (
+                      <button type="button" key={section.id} onClick={() => jump(section.id)}>
+                        <Settings2 size={14} />
+                        {section.title}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+              {class1Guided && (
+                <ConsoleGuidePanel
+                  fields={hints}
+                  step={guideStep}
+                  kind={kind}
+                  current={currentHint}
+                  onLocate={locateGuideField}
+                  readOnly={readOnly}
+                />
               )}
-              {view === 'Documentation' && (
-                <div className="config-documentation">
-                  <BookOpen size={30} />
-                  <h2>{kind} configuration guide</h2>
-                  <p>
-                    Use the official guide to compare each configuration section with the F5
-                    Distributed Cloud Console. This editor implements a training subset with local
-                    data.
-                  </p>
-                  <a href={guide} target="_blank" rel="noreferrer">
-                    Read official F5 documentation ↗
-                  </a>
-                  <h3>Sections in this simulator</h3>
-                  {sections.map((section) => (
-                    <button type="button" key={section.id} onClick={() => jump(section.id)}>
-                      <Settings2 size={14} />
-                      {section.title}
-                    </button>
-                  ))}
-                </div>
+              {!class1Guided && otherHints.length > 0 && activeLab && activeEnvironment && (
+                <LabGuidePanel
+                  lab={activeLab}
+                  fields={hints}
+                  current={currentHint}
+                  onLocate={locateGuideField}
+                  readOnly={readOnly}
+                  inEditor
+                  saved={
+                    ['HTTP Load Balancer', 'App Firewall', 'Origin Pool'].includes(kind) &&
+                    resourceGuideFields(
+                      activeLab,
+                      activeEnvironment,
+                      kind,
+                      kind === 'HTTP Load Balancer'
+                        ? activeEnvironment.lb
+                        : kind === 'App Firewall'
+                          ? activeEnvironment.waf
+                          : (activeEnvironment.origins.find((o) => o.name === name) ??
+                            activeEnvironment.origins[0]),
+                    ).every((f) => f.pass)
+                  }
+                />
               )}
-            </div>
-            <footer className="config-footer">
-              {error && (
-                <div role="alert" className="config-error">
-                  {error}
-                </div>
-              )}
-              <span>Changes apply to your local training environment.</span>
-              <Button type="button" variant="outline" onClick={close}>
-                {cancelLabel ?? 'Cancel and Exit'}
-              </Button>
-              {readOnly ? (
-                onEdit && (
-                  <Button
-                    key="edit-configuration"
-                    type="button"
-                    onClick={(event) => {
-                      event.preventDefault();
-                      onEdit?.();
-                    }}
-                  >
-                    Edit Configuration
+              <footer className="config-footer">
+                {error && (
+                  <div role="alert" className="config-error">
+                    {error}
+                  </div>
+                )}
+                <span>Changes apply to your local training environment.</span>
+                {onCancelAll && (
+                  <Button type="button" variant="outline" onClick={onCancelAll}>
+                    Cancel and Exit
                   </Button>
-                )
-              ) : (
-                <Button key="save-configuration" type="submit">
-                  <Save size={14} />
-                  {submitLabel ?? 'Save and Exit'}
+                )}
+                <Button type="button" variant="outline" onClick={close}>
+                  {cancelLabel ?? 'Cancel and Exit'}
                 </Button>
-              )}
-            </footer>
-          </form>
+                {readOnly ? (
+                  onEdit && (
+                    <Button
+                      key="edit-configuration"
+                      type="button"
+                      onClick={(event) => {
+                        event.preventDefault();
+                        onEdit?.();
+                      }}
+                    >
+                      Edit Configuration
+                    </Button>
+                  )
+                ) : (
+                  <Button key="save-configuration" type="submit">
+                    <Save size={14} />
+                    {submitLabel ?? 'Save and Exit'}
+                  </Button>
+                )}
+              </footer>
+            </form>
+          </GuideFieldContext.Provider>
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>

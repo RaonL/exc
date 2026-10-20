@@ -1,0 +1,329 @@
+{
+  "scope": "All 39 existing labs: official Class1–8 (34) plus community Class9 (5). Class1 Lab1 retains its specialized guide; remaining 38 use lab-specific targets and shared guide.",
+  "officialIndex": "https://clouddocs.f5.com/training/community/f5xc/html/",
+  "features": [
+    "Five actionable steps with automatic progress",
+    "Target hints beside editable inputs, readonly checkboxes and locate/focus",
+    "Guide visible inside Origin/LB/WAF and nested resource editors",
+    "Console practice settings/test modal shares existing training controls and engine",
+    "Request presets load method/path/headers/body/repeat without changing policy",
+    "Persisted guide tab and settings; effective console resource state used by guide"
+  ],
+  "automated": {
+    "fullSuite": {
+      "files": 23,
+      "tests": 308,
+      "pass": true
+    },
+    "build": {
+      "pass": true,
+      "warning": "Existing >500 kB main bundle warning; final main 572.89 kB, TrainingCenter stays lazy loaded 70.13 kB."
+    },
+    "mutation": "Inverted actual === expected to !==; tests failed. Exact original bytes restored; 83 targeted tests then full 308 passed."
+  },
+  "browser": {
+    "tool": "Chrome DevTools MCP",
+    "page": 5,
+    "profile": "isolatedContext=origin-lab1",
+    "allRemainingLabScreens": [
+      {
+        "class": 1,
+        "unit": "LAB2 Private Endpoint via Regional Edges",
+        "cards": true,
+        "guide": true,
+        "checks": 8
+      },
+      {
+        "class": 1,
+        "unit": "LAB3 Protecting a Private Endpoint",
+        "cards": true,
+        "guide": true,
+        "checks": 8
+      },
+      {
+        "class": 1,
+        "unit": "LAB4 Security Analytics",
+        "cards": true,
+        "guide": true,
+        "checks": 8
+      },
+      {
+        "class": 2,
+        "unit": "LAB1 Web Application Firewall Configuration",
+        "cards": true,
+        "guide": true,
+        "checks": 8
+      },
+      {
+        "class": 2,
+        "unit": "LAB2 Signature-based Bots & Bot Defense",
+        "cards": true,
+        "guide": true,
+        "checks": 12
+      },
+      {
+        "class": 2,
+        "unit": "LAB3 Malicious Users",
+        "cards": true,
+        "guide": true,
+        "checks": 10
+      },
+      {
+        "class": 2,
+        "unit": "LAB4 Web App Scanning",
+        "cards": true,
+        "guide": true,
+        "checks": 14
+      },
+      {
+        "class": 2,
+        "unit": "LAB5 AI Assistant & Security Operations",
+        "cards": true,
+        "guide": true,
+        "checks": 8
+      },
+      {
+        "class": 3,
+        "unit": "LAB1 Service Policy",
+        "cards": true,
+        "guide": true,
+        "checks": 11
+      },
+      {
+        "class": 3,
+        "unit": "LAB2 Load Balancer Routes",
+        "cards": true,
+        "guide": true,
+        "checks": 14
+      },
+      {
+        "class": 3,
+        "unit": "LAB3 Dashboards & AI Assistant",
+        "cards": true,
+        "guide": true,
+        "checks": 8
+      },
+      {
+        "class": 4,
+        "unit": "LAB1 Load Balancer and Origin",
+        "cards": true,
+        "guide": true,
+        "checks": 8
+      },
+      {
+        "class": 4,
+        "unit": "LAB2 API Inventory",
+        "cards": true,
+        "guide": true,
+        "checks": 9
+      },
+      {
+        "class": 4,
+        "unit": "LAB3 API Protection",
+        "cards": true,
+        "guide": true,
+        "checks": 11
+      },
+      {
+        "class": 4,
+        "unit": "LAB4 Web Application Firewall",
+        "cards": true,
+        "guide": true,
+        "checks": 8
+      },
+      {
+        "class": 4,
+        "unit": "LAB5 Rate Limiting",
+        "cards": true,
+        "guide": true,
+        "checks": 13
+      },
+      {
+        "class": 4,
+        "unit": "LAB6 Security Analytics & Malicious Users",
+        "cards": true,
+        "guide": true,
+        "checks": 10
+      },
+      {
+        "class": 4,
+        "unit": "LAB7 API Discovery / BIG-IP Connector",
+        "cards": true,
+        "guide": true,
+        "checks": 10
+      },
+      {
+        "class": 5,
+        "unit": "LAB1 Load Balancer & Traffic Dashboards",
+        "cards": true,
+        "guide": true,
+        "checks": 11
+      },
+      {
+        "class": 5,
+        "unit": "LAB2 Bot Protection Profile",
+        "cards": true,
+        "guide": true,
+        "checks": 12
+      },
+      {
+        "class": 5,
+        "unit": "LAB3 Human-Simulated Stuffing",
+        "cards": true,
+        "guide": true,
+        "checks": 13
+      },
+      {
+        "class": 5,
+        "unit": "LAB4 Defend Against an Ongoing Attack",
+        "cards": true,
+        "guide": true,
+        "checks": 12
+      },
+      {
+        "class": 6,
+        "unit": "MODULE1 · LAB1 Customer Edge Inspection",
+        "cards": true,
+        "guide": true,
+        "checks": 8
+      },
+      {
+        "class": 6,
+        "unit": "MODULE1 · LAB2 Network Connect & Segments",
+        "cards": true,
+        "guide": true,
+        "checks": 11
+      },
+      {
+        "class": 6,
+        "unit": "MODULE2 · LAB3 Globally Available Frontend",
+        "cards": true,
+        "guide": true,
+        "checks": 9
+      },
+      {
+        "class": 6,
+        "unit": "MODULE2 · LAB4 Solving IP Overlap",
+        "cards": true,
+        "guide": true,
+        "checks": 11
+      },
+      {
+        "class": 7,
+        "unit": "MODULE1 Vibe Coding a Simple Web App",
+        "cards": true,
+        "guide": true,
+        "checks": 8
+      },
+      {
+        "class": 7,
+        "unit": "MODULE2 CI/CD & Basic Runtime Security",
+        "cards": true,
+        "guide": true,
+        "checks": 8
+      },
+      {
+        "class": 7,
+        "unit": "MODULE3 Advanced Runtime Security",
+        "cards": true,
+        "guide": true,
+        "checks": 14
+      },
+      {
+        "class": 7,
+        "unit": "MODULE4 Web App Scanning & Conclusion",
+        "cards": true,
+        "guide": true,
+        "checks": 14
+      },
+      {
+        "class": 8,
+        "unit": "LAB1 Negative Enforcement Policy",
+        "cards": true,
+        "guide": true,
+        "checks": 11
+      },
+      {
+        "class": 8,
+        "unit": "LAB2 Positive Application Security",
+        "cards": true,
+        "guide": true,
+        "checks": 11
+      },
+      {
+        "class": 8,
+        "unit": "LAB3 Zero Day: Rate Limiting & Policy",
+        "cards": true,
+        "guide": true,
+        "checks": 12
+      },
+      {
+        "class": 9,
+        "unit": "LAB1 Publishing & WAF Protection",
+        "cards": true,
+        "guide": true,
+        "checks": 8
+      },
+      {
+        "class": 9,
+        "unit": "LAB2 API Discovery & Endpoint Protection",
+        "cards": true,
+        "guide": true,
+        "checks": 11
+      },
+      {
+        "class": 9,
+        "unit": "LAB3 Service Policies & Rate Limiting",
+        "cards": true,
+        "guide": true,
+        "checks": 12
+      },
+      {
+        "class": 9,
+        "unit": "LAB4 Signature-Based Bot Protection",
+        "cards": true,
+        "guide": true,
+        "checks": 8
+      },
+      {
+        "class": 9,
+        "unit": "LAB5 Bot Defense & Protected Endpoints",
+        "cards": true,
+        "guide": true,
+        "checks": 12
+      }
+    ],
+    "manual": {
+      "class3": "Baseline 200; header policy manually configured; wrong value unchecked, corrected checked; reloaded correct policy and guide tab; 3 samples submitted; verification all PASS.",
+      "rate": "Class4 Lab5: baseline recorded, enabled limiter manually, loaded 4-request example, last response 429; full current verification PASS.",
+      "bot": "Class5 Lab3: manually enabled Bot Defense, Flag and Client Telemetry; ran the 12-repeat human-like-bot preset; current verification PASS including classification transition.",
+      "ce": "Class6 Module1 Lab1: normal online request, manually toggled CE offline ->503, restored online->200; current verification PASS.",
+      "pipeline": "Class7 Module2: manually attached WAF Blocking, Build -> Test -> Deploy via UI, current verification PASS including deployed source/artifact and attack cases.",
+      "negative": "Class8 Lab1: manually set Negative enforcement, Fiji and TOR/Spam block; ran request; verification PASS including normal allow/country and reputation deny.",
+      "wafEditor": "Class2 Lab1: actual App Firewall editor showed guide; Blocking draft checkbox checked while saved-status stayed pending; saved policy. Attached saved WAF through console practice controls, normal/SQLi/XSS verification PASS. Return to console button closed embedded settings and showed actual LB list."
+    },
+    "responsive": {
+      "width": 624,
+      "height": 892,
+      "documentWidth": 624,
+      "guideTop": 0,
+      "guideBottom": 260,
+      "focusedInputTop": 417.375,
+      "focusedField": "control-policyMode"
+    },
+    "errorsAndWarnings": 0
+  },
+  "preservation": "No global data reset, deletion, or remote deployment. Existing session namespaces/resources kept; browser audit prepared independent lab environments.",
+  "limitations": [
+    "Additional policies/bot classification/segments/scans/AI/CI-CD remain existing local models; they are exercised through practice controls and test engine, not real XC services.",
+    "All-lab browser screen coverage is not a claim that every lab's entire manual workflow or pixel fidelity was verified. Representative manual workflows are listed separately.",
+    "Class9 is community supplement, not official F5 Class9."
+  ],
+  "review": {
+    "correctness": "Target checks and effective console data sync covered; unsaved editor draft separated from stored setting checks.",
+    "quality": "Shared guide model and extracted panels/cards reused; no generated targets applied on render or request preset load.",
+    "security": "No external requests or credentials added.",
+    "performance": "TrainingCenter remains dynamically imported; sample/reference targets memoized or cached.",
+    "testing": "All 38 generic guides rendered with actual matching editable controls; browser guide audit, representative runtime scenarios, mutation and full regression."
+  }
+}

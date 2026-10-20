@@ -1,0 +1,450 @@
+/* Class1 Lab1 original captures 009–012 and 030–032. Scoped to the LB form. */
+.lb-editor.lb-parent-obscured {
+  visibility: hidden;
+  pointer-events: none;
+}
+.lb-editor .config-viewbar {
+  min-height: 46px;
+  height: auto;
+  gap: 15px;
+}
+.lb-editor .config-view-tabs {
+  height: 32px;
+}
+.lb-editor .config-view-tabs button {
+  font-size: 14px;
+  padding: 0 20px;
+}
+.lb-editor .config-find {
+  margin-left: 0;
+}
+.lb-editor .config-find input {
+  width: 180px;
+  font-size: 14px;
+}
+.lb-editor .advanced-toggle {
+  font-size: 11px;
+}
+.lb-editor .config-reset-all,
+.lb-editor .config-reset-defaults {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+.config-reset-defaults {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #5263a1;
+  border: 1px solid #a5add3;
+  border-radius: 4px;
+  background: #f4f5ff;
+  padding: 5px 9px;
+}
+.topbar .console-reset-control {
+  display: inline-flex;
+  flex-shrink: 0;
+  min-height: 32px;
+  padding: 5px 10px;
+  font-size: 12px;
+  color: #4f5fa1;
+  border-color: #a5add3;
+  background: #f4f5ff;
+}
+.lb-editor .config-layout {
+  grid-template-columns: 330px minmax(0, 1fr);
+}
+.lb-editor .config-navigation {
+  padding: 20px 14px 16px 12px;
+}
+.lb-editor .config-resource {
+  padding: 8px 16px 18px;
+  min-height: 76px;
+}
+.lb-editor .config-resource > .badge {
+  margin-left: -16px;
+  padding: 4px 19px;
+  font-size: 12px;
+  background: #ffc400;
+}
+.lb-editor[data-mode='view'] .config-resource > .badge {
+  background: #e9e6ff;
+}
+.lb-editor .config-resource > strong {
+  font-size: 15px;
+  margin-top: 10px;
+}
+.lb-editor .config-resource > small {
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+.lb-editor[data-mode='new'] .config-resource > small {
+  display: none;
+}
+.lb-editor .config-navigation nav {
+  padding: 7px 16px 15px;
+}
+.lb-editor .config-navigation nav button {
+  font-size: 14px;
+  min-height: 31px;
+  padding: 5px 13px;
+}
+.lb-editor .config-main {
+  padding: 20px 36px 30px 48px;
+}
+.lb-editor .config-section {
+  padding: 20px;
+  margin-bottom: 16px;
+}
+.lb-editor .config-section-heading {
+  margin-bottom: 22px;
+}
+.lb-editor .config-section-heading h2 {
+  font-size: 18px;
+  font-weight: 650;
+}
+.lb-editor .field {
+  position: relative;
+  margin-bottom: 23px;
+}
+.lb-editor .field > span {
+  font-size: 12px;
+  font-weight: 650;
+}
+.lb-editor .field > span:after {
+  content: ' ⓘ' / '';
+  color: #96a3b9;
+  font-weight: 400;
+}
+.lb-editor .field input,
+.lb-editor .field select,
+.lb-editor .field textarea {
+  min-height: 33px;
+  font-size: 14px;
+  padding: 5px 12px;
+}
+.lb-editor .field textarea {
+  height: 33px;
+  min-height: 33px;
+}
+.lb-editor .form-grid .field,
+.lb-editor .config-section-body > .field {
+  max-width: 440px;
+}
+.lb-editor .config-section-body > .field:has(input[placeholder='Add Label']) {
+  max-width: none;
+}
+.lb-editor .reference-items {
+  padding: 18px 20px;
+  border: 1px solid #e0e4ee;
+  border-radius: 4px;
+}
+.lb-editor .reference-items > strong {
+  display: block;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 18px;
+}
+.lb-editor .reference-items > p {
+  margin: 35px 0 25px;
+  font-size: 14px;
+  color: #9aa5b8;
+}
+.lb-editor .reference-items > .btn {
+  margin: 14px auto 0;
+  min-height: 33px;
+  padding: 5px 24px;
+  font-size: 14px;
+}
+.lb-editor .lb-table-scroll table {
+  font-size: 14px;
+  min-width: 550px;
+}
+.lb-editor .lb-table-scroll th {
+  font-size: 12px;
+  color: #8b94a7;
+  padding: 12px;
+  background: #f7f8fa;
+}
+.lb-editor .lb-table-scroll td {
+  padding: 12px;
+  text-align: left;
+}
+.lb-editor .lb-table-scroll input {
+  max-width: 440px;
+  min-height: 33px;
+  font-size: 14px;
+}
+.lb-editor .lb-table-scroll tr[hidden] {
+  display: none;
+}
+.lb-editor .lb-origins th:first-child {
+  width: auto;
+}
+.lb-editor .lb-origins td:last-child button {
+  display: inline-flex;
+  margin-right: 10px;
+  color: #929bad;
+}
+.lb-editor .lb-table-scroll .resource-link {
+  min-width: 28px;
+  min-height: 28px;
+  justify-content: center;
+}
+.lb-editor .lb-table-scroll .resource-link svg {
+  display: block;
+}
+.lb-editor .lb-table-scroll .resource-link:focus-visible {
+  outline: 2px solid #6272ff;
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+.lb-items-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 0;
+}
+.lb-items-toolbar small {
+  font-size: 13px;
+  color: #929bad;
+}
+.lb-items-search {
+  display: flex;
+  align-items: center;
+  border: 1px solid #b9bfce;
+  border-radius: 4px;
+  padding: 0 8px;
+  color: #a0a8b7;
+  width: 185px;
+}
+.lb-editor .lb-items-search input {
+  border: 0;
+  padding: 6px;
+  min-height: 31px;
+  width: 100%;
+  font-size: 13px;
+}
+.lb-editor .lb-items-search:focus-within {
+  outline: 2px solid #6272ff;
+}
+.lb-editor .lb-items-search input:focus {
+  outline: 0;
+  box-shadow: none;
+}
+.lb-editor .lb-type-settings,
+.lb-editor .lb-waf-selection,
+.lb-editor .lb-exclusion-inline {
+  border-left: 1px solid #d5dbe6;
+  margin-left: 16px;
+  padding-left: 18px;
+}
+.lb-editor .lb-type-settings {
+  max-width: 475px;
+}
+.lb-editor .reference-checkbox {
+  font-size: 12px;
+  margin: 15px 0 24px;
+}
+.lb-editor .lb-waf-selection {
+  max-width: none;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  margin-bottom: 23px;
+}
+.lb-editor .lb-waf-selection > .field {
+  flex: 1;
+  max-width: 440px;
+  margin: 0;
+}
+.lb-waf-inspect {
+  font-size: 12px;
+  margin-top: 22px;
+  white-space: nowrap;
+}
+.lb-origin-reference-actions {
+  display: flex;
+  gap: 20px;
+  margin: -8px 0 24px;
+  font-size: 12px;
+}
+.lb-origin-item .config-resource-trail {
+  display: block;
+  padding: 14px 0 0 10px;
+  color: #78849c;
+  font-size: 12px;
+  line-height: 1.9;
+}
+.lb-editor .lb-exclusion-inline {
+  margin-bottom: 18px;
+  padding: 12px 16px;
+  border: 1px solid #e0e4ee;
+}
+.lb-editor .lb-exclusion-inline .config-subheading {
+  font-size: 12px;
+  margin-bottom: 12px;
+}
+.lb-editor .lb-exclusion-inline .configuration-summary {
+  border: 0;
+  padding: 0;
+  margin-bottom: 10px;
+}
+.lb-editor .lb-exclusion-inline .btn {
+  min-height: 30px;
+  padding: 4px 10px;
+  font-size: 12px;
+  margin-right: 8px;
+}
+.lb-editor .xc-select > button[role='combobox'] {
+  min-height: 33px;
+  font-size: 14px;
+}
+.lb-editor .xc-unmodeled-control {
+  padding: 18px 16px;
+  margin: 16px 0;
+}
+.lb-editor .xc-unmodeled-control h3 {
+  font-size: 12px;
+  font-weight: 650;
+  margin: 0 0 12px;
+}
+.lb-editor .xc-unmodeled-control p,
+.lb-editor .xc-unmodeled-control button {
+  font-size: 12px;
+}
+.lb-editor .xc-unmodeled-control p {
+  margin: 0;
+}
+.lb-editor .config-footer {
+  min-height: 56px;
+  padding: 10px 16px;
+}
+.lb-editor .config-footer .btn {
+  min-height: 34px;
+  font-size: 14px;
+}
+.lb-origin-item .config-footer {
+  display: flex;
+}
+.lb-origin-item .config-footer .config-cancel-all {
+  margin-right: auto;
+}
+.lb-origin-item .config-footer .btn:last-child {
+  margin-left: 0;
+}
+.lb-reset-help {
+  padding: 0 24px 20px;
+  color: #68758d;
+  line-height: 1.7;
+  font-size: 13px;
+}
+@media (max-width: 1250px) {
+  .lb-editor .config-layout {
+    grid-template-columns: 260px minmax(0, 1fr);
+  }
+  .lb-editor .config-main {
+    padding: 20px;
+  }
+  .lb-editor .config-viewbar {
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px 15px;
+  }
+}
+@media (max-width: 700px) {
+  .lb-editor .config-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    min-height: 0;
+  }
+  .lb-editor .config-navigation {
+    grid-column: 1;
+    grid-row: 1;
+    padding: 0;
+    min-width: 0;
+  }
+  .lb-editor .config-navigation .config-resource {
+    padding: 8px 12px;
+    min-height: 0;
+  }
+  .lb-editor .config-resource > strong {
+    margin: 0;
+    font-size: 13px;
+  }
+  .lb-editor .config-navigation nav {
+    padding: 6px;
+  }
+  .lb-editor .config-navigation nav button {
+    font-size: 12px;
+  }
+  .lb-editor .config-main {
+    grid-column: 1;
+    grid-row: 2;
+    min-width: 0;
+    min-height: 0;
+    overflow: auto;
+    padding: 10px;
+  }
+  .lb-editor .config-footer {
+    grid-column: 1;
+    grid-row: 3;
+    position: static;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 8px;
+  }
+  .lb-editor .config-footer .btn {
+    font-size: 12px;
+    min-height: 36px;
+    padding: 5px 10px;
+  }
+  .lb-editor .config-section {
+    padding: 14px;
+  }
+  .lb-editor .config-section-heading h2 {
+    font-size: 16px;
+  }
+  .lb-editor .config-view-tabs button {
+    padding: 0 10px;
+  }
+  .lb-editor .config-find {
+    flex: 1 1 100%;
+  }
+  .lb-editor .config-find input {
+    width: 100%;
+  }
+  .lb-editor .config-viewbar {
+    gap: 9px;
+  }
+  .lb-editor .lb-waf-selection {
+    flex-wrap: wrap;
+    gap: 0;
+  }
+  .lb-editor .lb-waf-selection > .field {
+    flex-basis: 100%;
+  }
+  .lb-waf-inspect {
+    margin-top: 10px;
+  }
+  .lb-editor .lb-table-scroll,
+  .lb-editor .xc-read-table {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+  .lb-items-search {
+    width: 140px;
+  }
+  .lb-editor .lb-type-settings {
+    margin-left: 6px;
+    padding-left: 12px;
+  }
+  .lb-editor .reference-items {
+    padding: 12px;
+  }
+}

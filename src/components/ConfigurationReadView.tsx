@@ -22,7 +22,18 @@ export function ConfigurationReadView({
   fallback: ReactNode;
 }) {
   const s = useConsole();
-  if (id === 'metadata') return row('Name', (value as { name: string }).name);
+  if (id === 'metadata') {
+    const metadata = value as { name: string; config?: { labels?: string; description?: string } };
+    return (
+      <>
+        {row('Name', metadata.name)}
+        {kind === 'Origin Pool' && metadata.config?.labels && row('Labels', metadata.config.labels)}
+        {kind === 'Origin Pool' &&
+          metadata.config?.description &&
+          row('Description', metadata.config.description)}
+      </>
+    );
+  }
   if (kind === 'Origin Pool') {
     const o = value as Origin,
       c = originConfig(o);
@@ -50,7 +61,7 @@ export function ConfigurationReadView({
                       : '—'}
                   </td>
                   <td>{c.type.includes('on Site') ? c.network : '—'}</td>
-                  <td>{c.labels || '—'}</td>
+                  <td>—</td>
                 </tr>
               </tbody>
             </table>
@@ -73,8 +84,35 @@ export function ConfigurationReadView({
           )}
         </>
       );
-    if (id === 'health') return row('Health Check', c.healthCheck);
-    if (id === 'balancing') return row('LoadBalancer Algorithm', c.algorithm);
+    if (id === 'health')
+      return (
+        <div className="origin-health-list">
+          <table>
+            <thead>
+              <tr>
+                <th>Order</th>
+                <th>Health Check object</th>
+              </tr>
+            </thead>
+            <tbody>
+              {c.healthCheck === 'None' ? (
+                <tr>
+                  <td colSpan={2}>No health checks configured</td>
+                </tr>
+              ) : (
+                <tr>
+                  <td>1</td>
+                  <td>
+                    {c.healthCheck}
+                    {c.healthCheck === 'HTTP' ? ` · ${c.healthPath}` : ''}
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      );
+    if (id === 'balancing') return row('Other Settings', 'Not configured');
   }
   if (kind === 'HTTP Load Balancer') {
     const l = value as LB,

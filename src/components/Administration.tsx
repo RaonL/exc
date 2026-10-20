@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react';
-import { Plus, Pencil, RotateCcw, Save, Building2, Layers, Users, ShieldCheck } from 'lucide-react';
+import { Plus, Pencil, Save, Building2, Layers, Users, ShieldCheck } from 'lucide-react';
 import { useConsole } from '../store';
 import type { User } from '../types';
 import {
@@ -13,7 +13,7 @@ import {
   time,
 } from './common';
 import { Button } from './ui/button';
-import { Dialog } from './ui/dialog';
+import { DemoResetControl } from './DemoResetControl';
 import { Field, ResourceForm } from './forms';
 export function ActivityPage({ audit = false }: { audit?: boolean }) {
   const s = useConsole();
@@ -94,7 +94,6 @@ export function Administration({
   const s = useConsole();
   const [form, setForm] = useState<User | 'new-user' | 'namespace' | null>(null);
   const [settings, setSettings] = useState(s.settings);
-  const [confirm, setConfirm] = useState(false);
   const [search, setSearch] = useState('');
   const saveSettings = (e: FormEvent) => {
     e.preventDefault();
@@ -288,10 +287,13 @@ export function Administration({
                   will be removed.
                 </p>
               </div>
-              <Button variant="destructive" onClick={() => setConfirm(true)}>
-                <RotateCcw size={14} />
-                Reset Demo Data
-              </Button>
+              <DemoResetControl
+                label="Reset Demo Data"
+                onReset={() => {
+                  setSettings(useConsole.getState().settings);
+                  notify('Demo data restored');
+                }}
+              />
             </div>
           </Card>
           <SectionNote>
@@ -309,32 +311,6 @@ export function Administration({
           notify={notify}
         />
       )}
-      <Dialog
-        open={confirm}
-        onOpenChange={setConfirm}
-        title="Reset all demo data?"
-        description="This restores every namespace, resource, user, event, and setting to the original seed data."
-      >
-        <div className="confirm-body">
-          Your current simulation changes will be removed from this browser.
-        </div>
-        <div className="form-footer">
-          <Button variant="outline" onClick={() => setConfirm(false)}>
-            Cancel
-          </Button>
-          <Button
-            variant="destructive"
-            onClick={() => {
-              s.reset();
-              setSettings(useConsole.getState().settings);
-              setConfirm(false);
-              notify('Demo data restored');
-            }}
-          >
-            Reset Demo Data
-          </Button>
-        </div>
-      </Dialog>
     </>
   );
 }

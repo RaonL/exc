@@ -14,6 +14,7 @@ import { exclusionError } from '../lib/waf-exclusions';
 import { WafEditor } from './SecurityEditors';
 import { OriginEditor } from './OriginEditor';
 import { OriginPoolItem } from './OriginItems';
+import { LoadBalancerReset } from './LoadBalancerReset';
 const WafExclusionRules = lazy(() =>
   import('./WafExclusionRules').then((module) => ({ default: module.WafExclusionRules })),
 );
@@ -38,6 +39,7 @@ export function LBForm({
   const [nested, setNested] = useState<'origin' | 'waf' | null>(null);
   const [originItem, setOriginItem] = useState(false);
   const [viewWaf, setViewWaf] = useState('');
+  const [inspectOrigin, setInspectOrigin] = useState<{ id: string; edit: boolean } | null>(null);
   const [form, setForm] = useState<LB>(
     initial ?? {
       id: crypto.randomUUID(),
@@ -57,7 +59,7 @@ export function LBForm({
   const [config, setConfig] = useState(lbConfig(initial));
   const [domains, setDomains] = useState<string[]>(initial?.domains ?? ['']);
   const [wafEnabled, setWafEnabled] = useState(!!initial?.wafId);
-  const [opened] = useState(() => ({ form, config, domains }));
+  const [opened] = useState(() => structuredClone({ form, config, domains }));
   const [error, setError] = useState('');
   const update = <K extends keyof LB>(key: K, value: LB[K]) => {
     setForm((v) => ({ ...v, [key]: value }));
@@ -69,6 +71,22 @@ export function LBForm({
   };
   const origins = s.origins.filter((o) => o.namespace === s.namespace);
   const wafs = s.wafs.filter((w) => w.namespace === s.namespace || w.namespace === 'shared');
+  const resetDefaults = () => {
+    if (readOnly) return;
+    setForm((current) => ({
+      ...current,
+      protocol: 'HTTPS',
+      originId: '',
+      wafId: '',
+      apiProtection: false,
+      botDefense: false,
+      ddosProtection: true,
+      config: undefined,
+    }));
+    setConfig(lbConfig());
+    setWafEnabled(false);
+    setError('');
+  };
   const save = (e: FormEvent) => {
     e.preventDefault();
     if (readOnly) return;
@@ -173,12 +191,14 @@ export function LBForm({
           name={initial?.name ?? ''}
           namespace={s.namespace}
           guide={class1Lab1Source}
-          className="lb-editor"
+          className={`lb-editor ${originItem || nested || viewWaf || inspectOrigin ? 'lb-parent-obscured' : ''}`}
           collapsible
+          toolbarActions={<LoadBalancerReset onReset={resetDefaults} />}
           onReset={() => {
-            setForm(opened.form);
-            setConfig(opened.config);
-            setDomains(opened.domains);
+            const restored = structuredClone(opened);
+            setForm(restored.form);
+            setConfig(restored.config);
+            setDomains(restored.domains);
             setWafEnabled(!!opened.form.wafId);
             setError('');
           }}
@@ -491,13 +511,22 @@ export function LBForm({
             },
             {
               id: 'dos',
-              title: 'DoS Protection',
+              title: 'DoS Settings',
               content: (
                 <ToggleField
                   label="L7 DDoS Protection"
                   value={form.ddosProtection}
                   onChange={(v) => update('ddosProtection', v)}
                 />
+              ),
+            },
+            {
+              id: 'malware',
+              title: 'Malware Protection',
+              content: (
+                <p className="xc-unmodeled-notice">
+                  Not configured · 미구현: 설정 위치 참고용입니다.
+                </p>
               ),
             },
             {
@@ -596,6 +625,7 @@ export function LBForm({
                 'waf',
                 'bot',
                 'api',
+                'malware',
                 'dos',
                 'client',
                 'common',
@@ -609,6 +639,7 @@ export function LBForm({
                 'waf',
                 'bot',
                 'api',
+                'malware',
                 'dos',
                 'client',
                 'common',
@@ -645,11 +676,22 @@ export function LBForm({
           priority={config.originPriority ?? 1}
           namespace={s.namespace}
           close={() => setOriginItem(false)}
+          onCancelAll={close}
+          obscured={!!inspectOrigin}
+          onInspect={(id, edit) => setInspectOrigin({ id, edit })}
           onApply={(id, weight, priority) => {
             update('originId', id);
             setConfig((c) => ({ ...c, originWeight: weight, originPriority: priority }));
             setOriginItem(false);
           }}
+        />
+      )}
+      {inspectOrigin && (
+        <OriginEditor
+          initial={s.origins.find((o) => o.id === inspectOrigin.id)}
+          viewOnly={!inspectOrigin.edit}
+          close={() => setInspectOrigin(null)}
+          notify={notify}
         />
       )}
       {viewWaf && (
