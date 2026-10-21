@@ -52,3 +52,43 @@ it('enters edit mode without submitting or closing the resource configuration', 
   await act(async () => submit.click());
   expect(save).toHaveBeenCalledOnce();
 });
+
+it('Apply in a portaled nested configuration does not submit the parent LB form', async () => {
+  (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
+  const parent = vi.fn((e: FormEvent) => e.preventDefault());
+  const child = vi.fn((e: FormEvent) => e.preventDefault());
+  const nested = createElement(ConfigurationEditor, {
+    kind: 'Secret Type',
+    name: '',
+    namespace: 'local',
+    value: {},
+    guide: 'https://docs.cloud.f5.com',
+    close: vi.fn(),
+    onSave: child,
+    submitLabel: 'Apply',
+    sections: [{ id: 'secret', title: 'Secret', content: 'Dummy value' }],
+  });
+  const container = document.createElement('div');
+  document.body.append(container);
+  root = createRoot(container);
+  await act(async () =>
+    root!.render(
+      createElement(ConfigurationEditor, {
+        kind: 'HTTP Load Balancer',
+        name: 'parent',
+        namespace: 'local',
+        value: {},
+        guide: 'https://docs.cloud.f5.com',
+        close: vi.fn(),
+        onSave: parent,
+        sections: [{ id: 'api', title: 'API Protection', content: nested }],
+      }),
+    ),
+  );
+  const button = Array.from(document.querySelectorAll('button')).find(
+    (b) => b.textContent?.trim() === 'Apply',
+  )!;
+  await act(async () => button.click());
+  expect(child).toHaveBeenCalledOnce();
+  expect(parent).not.toHaveBeenCalled();
+});

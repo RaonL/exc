@@ -257,7 +257,10 @@ export function ConfigurationEditor({
           </div>
           <GuideFieldContext.Provider value={{ fields: hints, current: currentHint }}>
             <form
-              onSubmit={onSave}
+              onSubmit={(event) => {
+                event.stopPropagation();
+                onSave(event);
+              }}
               className={`config-layout ${advanced ? 'show-advanced' : ''} ${guided ? 'with-console-guide' : ''}`}
               onInvalidCapture={(event) => {
                 const section = (event.target as HTMLElement).closest<HTMLElement>(
