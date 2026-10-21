@@ -10,6 +10,7 @@ import { Button } from '../components/ui/button';
 import { Field } from '../components/form-fields';
 import { lbConfig } from '../lib/config';
 import figures from '../../public/references/api-quickstart/index.json';
+import { DiscoveryGuide } from './DiscoveryGuide';
 const courses = [
   {
     title: '① Setting Up API Discovery',
@@ -99,6 +100,7 @@ export function ApiWorkbench() {
     [course, setCourse] = useState(0),
     [step, setStep] = useState(0),
     [editor, setEditor] = useState(false),
+    [guidedEditor, setGuidedEditor] = useState(false),
     [resource, setResource] = useState<'file' | 'definition' | 'integration' | null>(null),
     [error, err] = useState(''),
     [message, msg] = useState(''),
@@ -277,6 +279,21 @@ export function ApiWorkbench() {
             {step + 1}. {active.steps[step][0]}
           </h2>
           <p>{active.steps[step][1]}</p>
+          {course === 0 && <DiscoveryGuide step={step} ready={!!lb}
+            locate={() => {
+              if (step === 0) fixture();
+              else if (step === 2) setResource('integration');
+              else if (step === 4) {
+                setTab('Request Lab');
+                requestAnimationFrame(() => document.querySelector('[aria-label="Method"]')?.scrollIntoView({ block: 'center' }));
+              } else { setGuidedEditor(true); setEditor(true); }
+            }}
+            repository={() => { setGuidedEditor(true); setEditor(true); }}
+            sample={() => {
+              setMethod('GET'); setPath('/api/discovery-check'); setBody('{}');
+              setRequestHeaders('{}'); setResponse('{}'); setIncludeRedirect(false); setTab('Request Lab');
+              requestAnimationFrame(() => document.querySelector('[aria-label="Method"]')?.scrollIntoView({ block: 'center' }));
+            }} />}
           <p>
             저장된 설정 검사:{' '}
             <Badge tone={stageChecks[step] ? 'green' : 'amber'}>
@@ -336,7 +353,7 @@ export function ApiWorkbench() {
             ))}
           </select>
         </Field>
-        <Button disabled={!lb} onClick={() => setEditor(true)}>
+        <Button disabled={!lb} onClick={() => { setGuidedEditor(false); setEditor(true); }}>
           Manage Configuration
         </Button>
         <Button variant="outline" onClick={() => setResource('integration')}>
@@ -644,7 +661,7 @@ export function ApiWorkbench() {
           {!run && <p>N/A · 저장한 설정으로 Run API Testing을 실행하세요.</p>}
         </aside>
       )}
-      {editor && lb && <LBForm initial={lb} viewOnly close={() => setEditor(false)} notify={msg} />}{' '}
+      {editor && lb && <LBForm initial={lb} viewOnly={!guidedEditor} initialSection={guidedEditor ? 'api' : undefined} close={() => setEditor(false)} notify={msg} />}{' '}
       {resource && <ApiResourceEditor kind={resource} close={() => setResource(null)} />}
       <p className="api-limitations">
         공식 화면의 학습용 부분 재현입니다. OpenAPI 검증은 3.0.x JSON 인라인 schema의

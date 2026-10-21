@@ -26,12 +26,14 @@ export function LBForm({
   close,
   notify,
   viewOnly = false,
+  initialSection,
   exclusionEvent,
 }: {
   initial?: LB;
   close: () => void;
   notify: (message: string) => void;
   viewOnly?: boolean;
+  initialSection?: string;
   exclusionEvent?: SecurityEvent;
 }) {
   const s = useConsole();
@@ -202,6 +204,7 @@ export function LBForm({
     <>
       {!exclusions && (
         <ConfigurationEditor
+          initialSection={initialSection}
           kind="HTTP Load Balancer"
           submitLabel={initial ? 'Save HTTP Load Balancer' : 'Add HTTP Load Balancer'}
           name={initial?.name ?? ''}

@@ -3,6 +3,31 @@ import { act, createElement, useState, type FormEvent } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { ConfigurationEditor } from './ConfigurationEditor';
 let root: Root | undefined;
+
+it('opens the requested API section without saving configuration', async () => {
+  (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
+  const scroll = vi.fn();
+  const previous = HTMLElement.prototype.scrollIntoView;
+  HTMLElement.prototype.scrollIntoView = scroll;
+  const save = vi.fn();
+  try {
+    const container = document.createElement('div');
+    document.body.append(container);
+    root = createRoot(container);
+    await act(async () => root!.render(createElement(ConfigurationEditor, {
+      kind: 'HTTP Load Balancer', name: 'shop-lb', namespace: 'api-quickstart',
+      initialSection: 'api', value: {}, guide: '', close: vi.fn(), onSave: save,
+      sections: [
+        { id: 'metadata', title: 'Metadata', content: 'metadata' },
+        { id: 'api', title: 'API Protection', content: 'api settings' },
+      ],
+    })));
+    expect(scroll).toHaveBeenCalled();
+    expect(save).not.toHaveBeenCalled();
+  } finally {
+    HTMLElement.prototype.scrollIntoView = previous;
+  }
+});
 afterEach(async () => {
   if (root) await act(async () => root?.unmount());
   document.body.replaceChildren();

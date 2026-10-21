@@ -6,6 +6,8 @@
 
 ## 1. Setting Up API Discovery
 
+각 단계에는 **설정 위치 찾기**와 입력값 표·저장 순서·예상 결과가 있습니다. 이 버튼은 LB의 API Protection 편집 화면을 열지만 설정을 자동 저장하지 않습니다. Code Scanning 단계는 Integration 생성 버튼과 LB API Repositories 바로가기를 따로 제공합니다. 마지막 단계의 **요청 예제값 넣기**는 `GET /api/discovery-check`, headers/body/response `{}`, redirect 끄기를 Request Lab 입력란에 채웁니다. **Run Sample API Request**를 직접 누른 뒤 200/Allowed, Traffic Source와 로그를 확인하세요. 기존 정책에서 차단되면 로그의 차단 사유를 먼저 확인합니다.
+
 1. `Manage Configuration → Edit Configuration → API Protection`에서 **API Discovery: Enable**을 저장합니다. 기본은 2xx만 학습합니다. `Learn From Traffic With Direct Response: Enable`은 로컬 3xx 학습도 허용합니다. `Purge Duration for Inactive Discovered APIs`: 30일.
 2. `Manage → API Management → Code Base Integration → Add Code Base Integration`: Name `shop-code`, Code Base `Github Integration`, Username `demo-user`, API Key Configure → Secret `demo-only` → Apply → Save and Exit.
 3. LB 편집에서 API Repositories의 `Code Base Integration: api-quickstart/shop-code`, repository `demo-org/shop`을 입력합니다.

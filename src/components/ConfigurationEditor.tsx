@@ -1,4 +1,4 @@
-import { useId, useRef, useState, type FormEvent, type ReactNode } from 'react';
+import { useCallback, useId, useRef, useState, type FormEvent, type ReactNode } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import {
   ChevronLeft,
@@ -50,6 +50,7 @@ export function ConfigurationEditor({
   resourceContext,
   onCancelAll,
   toolbarActions,
+  initialSection,
 }: {
   kind: string;
   name: string;
@@ -70,6 +71,7 @@ export function ConfigurationEditor({
   resourceContext?: { title: string; trail: string[] };
   onCancelAll?: () => void;
   toolbarActions?: ReactNode;
+  initialSection?: string;
 }) {
   const editorId = useId();
   const consoleForm = [
@@ -80,7 +82,10 @@ export function ConfigurationEditor({
     'Health Check',
   ].includes(kind);
   const [view, setView] = useState('Form');
-  const [active, setActive] = useState(sections[0].id);
+  const [active, setActive] = useState(initialSection ?? sections[0].id);
+  const scrollToInitialSection = useCallback((node: HTMLElement | null) => {
+    node?.scrollIntoView?.({ block: 'start', behavior: 'instant' });
+  }, []);
   const [query, setQuery] = useState('');
   const [advanced, setAdvanced] = useState(false);
   const [collapsed, setCollapsed] = useState<string[]>([]);
@@ -336,6 +341,7 @@ export function ConfigurationEditor({
                         <section
                           className="config-section"
                           data-section={section.id}
+                          ref={section.id === initialSection ? scrollToInitialSection : undefined}
                           key={section.id}
                         >
                           <div className="config-section-heading">
