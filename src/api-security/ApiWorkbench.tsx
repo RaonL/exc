@@ -11,6 +11,7 @@ import { Field } from '../components/form-fields';
 import { lbConfig } from '../lib/config';
 import figures from '../../public/references/api-quickstart/index.json';
 import { DiscoveryGuide } from './DiscoveryGuide';
+import { requestPathError } from './request-input';
 const courses = [
   {
     title: '① Setting Up API Discovery',
@@ -403,6 +404,7 @@ export function ApiWorkbench() {
             </Button>
             <Button
               variant="outline"
+              disabled={!c.testing}
               onClick={() =>
                 act(() => {
                   s.run(lb);
@@ -412,6 +414,7 @@ export function ApiWorkbench() {
             >
               Run API Testing (모의)
             </Button>
+            {!c.testing && <span>API Testing 미설정 · ③ 자동 보안 테스트용입니다. Discovery는 아래 Request Lab에서 실행하세요.</span>}
             <Button
               variant="outline"
               onClick={() =>
@@ -537,6 +540,18 @@ export function ApiWorkbench() {
           )}
           {tab === 'Request Lab' && (
             <Card title="Sample API Request · 모의 요청">
+              <p>Discovery: {c.discovery ? 'Enabled' : 'Disabled'} · API Definition: {c.definitionId ? '연결됨' : 'Disabled'} · Validation: {c.validation} · Redirect 응답: {includeRedirect ? '302' : '200'}</p>
+              <p>Discovery 학습 요청은 API Testing을 켜지 않아도 실행됩니다. 스키마 위반 Detected/Blocked는 API Definition 연결과 Validation 설정이 필요합니다.</p>
+              <div className="api-toolbar">
+                {[
+                  ['Discovery 요청 예제', 'GET', '/api/discovery-check', '{}', '{}'],
+                  ['스키마 위반 예제', 'POST', '/api/orders', '{"quantity":"wrong"}', '{"id":"order-1"}'],
+                  ['정상 요청 예제', 'POST', '/api/orders', '{"quantity":2}', '{"id":"order-1"}'],
+                ].map(([label, m, p, b, r]) => <Button key={label} variant="outline" onClick={() => {
+                  setMethod(m); setPath(p); setBody(b); setResponse(r); setRequestHeaders('{}');
+                  setIncludeRedirect(false); err(''); msg('입력란을 채웠습니다. Run Sample API Request를 눌러 실행하세요.');
+                }}>{label}</Button>)}
+              </div>
               <div className="api-probe-grid">
                 <Field label="Method">
                   <select
@@ -550,7 +565,7 @@ export function ApiWorkbench() {
                   </select>
                 </Field>
                 <Field label="Request Path">
-                  <input value={path} onChange={(e) => setPath(e.target.value)} />
+                  <input placeholder="/api/orders" value={path} onChange={(e) => setPath(e.target.value)} />
                 </Field>
                 <Field label="Request Headers JSON">
                   <textarea
@@ -575,8 +590,8 @@ export function ApiWorkbench() {
               <Button
                 onClick={() =>
                   act(() => {
-                    if (!path.startsWith('/') || path.startsWith('//'))
-                      throw Error('Local request path required.');
+                    const pathError = requestPathError(path);
+                    if (pathError) throw Error(pathError);
                     probe({
                       path,
                       method,
@@ -591,9 +606,9 @@ export function ApiWorkbench() {
                 Run Sample API Request
               </Button>
               <p>
-                예제: POST /api/orders body {`{"quantity":"wrong"}`} → Report 200 Detected / Block
-                403. 정상값 quantity:2 → 200. GET /api/orders?limit=wrong는 Query Parameters 검사
-                예제입니다.
+                입력 예: Method는 POST, Request Path는 /api/orders, Request Body JSON은 {`{"quantity":"wrong"}`}입니다.
+                API Definition과 API Inventory 검증을 저장한 경우 Report는 200 Detected, Block은 403 Blocked입니다.
+                Redirect를 켜면 기본 응답은 302이며, 3xx 학습 옵션이 꺼져 있으면 Discovery에 추가되지 않습니다.
               </p>
               {logs[0] && <pre>{logs[0].trace.join('\n')}</pre>}
             </Card>
