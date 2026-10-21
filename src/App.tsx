@@ -1,5 +1,6 @@
 import { ApiWorkbench } from './api-security/ApiWorkbench';
 import { ApiResources } from './api-security/ApiResources';
+import { ApiDashboardPage } from './api-security/ApiDashboard';
 import { useEffect, useState, lazy, Suspense, type ElementType } from 'react';
 import {
   Bell,
@@ -76,7 +77,7 @@ const nav: Record<Workspace, NavGroup[]> = {
     {
       label: 'API Security',
       icon: ShieldCheck,
-      items: ['API Discovery', 'API Protection', 'API Quickstarts'],
+      items: ['API Discovery', 'API Protection', 'API Endpoints', 'API Quickstarts'],
     },
     { label: 'Bot Defense', icon: Bot, items: ['Bot Defense'] },
   ],
@@ -191,9 +192,9 @@ export default function App() {
       case 'Service Policies':
         return <ConfigResources key={`policy-${s.namespace}`} kind="policy" notify={notify} />;
       case 'API Discovery':
-        return (
-          <ApiPages key={`discovery-${s.namespace}`} openLab={() => setLab(true)} notify={notify} />
-        );
+        return <ApiPages key={`discovery-${s.namespace}`} openLab={() => setLab(true)} notify={notify} />;
+      case 'API Endpoints':
+        return <ApiDashboardPage key={s.namespace} />;
       case 'API Protection':
         return (
           <ApiPages

@@ -2,6 +2,7 @@ export type Workspace =
   'Home' | 'Web App & API Protection' | 'Multi-Cloud Network Connect' | 'Administration';
 export type Page =
   | 'API Quickstarts'
+  | 'API Endpoints'
   | 'OpenAPI Files'
   | 'API Definition'
   | 'Code Base Integration'

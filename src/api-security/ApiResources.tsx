@@ -10,10 +10,12 @@ export function ApiResourceEditor({
   kind,
   initial,
   close,
+  initialSection,
 }: {
   kind: 'file' | 'definition' | 'integration';
   initial?: FileResource | Definition | Integration;
   close: () => void;
+  initialSection?: string;
 }) {
   const core = useConsole(),
     s = useApiSecurity(),
@@ -36,6 +38,7 @@ export function ApiResourceEditor({
         : 'Code Base Integration';
   return (
     <ConfigurationEditor
+      initialSection={initialSection}
       kind={title}
       className="api-resource-editor reference-editor"
       name={initial?.name ?? ''}

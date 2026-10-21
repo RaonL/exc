@@ -14,6 +14,7 @@ import { DiscoveryGuide } from './DiscoveryGuide';
 import { requestPathError } from './request-input';
 import { protectionResourceProgress } from './progress';
 import { ApiGuideContext, checklistItems } from './GuideChecklist';
+import { ApiDashboard } from './ApiDashboard';
 const courses = [
   {
     title: '① Setting Up API Discovery',
@@ -108,15 +109,12 @@ export function ApiWorkbench() {
     [error, err] = useState(''),
     [message, msg] = useState(''),
     [tab, setTab] = useState('API Endpoints'),
-    [showTested, setShowTested] = useState(false),
     [detail, setDetail] = useState<Endpoint | null>(null),
     [path, setPath] = useState('/api/orders'),
     [method, setMethod] = useState('POST'),
     [body, setBody] = useState('{"quantity":"wrong"}'),
     [response, setResponse] = useState('{"id":"order-1"}'),
     [requestHeaders, setRequestHeaders] = useState('{}'),
-    [query, setQuery] = useState(''),
-    [category, setCategory] = useState('All'),
     [includeRedirect, setIncludeRedirect] = useState(false);
   const lbs = core.lbs.filter((l) => l.namespace === core.namespace),
     lb = lbs.find((l) => l.id === s.selectedLbId) ?? lbs[0],
@@ -206,17 +204,6 @@ export function ApiWorkbench() {
             lastSeen: 0,
             calls: 0,
           });
-  const isInventory = (e: Endpoint) =>
-      Object.keys(spec?.paths ?? {}).some(
-        (p) =>
-          p.split('/').length === e.path.split('/').length &&
-          p.split('/').every((seg, i) => /^\{.+\}$/.test(seg) || seg === e.path.split('/')[i]),
-      ),
-    filtered = endpoints.filter(
-      (e) =>
-        e.path.toLowerCase().includes(query.toLowerCase()) &&
-        (category === 'All' || (category === 'Inventory' ? isInventory(e) : !isInventory(e))),
-    );
   const stageChecks =
     course === 0
       ? [
@@ -454,106 +441,7 @@ export function ApiWorkbench() {
               </button>
             ))}
           </div>
-          {tab === 'API Endpoints' && (
-            <>
-              <div className="api-metrics">
-                <Card title="Risk Score">
-                  <strong>
-                    {run ? `${run.checks.filter((x) => x.outcome === 'Open').length} Open` : 'N/A'}
-                  </strong>
-                  <p>로컬 fixture 위험 수 · 실제 F5 risk score 아님</p>
-                </Card>
-                <Card title="API Classification">
-                  <p>
-                    Inventory {endpoints.filter(isInventory).length} · Discovered{' '}
-                    {s.endpoints.filter((e) => e.lbId === lb.id).length} · Shadow{' '}
-                    {endpoints.filter((e) => !isInventory(e)).length}
-                  </p>
-                </Card>
-                <Card title="API Auth">
-                  <p>
-                    Standard{' '}
-                    {c.environments[0]?.credentials.filter((x) => x.role === 'Standard').length ??
-                      0}{' '}
-                    · Admin{' '}
-                    {c.environments[0]?.credentials.filter((x) => x.role === 'Admin').length ?? 0}
-                  </p>
-                  <p>더미 테스트 자격 증명</p>
-                </Card>
-              </div>
-              <Card>
-                <div className="api-toolbar">
-                  <input
-                    aria-label="Search API endpoints"
-                    placeholder="Search"
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                  />
-                  <select
-                    aria-label="API Category"
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value)}
-                  >
-                    <option>All</option>
-                    <option>Inventory</option>
-                    <option>Shadow</option>
-                  </select>
-                  <Field label="⚙ Last Tested">
-                    <input
-                      type="checkbox"
-                      checked={showTested}
-                      onChange={(e) => setShowTested(e.target.checked)}
-                    />
-                  </Field>
-                  <span>
-                    API Definition:{' '}
-                    {s.definitions.find((d) => d.id === c.definitionId)?.name ?? 'Not configured'}
-                  </span>
-                </div>
-                <div className="table-wrap">
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>API Endpoint</th>
-                        <th>Method</th>
-                        <th>API Category</th>
-                        <th>Discovery Source</th>
-                        <th>API Calls</th>
-                        {showTested && <th>Last Tested</th>}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {filtered.map((e) => (
-                        <tr key={e.method + e.path}>
-                          <td>
-                            <button className="resource-link" onClick={() => setDetail(e)}>
-                              {e.path}
-                            </button>
-                          </td>
-                          <td>{e.method}</td>
-                          <td>{isInventory(e) ? 'Inventory' : 'Shadow'}</td>
-                          <td>{e.sources.join(', ')}</td>
-                          <td>{e.calls}</td>
-                          {showTested && (
-                            <td>
-                              {run?.checks.some((x) => x.path === e.path && x.method === e.method)
-                                ? new Date(run.at).toLocaleString()
-                                : 'N/A'}
-                            </td>
-                          )}
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-                {!filtered.length && (
-                  <p className="api-empty">
-                    No API endpoints. Enable discovery, save, then send a local request.
-                  </p>
-                )}
-              </Card>
-            </>
-          )}
+          {tab === 'API Endpoints' && <ApiDashboard key={lb.id} lb={lb} />}
           {tab === 'Request Lab' && (
             <Card title="Sample API Request · 모의 요청">
               <p>Discovery: {c.discovery ? 'Enabled' : 'Disabled'} · API Definition: {c.definitionId ? '연결됨' : 'Disabled'} · Validation: {c.validation} · Redirect 응답: {includeRedirect ? '302' : '200'}</p>
@@ -563,8 +451,9 @@ export function ApiWorkbench() {
                   ['Discovery 요청 예제', 'GET', '/api/discovery-check', '{}', '{}'],
                   ['스키마 위반 예제', 'POST', '/api/orders', '{"quantity":"wrong"}', '{"id":"order-1"}'],
                   ['정상 요청 예제', 'POST', '/api/orders', '{"quantity":2}', '{"id":"order-1"}'],
+                  ['민감정보·인증 예제', 'POST', '/api/profile', '{"email":"demo@example.test","ssn":"dummy-only","card_number":"dummy-only"}', '{}'],
                 ].map(([label, m, p, b, r]) => <Button key={label} variant="outline" onClick={() => {
-                  setMethod(m); setPath(p); setBody(b); setResponse(r); setRequestHeaders('{}');
+                  setMethod(m); setPath(p); setBody(b); setResponse(r); setRequestHeaders(label==='민감정보·인증 예제' ? '{"x-demo-key":"demo-only"}' : '{}');
                   setIncludeRedirect(false); err(''); msg('입력란을 채웠습니다. Run Sample API Request를 눌러 실행하세요.');
                 }}>{label}</Button>)}
               </div>

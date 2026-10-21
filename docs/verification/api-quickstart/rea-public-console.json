@@ -1,0 +1,41 @@
+{
+  "evidence_id": "ev_6dbc2bde93b3a72056c06a48814df1c3d9767d4e0ffcce41a2a565190477e50d",
+  "authority": "controlled-replay",
+  "confidence": "observed",
+  "finalUrl": {
+    "origin": "https://login.ves.volterra.io",
+    "path": "https://login.ves.volterra.io/auth/realms/f5-xc-lab-sec-lpuwkdtb/protocol/openid-connect/auth",
+    "query_parameter_names": [
+      "state",
+      "nonce",
+      "response_type",
+      "client_id",
+      "scope",
+      "redirect_uri"
+    ]
+  },
+  "completeness": {
+    "status": "complete",
+    "equality_eligible": true,
+    "missing_sections": [],
+    "truncated_sections": []
+  },
+  "title": "    f5-xc-lab-sec\n",
+  "scripts": [
+    "/auth/resources/s5dc9/login/volterra/dist/main.js?v7.0.12"
+  ],
+  "forms": [
+    "text",
+    "password",
+    "submit"
+  ],
+  "accessibility": {
+    "heading": "f5-xc-lab-sec",
+    "loginOptions": [
+      "Sign In with oidc",
+      "Log In as Tenant Owner"
+    ],
+    "credentialsSubmitted": false
+  },
+  "limit": "Unauthenticated console redirected to login; no authenticated console behavior or backend source observed."
+}

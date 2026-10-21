@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { LB } from '../types';
+import { summarizeRequest, type RequestSummary } from './dashboard';
 import {
   defaults,
   evaluateApi,
@@ -40,6 +41,8 @@ export type Integration = {
   hostname: string;
 };
 export type ApiLog = ApiResult & {
+  domain?: string;
+  summary?: RequestSummary;
   id: string;
   lbId: string;
   at: number;
@@ -166,6 +169,8 @@ export const useApiSecurity = create<State>()(
           at: get().clock,
           path: q.path,
           method: q.method,
+          summary: summarizeRequest(q.headers ?? {}, q.body, q.responseBody),
+          domain: q.domain ?? lb.domains[0],
           settings: JSON.stringify(c),
         };
         set((s) => ({

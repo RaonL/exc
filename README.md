@@ -198,3 +198,6 @@ Training Center includes five community-reference exercises for WAF, API endpoin
 ## API Security Quickstarts
 
 API Security → API Quickstarts에서 공식 문서 순서의 API Discovery, API Protection, API Testing을 연습할 수 있습니다. [입력값과 설정 순서](docs/API-QUICKSTARTS.md), [검증 결과](docs/verification/api-quickstart/README.md)를 참고하세요. 기존 Class 1–9는 유지됩니다.
+# API 대시보드
+
+API Security → API Endpoints에서 차트·테이블을 확인합니다. [실습과 집계 기준](docs/API-DASHBOARD.md).
