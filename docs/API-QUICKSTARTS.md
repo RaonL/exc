@@ -6,6 +6,8 @@
 
 ## 1. Setting Up API Discovery
 
+설정 창 오른쪽의 **입력값 · 실습 체크리스트**는 세 가이드 모두에서 제공됩니다. 하위 설정 창에서도 유지되며 **안내 단계**를 바꿔 다음 입력값을 볼 수 있습니다. 체크는 Namespace·LB·가이드·단계별로 저장되는 학습 메모이고, 설정 저장이나 자동 실습 완료를 대신하지 않습니다. 작은 화면에서는 접속한 설정 창 아래쪽에 스크롤 가능한 패널로 표시됩니다.
+
 각 단계에는 **설정 위치 찾기**와 입력값 표·저장 순서·예상 결과가 있습니다. 이 버튼은 LB의 API Protection 편집 화면을 열지만 설정을 자동 저장하지 않습니다. Code Scanning 단계는 Integration 생성 버튼과 LB API Repositories 바로가기를 따로 제공합니다. 마지막 단계의 **요청 예제값 넣기**는 `GET /api/discovery-check`, headers/body/response `{}`, redirect 끄기를 Request Lab 입력란에 채웁니다. **Run Sample API Request**를 직접 누른 뒤 200/Allowed, Traffic Source와 로그를 확인하세요. 기존 정책에서 차단되면 로그의 차단 사유를 먼저 확인합니다.
 
 1. `Manage Configuration → Edit Configuration → API Protection`에서 **API Discovery: Enable**을 저장합니다. 기본은 2xx만 학습합니다. `Learn From Traffic With Direct Response: Enable`은 로컬 3xx 학습도 허용합니다. `Purge Duration for Inactive Discovered APIs`: 30일.

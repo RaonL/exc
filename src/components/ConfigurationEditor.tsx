@@ -23,6 +23,7 @@ import { effectiveEnvironment, useTraining } from '../training/store';
 import { labById } from '../training/catalog';
 import { resourceGuideFields } from '../training/lab-guide';
 import { LabGuidePanel } from '../training/LabGuidePanel';
+import { ConfigurationChecklist } from '../api-security/GuideChecklist';
 export interface ConfigSection {
   id: string;
   title: string;
@@ -161,6 +162,7 @@ export function ConfigurationEditor({
           className={`config-editor ${['HTTP Load Balancer', 'Origin Pool', 'Origin Server', 'Health Check', 'Origin Pool with Weight and Priority', 'App Firewall', 'Simple WAF Exclusion Rule', 'WAF Exclusion Rules'].includes(kind) ? 'reference-editor' : ''} ${className}`}
           aria-describedby={`${editorId}-description`}
         >
+          <ConfigurationChecklist />
           <header className="config-header">
             <button className="config-back" onClick={close} aria-label="Back to resource list">
               <ChevronLeft size={17} />

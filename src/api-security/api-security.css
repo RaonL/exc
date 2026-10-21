@@ -200,3 +200,33 @@
 .api-sidebar-group .nav-item {
   padding-left: 30px;
 }
+
+.api-guide-panel {
+  position: absolute;
+  right: 12px;
+  top: 115px;
+  bottom: 78px;
+  width: 310px;
+  overflow-y: auto;
+  background: #f7f9ff;
+  border: 1px solid #cbd4ef;
+  border-top: 3px solid #586aff;
+  padding: 16px;
+  z-index: 2;
+  color: #17254e;
+  font-size: 13px;
+}
+.api-guide-panel h2 { font-size: 16px; margin-bottom: 12px; }
+.api-guide-panel h3 { font-size: 14px; margin-bottom: 12px; }
+.api-guide-panel p { margin: 12px 0; color: #5a6884; line-height: 1.6; }
+.api-guide-panel label { display: flex; gap: 9px; align-items: flex-start; padding: 12px 0; border-bottom: 1px solid #dce2f0; line-height: 1.6; }
+.api-guide-panel input { flex: 0 0 16px; width: 16px; height: 16px; margin-top: 3px; }
+.api-guide-panel span { overflow-wrap: anywhere; }
+.api-guide-panel select { min-width: 0; width: 100%; }
+.api-guide-panel label:has(select) { display: block; }
+.api-guide-panel label:has(select) select { margin-top: 8px; }
+.config-editor:has(> .api-guide-panel) .config-layout { margin-right: 334px; width: calc(100% - 334px); }
+@media (max-width: 900px) {
+  .api-guide-panel { position: relative; inset: auto; width: auto; max-height: 220px; flex-shrink: 0; order: 2; margin: 6px 12px; }
+  .config-editor:has(> .api-guide-panel) .config-layout { margin-right: 0; width: 100%; }
+}

@@ -13,6 +13,7 @@ import figures from '../../public/references/api-quickstart/index.json';
 import { DiscoveryGuide } from './DiscoveryGuide';
 import { requestPathError } from './request-input';
 import { protectionResourceProgress } from './progress';
+import { ApiGuideContext, checklistItems } from './GuideChecklist';
 const courses = [
   {
     title: '① Setting Up API Discovery',
@@ -240,6 +241,7 @@ export function ApiWorkbench() {
             !!run,
           ];
   return (
+    <ApiGuideContext.Provider value={{ identity: `${core.namespace}:${lb?.id ?? 'none'}:${course}:${step}`, title: `${active.title} · ${step + 1}. ${active.steps[step][0]}`, items: checklistItems[course][step], stepTitles: active.steps.map(([title]) => title), currentStep: step, onStepChange: setStep }}>
     <div className="api-workbench">
       <header className="api-toolbar">
         <div>
@@ -279,6 +281,7 @@ export function ApiWorkbench() {
             {step + 1}. {active.steps[step][0]}
           </h2>
           <p>{active.steps[step][1]}</p>
+          <p>설정 창을 열어도 오른쪽에 이 단계의 입력값·체크리스트가 계속 표시됩니다. 체크 상태는 학습 메모로 보관됩니다.</p>
           {course === 1 && step === 1 && <section aria-label="API Definition 생성 확인">
             <p>Name: <code>shop-definition</code> · OpenAPI Specification Files: <code>shop-openapi</code> 선택 → Save and Exit.</p>
             <p>2단계는 파일을 참조하는 API Definition 생성까지만 확인합니다. LB 연결은 3단계에서 진행합니다.</p>
@@ -697,5 +700,6 @@ export function ApiWorkbench() {
         서비스·Blindfold 암호화는 실행하지 않습니다. 실제 토큰을 입력하지 마세요.
       </p>
     </div>
+    </ApiGuideContext.Provider>
   );
 }
