@@ -12,6 +12,7 @@ import { lbConfig } from '../lib/config';
 import figures from '../../public/references/api-quickstart/index.json';
 import { DiscoveryGuide } from './DiscoveryGuide';
 import { requestPathError } from './request-input';
+import { protectionResourceProgress } from './progress';
 const courses = [
   {
     title: '① Setting Up API Discovery',
@@ -227,9 +228,7 @@ export function ApiWorkbench() {
         ]
       : course === 1
         ? [
-            s.files.some((f) => f.namespace === core.namespace),
-            !!spec,
-            !!c.definitionId,
+            ...protectionResourceProgress(core.namespace, s.files, s.definitions, c.definitionId),
             c.validation !== 'Disabled' && logs.some((l) => l.action === 'Detected'),
             logs.some((l) => l.action === 'Blocked'),
           ]
@@ -280,6 +279,20 @@ export function ApiWorkbench() {
             {step + 1}. {active.steps[step][0]}
           </h2>
           <p>{active.steps[step][1]}</p>
+          {course === 1 && step === 1 && <section aria-label="API Definition 생성 확인">
+            <p>Name: <code>shop-definition</code> · OpenAPI Specification Files: <code>shop-openapi</code> 선택 → Save and Exit.</p>
+            <p>2단계는 파일을 참조하는 API Definition 생성까지만 확인합니다. LB 연결은 3단계에서 진행합니다.</p>
+            <p>사용 가능한 정의: {s.definitions.filter(d => d.namespace === core.namespace || d.namespace === 'shared').map(d => d.name).join(', ') || '없음'}</p>
+            <Button variant="outline" onClick={() => core.navigate('Web App & API Protection', 'API Definition')}>설정 위치 찾기 · API Definition 목록</Button>
+          </section>}
+          {course === 1 && step === 0 && <section aria-label="OpenAPI 실습 파일 준비">
+            <div className="api-toolbar">
+              <a href="/fixtures/shop-openapi.json" download="shop-openapi.json">실습 파일 다운로드 · shop-openapi.json</a>
+              <Button variant="outline" onClick={() => setResource('file')}>설정 위치 찾기 · OpenAPI 업로드</Button>
+            </div>
+            <p>① 파일 다운로드 → ② 업로드 화면 열기 → Name에 <code>shop-openapi</code> 입력 → Upload File에서 받은 JSON 선택 → Save and Exit.</p>
+            <p>다운로드 없이 하려면 업로드 화면에서 <strong>Load dummy OpenAPI</strong>를 누르고 Name을 입력한 뒤 저장하세요. 파일은 저장해야 API Definition에서 선택할 수 있습니다.</p>
+          </section>}
           {course === 0 && <DiscoveryGuide step={step} ready={!!lb}
             locate={() => {
               if (step === 0) fixture();
