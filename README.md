@@ -194,3 +194,7 @@ React + TypeScript + Vite, Tailwind CSS v4, shadcn/ui 스타일의 로컬 Radix 
 ## Class 9 · Community supplement
 
 Training Center includes five community-reference exercises for WAF, API endpoint protection, rate limiting, signature-based bots, and Bot Defense. See [Class 9 details](docs/CLASS9.md). All outcomes are local simulations. Current verification: 212 tests passed and production build passed.
+
+## API Security Quickstarts
+
+API Security → API Quickstarts에서 공식 문서 순서의 API Discovery, API Protection, API Testing을 연습할 수 있습니다. [입력값과 설정 순서](docs/API-QUICKSTARTS.md), [검증 결과](docs/verification/api-quickstart/README.md)를 참고하세요. 기존 Class 1–9는 유지됩니다.

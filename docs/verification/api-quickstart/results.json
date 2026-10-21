@@ -1,0 +1,1991 @@
+{
+  "at": "2026-10-21",
+  "unitTests": {
+    "files": 24,
+    "passed": 320
+  },
+  "build": "passed",
+  "ui": {
+    "pass": true,
+    "discovery": [
+      "Code",
+      "API Crawling"
+    ],
+    "requestModes": [
+      "Report 200 Detected",
+      "Block 403 Blocked"
+    ],
+    "reload": "Block",
+    "errors": []
+  },
+  "testing": {
+    "pass": true,
+    "credentials": [
+      {
+        "type": "API Key",
+        "role": "Standard"
+      },
+      {
+        "type": "Basic Authentication",
+        "role": "Standard"
+      },
+      {
+        "type": "Bearer Token",
+        "role": "Admin"
+      },
+      {
+        "type": "Login Endpoint",
+        "role": "Standard"
+      }
+    ],
+    "runs": 2,
+    "schedule": "Every Day",
+    "customList": true,
+    "fallThrough": [
+      "403 Blocked",
+      "200 Allowed"
+    ],
+    "errors": []
+  },
+  "classes": {
+    "pass": true,
+    "rows": [
+      {
+        "id": "c1-lab1",
+        "title": "Public Endpoint",
+        "pass": true,
+        "checks": [
+          {
+            "name": "LB → Origin 연결",
+            "pass": true,
+            "expected": "유효한 Origin과 Domain",
+            "actual": "c1-lab1.example.com → training-c1-lab1-aws"
+          },
+          {
+            "name": "HTTP / 80 / Internet",
+            "pass": true,
+            "expected": "HTTP :80 · Internet · Public DNS",
+            "actual": "HTTP :80 · Internet"
+          },
+          {
+            "name": "정상 사용자 허용",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "SQLi 차단",
+            "pass": true,
+            "expected": "HTTP 403",
+            "actual": "HTTP 403 · Blocked · aws-primary · WAF signature matched in Blocking mode"
+          },
+          {
+            "name": "XSS 차단",
+            "pass": true,
+            "expected": "HTTP 403",
+            "actual": "HTTP 403 · Blocked · aws-primary · WAF signature matched in Blocking mode"
+          }
+        ]
+      },
+      {
+        "id": "c1-lab2",
+        "title": "Private Endpoint via Regional Edges",
+        "pass": true,
+        "checks": [
+          {
+            "name": "LB → Origin 연결",
+            "pass": true,
+            "expected": "유효한 Origin과 Domain",
+            "actual": "c1-lab2.example.com → training-c1-lab2-aws"
+          },
+          {
+            "name": "Private Origin / CE",
+            "pass": true,
+            "expected": "Private origin on CE",
+            "actual": "IP on Site / training-c1-lab2-ce"
+          },
+          {
+            "name": "Regional Edge advertisement",
+            "pass": true,
+            "expected": "Internet",
+            "actual": "Internet"
+          },
+          {
+            "name": "CE Online request",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "CE Offline request",
+            "pass": true,
+            "expected": "HTTP 503",
+            "actual": "HTTP 503 · Blocked · aws-primary · Origin / Customer Edge unavailable"
+          },
+          {
+            "name": "정상 사용자 허용",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "SQLi 차단",
+            "pass": true,
+            "expected": "HTTP 403",
+            "actual": "HTTP 403 · Blocked · aws-primary · WAF signature matched in Blocking mode"
+          },
+          {
+            "name": "XSS 차단",
+            "pass": true,
+            "expected": "HTTP 403",
+            "actual": "HTTP 403 · Blocked · aws-primary · WAF signature matched in Blocking mode"
+          }
+        ]
+      },
+      {
+        "id": "c1-lab3",
+        "title": "Protecting a Private Endpoint",
+        "pass": true,
+        "checks": [
+          {
+            "name": "LB → Origin 연결",
+            "pass": true,
+            "expected": "유효한 Origin과 Domain",
+            "actual": "c1-lab3.example.com → training-c1-lab3-aws"
+          },
+          {
+            "name": "Private Origin / CE",
+            "pass": true,
+            "expected": "Private origin on CE",
+            "actual": "IP on Site / training-c1-lab3-ce"
+          },
+          {
+            "name": "CE advertisement",
+            "pass": true,
+            "expected": "Custom VIP on CE",
+            "actual": "Custom"
+          },
+          {
+            "name": "CE Online request",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "CE Offline request",
+            "pass": true,
+            "expected": "HTTP 503",
+            "actual": "HTTP 503 · Blocked · aws-primary · Origin / Customer Edge unavailable"
+          },
+          {
+            "name": "정상 사용자 허용",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "SQLi 차단",
+            "pass": true,
+            "expected": "HTTP 403",
+            "actual": "HTTP 403 · Blocked · aws-primary · WAF signature matched in Blocking mode"
+          },
+          {
+            "name": "XSS 차단",
+            "pass": true,
+            "expected": "HTTP 403",
+            "actual": "HTTP 403 · Blocked · aws-primary · WAF signature matched in Blocking mode"
+          }
+        ]
+      },
+      {
+        "id": "c1-lab4",
+        "title": "Security Analytics",
+        "pass": true,
+        "checks": [
+          {
+            "name": "LB → Origin 연결",
+            "pass": true,
+            "expected": "유효한 Origin과 Domain",
+            "actual": "c1-lab4.example.com → training-c1-lab4-aws"
+          },
+          {
+            "name": "정상 사용자 허용",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "SQLi 차단",
+            "pass": true,
+            "expected": "HTTP 403",
+            "actual": "HTTP 403 · Blocked · aws-primary · WAF signature matched in Blocking mode"
+          },
+          {
+            "name": "XSS 차단",
+            "pass": true,
+            "expected": "HTTP 403",
+            "actual": "HTTP 403 · Blocked · aws-primary · WAF signature matched in Blocking mode"
+          }
+        ]
+      },
+      {
+        "id": "c2-lab1",
+        "title": "Web Application Firewall Configuration",
+        "pass": true,
+        "checks": [
+          {
+            "name": "LB → Origin 연결",
+            "pass": true,
+            "expected": "유효한 Origin과 Domain",
+            "actual": "c2-lab1.example.com → training-c2-lab1-aws"
+          },
+          {
+            "name": "정상 사용자 허용",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "SQLi 차단",
+            "pass": true,
+            "expected": "HTTP 403",
+            "actual": "HTTP 403 · Blocked · aws-primary · WAF signature matched in Blocking mode"
+          },
+          {
+            "name": "XSS 차단",
+            "pass": true,
+            "expected": "HTTP 403",
+            "actual": "HTTP 403 · Blocked · aws-primary · WAF signature matched in Blocking mode"
+          }
+        ]
+      },
+      {
+        "id": "c2-lab2",
+        "title": "Signature-based Bots & Bot Defense",
+        "pass": true,
+        "checks": [
+          {
+            "name": "LB → Origin 연결",
+            "pass": true,
+            "expected": "유효한 Origin과 Domain",
+            "actual": "c2-lab2.example.com → training-c2-lab2-aws"
+          },
+          {
+            "name": "정상 사람 요청",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "봇 요청",
+            "pass": true,
+            "expected": "HTTP 403",
+            "actual": "HTTP 403 · Blocked · aws-primary · Bot profile Blocking: BadBot rejected"
+          },
+          {
+            "name": "다른 endpoint는 제외",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          }
+        ]
+      },
+      {
+        "id": "c2-lab3",
+        "title": "Malicious Users",
+        "pass": true,
+        "checks": [
+          {
+            "name": "LB → Origin 연결",
+            "pass": true,
+            "expected": "유효한 Origin과 Domain",
+            "actual": "c2-lab3.example.com → training-c2-lab3-aws"
+          },
+          {
+            "name": "악성 fingerprint #1",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Detected · aws-primary · Malicious fingerprint bad-ja4: 1 requests on shared IP"
+          },
+          {
+            "name": "악성 fingerprint #2",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Detected · aws-primary · Malicious fingerprint bad-ja4: 2 requests on shared IP"
+          },
+          {
+            "name": "악성 fingerprint #3",
+            "pass": true,
+            "expected": "HTTP 403",
+            "actual": "HTTP 403 · Blocked · aws-primary · Temporary block for fingerprint bad-ja4; shared IP is not globally blocked"
+          },
+          {
+            "name": "공유 IP의 정상 fingerprint",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          }
+        ]
+      },
+      {
+        "id": "c2-lab4",
+        "title": "Web App Scanning",
+        "pass": true,
+        "checks": [
+          {
+            "name": "LB → Origin 연결",
+            "pass": true,
+            "expected": "유효한 Origin과 Domain",
+            "actual": "c2-lab4.example.com → training-c2-lab4-aws"
+          },
+          {
+            "name": "스캔 보고서 존재",
+            "pass": true,
+            "expected": "Local scan report",
+            "actual": "2026-10-21T00:30:11.670Z"
+          },
+          {
+            "name": "현재 설정에서 보호 적용",
+            "pass": true,
+            "expected": "All 3 findings mitigated",
+            "actual": "SQL Injection: mitigated, Cross-site Scripting: mitigated, Automated login abuse: mitigated"
+          },
+          {
+            "name": "보고서 최신성",
+            "pass": true,
+            "expected": "Current controls reflected in report",
+            "actual": "설정 변경 후 재스캔 필요"
+          }
+        ]
+      },
+      {
+        "id": "c2-lab5",
+        "title": "AI Assistant & Security Operations",
+        "pass": true,
+        "checks": [
+          {
+            "name": "LB → Origin 연결",
+            "pass": true,
+            "expected": "유효한 Origin과 Domain",
+            "actual": "c2-lab5.example.com → training-c2-lab5-aws"
+          },
+          {
+            "name": "정상 사용자 허용",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "SQLi 차단",
+            "pass": true,
+            "expected": "HTTP 403",
+            "actual": "HTTP 403 · Blocked · aws-primary · WAF signature matched in Blocking mode"
+          },
+          {
+            "name": "XSS 차단",
+            "pass": true,
+            "expected": "HTTP 403",
+            "actual": "HTTP 403 · Blocked · aws-primary · WAF signature matched in Blocking mode"
+          },
+          {
+            "name": "실제 로그에 대한 Explain",
+            "pass": true,
+            "expected": "최근 요청 ID를 포함한 설명",
+            "actual": "LOCAL TEMPLATE · 1개 요청 중 1개 차단. 최근 요청 ab966375-cb0c-4964-a0b1-824208dcd920: HTTP 403, WAF signature matched in Blocking mode. 정상 트래픽과 차단 원인을 함께 비교하고 의도하지 않은 차단 여부를 확인하세요."
+          }
+        ]
+      },
+      {
+        "id": "c3-lab1",
+        "title": "Service Policy",
+        "pass": true,
+        "checks": [
+          {
+            "name": "LB → Origin 연결",
+            "pass": true,
+            "expected": "유효한 Origin과 Domain",
+            "actual": "c3-lab1.example.com → training-c3-lab1-aws"
+          },
+          {
+            "name": "헤더 없음",
+            "pass": true,
+            "expected": "HTTP 403",
+            "actual": "HTTP 403 · Blocked · aws-primary · Service policy: required header missing or invalid"
+          },
+          {
+            "name": "정확한 헤더",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "잘못된 헤더 값",
+            "pass": true,
+            "expected": "HTTP 403",
+            "actual": "HTTP 403 · Blocked · aws-primary · Service policy: required header missing or invalid"
+          }
+        ]
+      },
+      {
+        "id": "c3-lab2",
+        "title": "Load Balancer Routes",
+        "pass": true,
+        "checks": [
+          {
+            "name": "LB → Origin 연결",
+            "pass": true,
+            "expected": "유효한 Origin과 Domain",
+            "actual": "c3-lab2.example.com → training-c3-lab2-aws"
+          },
+          {
+            "name": "기본 AWS 경로",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "Canary 헤더 경로",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · azure-canary · Local origin accepted request"
+          },
+          {
+            "name": "/login path → green + rewrite + namespace header",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · azure-canary · Local origin accepted request"
+          },
+          {
+            "name": "Route WAF 차단",
+            "pass": true,
+            "expected": "HTTP 403",
+            "actual": "HTTP 403 · Blocked · azure-canary · WAF signature matched in Blocking mode"
+          },
+          {
+            "name": "기본 경로는 route WAF 대상 아님",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Protection is not enabled; forwarded to aws-primary"
+          }
+        ]
+      },
+      {
+        "id": "c3-lab3",
+        "title": "Dashboards & AI Assistant",
+        "pass": true,
+        "checks": [
+          {
+            "name": "LB → Origin 연결",
+            "pass": true,
+            "expected": "유효한 Origin과 Domain",
+            "actual": "c3-lab3.example.com → training-c3-lab3-aws"
+          },
+          {
+            "name": "정상 사용자 허용",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "SQLi 차단",
+            "pass": true,
+            "expected": "HTTP 403",
+            "actual": "HTTP 403 · Blocked · aws-primary · WAF signature matched in Blocking mode"
+          },
+          {
+            "name": "XSS 차단",
+            "pass": true,
+            "expected": "HTTP 403",
+            "actual": "HTTP 403 · Blocked · aws-primary · WAF signature matched in Blocking mode"
+          },
+          {
+            "name": "실제 로그에 대한 Explain",
+            "pass": true,
+            "expected": "최근 요청 ID를 포함한 설명",
+            "actual": "LOCAL TEMPLATE · 1개 요청 중 1개 차단. 최근 요청 bac995c7-328b-4b5b-86c3-fa932d2fb378: HTTP 403, WAF signature matched in Blocking mode. 정상 트래픽과 차단 원인을 함께 비교하고 의도하지 않은 차단 여부를 확인하세요."
+          }
+        ]
+      },
+      {
+        "id": "c4-lab1",
+        "title": "Load Balancer and Origin",
+        "pass": true,
+        "checks": [
+          {
+            "name": "LB → Origin 연결",
+            "pass": true,
+            "expected": "유효한 Origin과 Domain",
+            "actual": "c4-lab1.example.com → training-c4-lab1-aws"
+          },
+          {
+            "name": "HTTPS API frontend",
+            "pass": true,
+            "expected": "HTTPS :443 → Origin :80",
+            "actual": "HTTPS :443 → :80"
+          },
+          {
+            "name": "Swagger",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "Known API",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          }
+        ]
+      },
+      {
+        "id": "c4-lab2",
+        "title": "API Inventory",
+        "pass": true,
+        "checks": [
+          {
+            "name": "LB → Origin 연결",
+            "pass": true,
+            "expected": "유효한 Origin과 Domain",
+            "actual": "c4-lab2.example.com → training-c4-lab2-aws"
+          },
+          {
+            "name": "Known inventory API",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "Shadow API denied",
+            "pass": true,
+            "expected": "HTTP 403",
+            "actual": "HTTP 403 · Blocked · aws-primary · API inventory: fall-through endpoint denied"
+          }
+        ]
+      },
+      {
+        "id": "c4-lab3",
+        "title": "API Protection",
+        "pass": true,
+        "checks": [
+          {
+            "name": "LB → Origin 연결",
+            "pass": true,
+            "expected": "유효한 Origin과 Domain",
+            "actual": "c4-lab3.example.com → training-c4-lab3-aws"
+          },
+          {
+            "name": "민감 데이터 endpoint Deny",
+            "pass": true,
+            "expected": "HTTP 403",
+            "actual": "HTTP 403 · Blocked · aws-primary · API protection: endpoint Deny / ANY method"
+          },
+          {
+            "name": "정상 endpoint 유지",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          }
+        ]
+      },
+      {
+        "id": "c4-lab4",
+        "title": "Web Application Firewall",
+        "pass": true,
+        "checks": [
+          {
+            "name": "LB → Origin 연결",
+            "pass": true,
+            "expected": "유효한 Origin과 Domain",
+            "actual": "c4-lab4.example.com → training-c4-lab4-aws"
+          },
+          {
+            "name": "정상 사용자 허용",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "SQLi 차단",
+            "pass": true,
+            "expected": "HTTP 403",
+            "actual": "HTTP 403 · Blocked · aws-primary · WAF signature matched in Blocking mode"
+          },
+          {
+            "name": "XSS 차단",
+            "pass": true,
+            "expected": "HTTP 403",
+            "actual": "HTTP 403 · Blocked · aws-primary · WAF signature matched in Blocking mode"
+          }
+        ]
+      },
+      {
+        "id": "c4-lab5",
+        "title": "Rate Limiting",
+        "pass": true,
+        "checks": [
+          {
+            "name": "LB → Origin 연결",
+            "pass": true,
+            "expected": "유효한 Origin과 Domain",
+            "actual": "c4-lab5.example.com → training-c4-lab5-aws"
+          },
+          {
+            "name": "3 requests / minute",
+            "pass": true,
+            "expected": "3 / 60s",
+            "actual": "3 / 60s"
+          },
+          {
+            "name": "GET /api/customerlookup/getbyname #1",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "GET /api/customerlookup/getbyname #2",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "GET /api/customerlookup/getbyname #3",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "GET /api/customerlookup/getbyname #4",
+            "pass": true,
+            "expected": "HTTP 429",
+            "actual": "HTTP 429 · Blocked · aws-primary · Rate limiter: 3 requests / 60s exceeded"
+          },
+          {
+            "name": "다른 클라이언트 허용",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "제한 제외 경로 #1",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "제한 제외 경로 #2",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "제한 제외 경로 #3",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "제한 제외 경로 #4",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "제한 제외 경로 #5",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "시간 창 만료 후 재허용",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          }
+        ]
+      },
+      {
+        "id": "c4-lab6",
+        "title": "Security Analytics & Malicious Users",
+        "pass": true,
+        "checks": [
+          {
+            "name": "LB → Origin 연결",
+            "pass": true,
+            "expected": "유효한 Origin과 Domain",
+            "actual": "c4-lab6.example.com → training-c4-lab6-aws"
+          },
+          {
+            "name": "악성 fingerprint #1",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Detected · aws-primary · Malicious fingerprint bad-ja4: 1 requests on shared IP"
+          },
+          {
+            "name": "악성 fingerprint #2",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Detected · aws-primary · Malicious fingerprint bad-ja4: 2 requests on shared IP"
+          },
+          {
+            "name": "악성 fingerprint #3",
+            "pass": true,
+            "expected": "HTTP 403",
+            "actual": "HTTP 403 · Blocked · aws-primary · Temporary block for fingerprint bad-ja4; shared IP is not globally blocked"
+          },
+          {
+            "name": "공유 IP의 정상 fingerprint",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          }
+        ]
+      },
+      {
+        "id": "c4-lab7",
+        "title": "API Discovery / BIG-IP Connector",
+        "pass": true,
+        "checks": [
+          {
+            "name": "LB → Origin 연결",
+            "pass": true,
+            "expected": "유효한 Origin과 Domain",
+            "actual": "c4-lab7.example.com → training-c4-lab7-aws"
+          },
+          {
+            "name": "탐색 트래픽 생성",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "Discovered endpoint",
+            "pass": true,
+            "expected": "/qrcode/form",
+            "actual": "/qrcode/form"
+          }
+        ]
+      },
+      {
+        "id": "c5-lab1",
+        "title": "Load Balancer & Traffic Dashboards",
+        "pass": true,
+        "checks": [
+          {
+            "name": "LB → Origin 연결",
+            "pass": true,
+            "expected": "유효한 Origin과 Domain",
+            "actual": "c5-lab1.example.com → training-c5-lab1-aws"
+          },
+          {
+            "name": "WAF 적용 후 재시험",
+            "pass": true,
+            "expected": "WAF attached / Blocking",
+            "actual": "training-c5-lab1-waf / Blocking"
+          },
+          {
+            "name": "보호 전 기준 상태",
+            "pass": true,
+            "expected": "Bot disabled",
+            "actual": "Disabled"
+          },
+          {
+            "name": "로그인 봇 기준 응답",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          }
+        ]
+      },
+      {
+        "id": "c5-lab2",
+        "title": "Bot Protection Profile",
+        "pass": true,
+        "checks": [
+          {
+            "name": "LB → Origin 연결",
+            "pass": true,
+            "expected": "유효한 Origin과 Domain",
+            "actual": "c5-lab2.example.com → training-c5-lab2-aws"
+          },
+          {
+            "name": "정상 사람 요청",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "봇 요청",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Detected · aws-primary · Bot profile: synthetic telemetry classified BadBot"
+          },
+          {
+            "name": "다른 endpoint는 제외",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          }
+        ]
+      },
+      {
+        "id": "c5-lab3",
+        "title": "Human-Simulated Stuffing",
+        "pass": true,
+        "checks": [
+          {
+            "name": "LB → Origin 연결",
+            "pass": true,
+            "expected": "유효한 Origin과 Domain",
+            "actual": "c5-lab3.example.com → training-c5-lab3-aws"
+          },
+          {
+            "name": "Synthetic telemetry #1",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "Synthetic telemetry #2",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "Synthetic telemetry #3",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "Synthetic telemetry #4",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "Synthetic telemetry #5",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "Synthetic telemetry #6",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "Synthetic telemetry #7",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "Synthetic telemetry #8",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "Synthetic telemetry #9",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "Synthetic telemetry #10",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "Synthetic telemetry #11",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Detected · aws-primary · Bot profile: synthetic telemetry classified BadBot"
+          },
+          {
+            "name": "Synthetic telemetry #12",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Detected · aws-primary · Bot profile: synthetic telemetry classified BadBot"
+          }
+        ]
+      },
+      {
+        "id": "c5-lab4",
+        "title": "Defend Against an Ongoing Attack",
+        "pass": true,
+        "checks": [
+          {
+            "name": "LB → Origin 연결",
+            "pass": true,
+            "expected": "유효한 Origin과 Domain",
+            "actual": "c5-lab4.example.com → training-c5-lab4-aws"
+          },
+          {
+            "name": "정상 사람 요청",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "봇 요청",
+            "pass": true,
+            "expected": "HTTP 403",
+            "actual": "HTTP 403 · Blocked · aws-primary · Bot profile Blocking: BadBot rejected"
+          },
+          {
+            "name": "다른 endpoint는 제외",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          }
+        ]
+      },
+      {
+        "id": "c6-module1-lab1",
+        "title": "Customer Edge Inspection",
+        "pass": true,
+        "checks": [
+          {
+            "name": "LB → Origin 연결",
+            "pass": true,
+            "expected": "유효한 Origin과 Domain",
+            "actual": "c6-module1-lab1.example.com → training-c6-module1-lab1-aws"
+          },
+          {
+            "name": "Private Origin / CE",
+            "pass": true,
+            "expected": "Private origin on CE",
+            "actual": "IP on Site / training-c6-module1-lab1-ce"
+          },
+          {
+            "name": "Regional Edge advertisement",
+            "pass": true,
+            "expected": "Internet",
+            "actual": "Internet"
+          },
+          {
+            "name": "CE Online request",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "CE Offline request",
+            "pass": true,
+            "expected": "HTTP 503",
+            "actual": "HTTP 503 · Blocked · aws-primary · Origin / Customer Edge unavailable"
+          }
+        ]
+      },
+      {
+        "id": "c6-module1-lab2",
+        "title": "Network Connect & Segments",
+        "pass": true,
+        "checks": [
+          {
+            "name": "LB → Origin 연결",
+            "pass": true,
+            "expected": "유효한 Origin과 Domain",
+            "actual": "c6-module1-lab2.example.com → training-c6-module1-lab2-aws"
+          },
+          {
+            "name": "CE Online",
+            "pass": true,
+            "expected": "Online",
+            "actual": "true"
+          },
+          {
+            "name": "HTTP 연결",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "SSH 방화벽",
+            "pass": true,
+            "expected": "HTTP 403",
+            "actual": "HTTP 403 · Blocked · aws-primary · Enhanced firewall: SSH denied (simulated L4 result)"
+          },
+          {
+            "name": "CE 단절 연결",
+            "pass": true,
+            "expected": "HTTP 503",
+            "actual": "HTTP 503 · Blocked · aws-primary · Origin / Customer Edge unavailable"
+          }
+        ]
+      },
+      {
+        "id": "c6-module2-lab3",
+        "title": "Globally Available Frontend",
+        "pass": true,
+        "checks": [
+          {
+            "name": "LB → Origin 연결",
+            "pass": true,
+            "expected": "유효한 Origin과 Domain",
+            "actual": "c6-module2-lab3.example.com → training-c6-module2-lab3-aws"
+          },
+          {
+            "name": "AWS 우선",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "AWS 장애 → Azure",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · azure-canary · Local origin accepted request"
+          },
+          {
+            "name": "전체 Origin 장애",
+            "pass": true,
+            "expected": "HTTP 503",
+            "actual": "HTTP 503 · Blocked · none · Origin / Customer Edge unavailable"
+          },
+          {
+            "name": "AWS 복구",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          }
+        ]
+      },
+      {
+        "id": "c6-module2-lab4",
+        "title": "Solving IP Overlap",
+        "pass": true,
+        "checks": [
+          {
+            "name": "LB → Origin 연결",
+            "pass": true,
+            "expected": "유효한 Origin과 Domain",
+            "actual": "c6-module2-lab4.example.com → training-c6-module2-lab4-aws"
+          },
+          {
+            "name": "CE Online",
+            "pass": true,
+            "expected": "Online",
+            "actual": "true"
+          },
+          {
+            "name": "HTTP 연결",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "SSH 방화벽",
+            "pass": true,
+            "expected": "HTTP 403",
+            "actual": "HTTP 403 · Blocked · aws-primary · Enhanced firewall: SSH denied (simulated L4 result)"
+          },
+          {
+            "name": "Task 8 · HEAD 차단",
+            "pass": true,
+            "expected": "HTTP 403",
+            "actual": "HTTP 403 · Blocked · aws-primary · Service policy: only GET is allowed; method HEAD denied"
+          },
+          {
+            "name": "Task 3 · IP만 접근 시 Host 불일치",
+            "pass": true,
+            "expected": "HTTP 404",
+            "actual": "HTTP 404 · Blocked · aws-primary · Internal VIP: Host does not match the configured LB domain"
+          },
+          {
+            "name": "CE 단절 연결",
+            "pass": true,
+            "expected": "HTTP 503",
+            "actual": "HTTP 503 · Blocked · aws-primary · Origin / Customer Edge unavailable"
+          }
+        ]
+      },
+      {
+        "id": "c7-module1",
+        "title": "Vibe Coding a Simple Web App",
+        "pass": true,
+        "checks": [
+          {
+            "name": "LB → Origin 연결",
+            "pass": true,
+            "expected": "유효한 Origin과 Domain",
+            "actual": "c7-module1.example.com → training-c7-module1-aws"
+          },
+          {
+            "name": "현재 소스 artifact",
+            "pass": true,
+            "expected": "Current Build + Test",
+            "actual": "local-41793167 / Build → Test"
+          },
+          {
+            "name": "앱 route 계약",
+            "pass": true,
+            "expected": "GET / + GET /about",
+            "actual": "Local manifest contract"
+          }
+        ]
+      },
+      {
+        "id": "c7-module2",
+        "title": "CI/CD & Basic Runtime Security",
+        "pass": true,
+        "checks": [
+          {
+            "name": "LB → Origin 연결",
+            "pass": true,
+            "expected": "유효한 Origin과 Domain",
+            "actual": "c7-module2.example.com → training-c7-module2-aws"
+          },
+          {
+            "name": "정상 사용자 허용",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "SQLi 차단",
+            "pass": true,
+            "expected": "HTTP 403",
+            "actual": "HTTP 403 · Blocked · aws-primary · WAF signature matched in Blocking mode"
+          },
+          {
+            "name": "XSS 차단",
+            "pass": true,
+            "expected": "HTTP 403",
+            "actual": "HTTP 403 · Blocked · aws-primary · WAF signature matched in Blocking mode"
+          },
+          {
+            "name": "현재 소스 artifact",
+            "pass": true,
+            "expected": "Current Build + Test",
+            "actual": "local-41793167 / Build → Test → Deploy"
+          },
+          {
+            "name": "현재 소스 배포",
+            "pass": true,
+            "expected": "Current source deployed",
+            "actual": "Build → Test → Deploy"
+          }
+        ]
+      },
+      {
+        "id": "c7-module3",
+        "title": "Advanced Runtime Security",
+        "pass": true,
+        "checks": [
+          {
+            "name": "LB → Origin 연결",
+            "pass": true,
+            "expected": "유효한 Origin과 Domain",
+            "actual": "c7-module3.example.com → training-c7-module3-aws"
+          },
+          {
+            "name": "탐색 트래픽 생성",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "Discovered endpoint",
+            "pass": true,
+            "expected": "/api/shadow/contact",
+            "actual": "/api/shadow/contact"
+          },
+          {
+            "name": "정상 사람 요청",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "봇 요청",
+            "pass": true,
+            "expected": "HTTP 403",
+            "actual": "HTTP 403 · Blocked · aws-primary · Bot profile Blocking: BadBot rejected"
+          },
+          {
+            "name": "다른 endpoint는 제외",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "Contact form bot 차단",
+            "pass": true,
+            "expected": "HTTP 403",
+            "actual": "HTTP 403 · Blocked · aws-primary · Bot profile Blocking: BadBot rejected"
+          },
+          {
+            "name": "Contact form 정상 허용",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "현재 소스 artifact",
+            "pass": true,
+            "expected": "Current Build + Test",
+            "actual": "local-41793167 / Build → Test → Deploy"
+          },
+          {
+            "name": "현재 소스 배포",
+            "pass": true,
+            "expected": "Current source deployed",
+            "actual": "Build → Test → Deploy"
+          }
+        ]
+      },
+      {
+        "id": "c7-module4",
+        "title": "Web App Scanning & Conclusion",
+        "pass": true,
+        "checks": [
+          {
+            "name": "LB → Origin 연결",
+            "pass": true,
+            "expected": "유효한 Origin과 Domain",
+            "actual": "c7-module4.example.com → training-c7-module4-aws"
+          },
+          {
+            "name": "현재 소스 artifact",
+            "pass": true,
+            "expected": "Current Build + Test",
+            "actual": "local-41793167 / Build → Test → Deploy"
+          },
+          {
+            "name": "현재 소스 배포",
+            "pass": true,
+            "expected": "Current source deployed",
+            "actual": "Build → Test → Deploy"
+          },
+          {
+            "name": "스캔 보고서 존재",
+            "pass": true,
+            "expected": "Local scan report",
+            "actual": "2026-10-21T00:30:11.686Z"
+          },
+          {
+            "name": "현재 설정에서 보호 적용",
+            "pass": true,
+            "expected": "All 3 findings mitigated",
+            "actual": "SQL Injection: mitigated, Cross-site Scripting: mitigated, Automated login abuse: mitigated"
+          },
+          {
+            "name": "보고서 최신성",
+            "pass": true,
+            "expected": "Current controls reflected in report",
+            "actual": "설정 변경 후 재스캔 필요"
+          }
+        ]
+      },
+      {
+        "id": "c8-lab1",
+        "title": "Negative Enforcement Policy",
+        "pass": true,
+        "checks": [
+          {
+            "name": "LB → Origin 연결",
+            "pass": true,
+            "expected": "유효한 Origin과 Domain",
+            "actual": "c8-lab1.example.com → training-c8-lab1-aws"
+          },
+          {
+            "name": "정상 국가",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "Fiji 거부",
+            "pass": true,
+            "expected": "HTTP 403",
+            "actual": "HTTP 403 · Blocked · aws-primary · Service policy: country or reputation deny"
+          },
+          {
+            "name": "TOR 평판 거부",
+            "pass": true,
+            "expected": "HTTP 403",
+            "actual": "HTTP 403 · Blocked · aws-primary · Service policy: country or reputation deny"
+          },
+          {
+            "name": "Spam 평판 거부",
+            "pass": true,
+            "expected": "HTTP 403",
+            "actual": "HTTP 403 · Blocked · aws-primary · Service policy: country or reputation deny"
+          }
+        ]
+      },
+      {
+        "id": "c8-lab2",
+        "title": "Positive Application Security",
+        "pass": true,
+        "checks": [
+          {
+            "name": "LB → Origin 연결",
+            "pass": true,
+            "expected": "유효한 Origin과 Domain",
+            "actual": "c8-lab2.example.com → training-c8-lab2-aws"
+          },
+          {
+            "name": "허용 국가·경로",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "다른 국가",
+            "pass": true,
+            "expected": "HTTP 403",
+            "actual": "HTTP 403 · Blocked · aws-primary · Service policy: default deny; allowlist did not match"
+          },
+          {
+            "name": "다른 경로",
+            "pass": true,
+            "expected": "HTTP 403",
+            "actual": "HTTP 403 · Blocked · aws-primary · Service policy: default deny; allowlist did not match"
+          },
+          {
+            "name": "다른 메서드",
+            "pass": true,
+            "expected": "HTTP 403",
+            "actual": "HTTP 403 · Blocked · aws-primary · Service policy: default deny; allowlist did not match"
+          }
+        ]
+      },
+      {
+        "id": "c8-lab3",
+        "title": "Zero Day: Rate Limiting & Policy",
+        "pass": true,
+        "checks": [
+          {
+            "name": "LB → Origin 연결",
+            "pass": true,
+            "expected": "유효한 Origin과 Domain",
+            "actual": "c8-lab3.example.com → training-c8-lab3-aws"
+          },
+          {
+            "name": "3 requests / minute",
+            "pass": true,
+            "expected": "3 / 60s",
+            "actual": "3 / 60s"
+          },
+          {
+            "name": "GET /ratelimit.php #1",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "GET /ratelimit.php #2",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "GET /ratelimit.php #3",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "GET /ratelimit.php #4",
+            "pass": true,
+            "expected": "HTTP 429",
+            "actual": "HTTP 429 · Blocked · aws-primary · Rate limiter: 3 requests / 60s exceeded"
+          },
+          {
+            "name": "다른 클라이언트 허용",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "POST /auth.php #1",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "POST /auth.php #2",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "POST /auth.php #3",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "POST /auth.php #4",
+            "pass": true,
+            "expected": "HTTP 429",
+            "actual": "HTTP 429 · Blocked · aws-primary · Rate limiter: 3 requests / 60s exceeded"
+          },
+          {
+            "name": "다른 클라이언트 허용",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "제한 제외 경로 #1",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "제한 제외 경로 #2",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "제한 제외 경로 #3",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "제한 제외 경로 #4",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "제한 제외 경로 #5",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "시간 창 만료 후 재허용",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "Zero Day 패턴 차단",
+            "pass": true,
+            "expected": "HTTP 403",
+            "actual": "HTTP 403 · Blocked · aws-primary · Custom service policy: exploit request pattern"
+          },
+          {
+            "name": "정상 로그인 유지",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          }
+        ]
+      },
+      {
+        "id": "c9-lab1",
+        "title": "Publishing & WAF Protection",
+        "pass": true,
+        "checks": [
+          {
+            "name": "LB → Origin 연결",
+            "pass": true,
+            "expected": "유효한 Origin과 Domain",
+            "actual": "c9-lab1.example.com → training-c9-lab1-aws"
+          },
+          {
+            "name": "정상 사용자 허용",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "SQLi 차단",
+            "pass": true,
+            "expected": "HTTP 403",
+            "actual": "HTTP 403 · Blocked · aws-primary · WAF signature matched in Blocking mode"
+          },
+          {
+            "name": "XSS 차단",
+            "pass": true,
+            "expected": "HTTP 403",
+            "actual": "HTTP 403 · Blocked · aws-primary · WAF signature matched in Blocking mode"
+          }
+        ]
+      },
+      {
+        "id": "c9-lab2",
+        "title": "API Discovery & Endpoint Protection",
+        "pass": true,
+        "checks": [
+          {
+            "name": "LB → Origin 연결",
+            "pass": true,
+            "expected": "유효한 Origin과 Domain",
+            "actual": "c9-lab2.example.com → training-c9-lab2-aws"
+          },
+          {
+            "name": "민감 데이터 endpoint Deny",
+            "pass": true,
+            "expected": "HTTP 403",
+            "actual": "HTTP 403 · Blocked · aws-primary · API protection: endpoint Deny / ANY method"
+          },
+          {
+            "name": "정상 endpoint 유지",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          }
+        ]
+      },
+      {
+        "id": "c9-lab3",
+        "title": "Service Policies & Rate Limiting",
+        "pass": true,
+        "checks": [
+          {
+            "name": "LB → Origin 연결",
+            "pass": true,
+            "expected": "유효한 Origin과 Domain",
+            "actual": "c9-lab3.example.com → training-c9-lab3-aws"
+          },
+          {
+            "name": "3 requests / minute",
+            "pass": true,
+            "expected": "3 / 60s",
+            "actual": "3 / 60s"
+          },
+          {
+            "name": "GET /ratelimit.php #1",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "GET /ratelimit.php #2",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "GET /ratelimit.php #3",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "GET /ratelimit.php #4",
+            "pass": true,
+            "expected": "HTTP 429",
+            "actual": "HTTP 429 · Blocked · aws-primary · Rate limiter: 3 requests / 60s exceeded"
+          },
+          {
+            "name": "다른 클라이언트 허용",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "POST /auth.php #1",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "POST /auth.php #2",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "POST /auth.php #3",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "POST /auth.php #4",
+            "pass": true,
+            "expected": "HTTP 429",
+            "actual": "HTTP 429 · Blocked · aws-primary · Rate limiter: 3 requests / 60s exceeded"
+          },
+          {
+            "name": "다른 클라이언트 허용",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "제한 제외 경로 #1",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "제한 제외 경로 #2",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "제한 제외 경로 #3",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "제한 제외 경로 #4",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "제한 제외 경로 #5",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "시간 창 만료 후 재허용",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "Zero Day 패턴 차단",
+            "pass": true,
+            "expected": "HTTP 403",
+            "actual": "HTTP 403 · Blocked · aws-primary · Custom service policy: exploit request pattern"
+          },
+          {
+            "name": "정상 로그인 유지",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          }
+        ]
+      },
+      {
+        "id": "c9-lab4",
+        "title": "Signature-Based Bot Protection",
+        "pass": true,
+        "checks": [
+          {
+            "name": "LB → Origin 연결",
+            "pass": true,
+            "expected": "유효한 Origin과 Domain",
+            "actual": "c9-lab4.example.com → training-c9-lab4-aws"
+          },
+          {
+            "name": "정상 사용자 허용",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "SQLi 차단",
+            "pass": true,
+            "expected": "HTTP 403",
+            "actual": "HTTP 403 · Blocked · aws-primary · WAF signature matched in Blocking mode"
+          },
+          {
+            "name": "XSS 차단",
+            "pass": true,
+            "expected": "HTTP 403",
+            "actual": "HTTP 403 · Blocked · aws-primary · WAF signature matched in Blocking mode"
+          }
+        ]
+      },
+      {
+        "id": "c9-lab5",
+        "title": "Bot Defense & Protected Endpoints",
+        "pass": true,
+        "checks": [
+          {
+            "name": "LB → Origin 연결",
+            "pass": true,
+            "expected": "유효한 Origin과 Domain",
+            "actual": "c9-lab5.example.com → training-c9-lab5-aws"
+          },
+          {
+            "name": "정상 사람 요청",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          },
+          {
+            "name": "봇 요청",
+            "pass": true,
+            "expected": "HTTP 403",
+            "actual": "HTTP 403 · Blocked · aws-primary · Bot profile Blocking: BadBot rejected"
+          },
+          {
+            "name": "다른 endpoint는 제외",
+            "pass": true,
+            "expected": "HTTP 200",
+            "actual": "HTTP 200 · Allowed · aws-primary · Local origin accepted request"
+          }
+        ]
+      }
+    ],
+    "counts": [
+      {
+        "class": 1,
+        "total": 4,
+        "passed": 4
+      },
+      {
+        "class": 2,
+        "total": 5,
+        "passed": 5
+      },
+      {
+        "class": 3,
+        "total": 3,
+        "passed": 3
+      },
+      {
+        "class": 4,
+        "total": 7,
+        "passed": 7
+      },
+      {
+        "class": 5,
+        "total": 4,
+        "passed": 4
+      },
+      {
+        "class": 6,
+        "total": 4,
+        "passed": 4
+      },
+      {
+        "class": 7,
+        "total": 4,
+        "passed": 4
+      },
+      {
+        "class": 8,
+        "total": 3,
+        "passed": 3
+      },
+      {
+        "class": 9,
+        "total": 5,
+        "passed": 5
+      }
+    ],
+    "unchanged": true,
+    "opened": [
+      {
+        "class": 1,
+        "index": 1,
+        "heading": "Public Endpoint"
+      },
+      {
+        "class": 1,
+        "index": 2,
+        "heading": "Private Endpoint via Regional Edges"
+      },
+      {
+        "class": 1,
+        "index": 3,
+        "heading": "Protecting a Private Endpoint"
+      },
+      {
+        "class": 1,
+        "index": 4,
+        "heading": "Security Analytics"
+      },
+      {
+        "class": 2,
+        "index": 1,
+        "heading": "Web Application Firewall Configuration"
+      },
+      {
+        "class": 2,
+        "index": 2,
+        "heading": "Signature-based Bots & Bot Defense"
+      },
+      {
+        "class": 2,
+        "index": 3,
+        "heading": "Malicious Users"
+      },
+      {
+        "class": 2,
+        "index": 4,
+        "heading": "Web App Scanning"
+      },
+      {
+        "class": 2,
+        "index": 5,
+        "heading": "AI Assistant & Security Operations"
+      },
+      {
+        "class": 3,
+        "index": 1,
+        "heading": "Service Policy"
+      },
+      {
+        "class": 3,
+        "index": 2,
+        "heading": "Load Balancer Routes"
+      },
+      {
+        "class": 3,
+        "index": 3,
+        "heading": "Dashboards & AI Assistant"
+      },
+      {
+        "class": 4,
+        "index": 1,
+        "heading": "Load Balancer and Origin"
+      },
+      {
+        "class": 4,
+        "index": 2,
+        "heading": "API Inventory"
+      },
+      {
+        "class": 4,
+        "index": 3,
+        "heading": "API Protection"
+      },
+      {
+        "class": 4,
+        "index": 4,
+        "heading": "Web Application Firewall"
+      },
+      {
+        "class": 4,
+        "index": 5,
+        "heading": "Rate Limiting"
+      },
+      {
+        "class": 4,
+        "index": 6,
+        "heading": "Security Analytics & Malicious Users"
+      },
+      {
+        "class": 4,
+        "index": 7,
+        "heading": "API Discovery / BIG-IP Connector"
+      },
+      {
+        "class": 5,
+        "index": 1,
+        "heading": "Load Balancer & Traffic Dashboards"
+      },
+      {
+        "class": 5,
+        "index": 2,
+        "heading": "Bot Protection Profile"
+      },
+      {
+        "class": 5,
+        "index": 3,
+        "heading": "Human-Simulated Stuffing"
+      },
+      {
+        "class": 5,
+        "index": 4,
+        "heading": "Defend Against an Ongoing Attack"
+      },
+      {
+        "class": 6,
+        "index": 1,
+        "heading": "Customer Edge Inspection"
+      },
+      {
+        "class": 6,
+        "index": 2,
+        "heading": "Network Connect & Segments"
+      },
+      {
+        "class": 6,
+        "index": 3,
+        "heading": "Globally Available Frontend"
+      },
+      {
+        "class": 6,
+        "index": 4,
+        "heading": "Solving IP Overlap"
+      },
+      {
+        "class": 7,
+        "index": 1,
+        "heading": "Vibe Coding a Simple Web App"
+      },
+      {
+        "class": 7,
+        "index": 2,
+        "heading": "CI/CD & Basic Runtime Security"
+      },
+      {
+        "class": 7,
+        "index": 3,
+        "heading": "Advanced Runtime Security"
+      },
+      {
+        "class": 7,
+        "index": 4,
+        "heading": "Web App Scanning & Conclusion"
+      },
+      {
+        "class": 8,
+        "index": 1,
+        "heading": "Negative Enforcement Policy"
+      },
+      {
+        "class": 8,
+        "index": 2,
+        "heading": "Positive Application Security"
+      },
+      {
+        "class": 8,
+        "index": 3,
+        "heading": "Zero Day: Rate Limiting & Policy"
+      },
+      {
+        "class": 9,
+        "index": 1,
+        "heading": "Publishing & WAF Protection"
+      },
+      {
+        "class": 9,
+        "index": 2,
+        "heading": "API Discovery & Endpoint Protection"
+      },
+      {
+        "class": 9,
+        "index": 3,
+        "heading": "Service Policies & Rate Limiting"
+      },
+      {
+        "class": 9,
+        "index": 4,
+        "heading": "Signature-Based Bot Protection"
+      },
+      {
+        "class": 9,
+        "index": 5,
+        "heading": "Bot Defense & Protected Endpoints"
+      }
+    ],
+    "errors": []
+  },
+  "visual": {
+    "mobileOverflow": false,
+    "desktop": [
+      1793,
+      1100
+    ],
+    "savedSettingsUnchanged": true
+  },
+  "finalCapture": {
+    "currentRun": true,
+    "settingsSaved": true,
+    "displayed": "API Endpoints / Last Tested"
+  }
+}

@@ -1,3 +1,6 @@
+import { ApiSettingsFields } from '../api-security/ApiSettingsFields';
+import { defaults as apiDefaults, environmentError } from '../api-security/model';
+import { configurationError, useApiSecurity } from '../api-security/store';
 import { lazy, Suspense, useState, type FormEvent } from 'react';
 import { Plus, Trash2, ArrowUp, ArrowDown } from 'lucide-react';
 import { useConsole } from '../store';
@@ -150,6 +153,19 @@ export function LBForm({
       return setError('WAF exclusions must have unique names.');
     if (!Number.isFinite(config.timeout) || config.timeout < 1 || config.timeout > 600)
       return setError('Route timeout must be between 1 and 600 seconds.');
+    if (config.apiSecurity) {
+      const target = { ...form, domains: list };
+      const apiError = configurationError(config.apiSecurity, target);
+      if (apiError) return setError(apiError);
+      if (config.apiSecurity.testing) {
+        if (!config.apiSecurity.environments.length)
+          return setError('Add Testing Environments before saving API Testing.');
+        for (const env of config.apiSecurity.environments) {
+          const e = environmentError(env, list, useApiSecurity.getState().clock);
+          if (e) return setError(e);
+        }
+      }
+    }
     s.saveLb({ ...form, domains: list, config });
     notify(`${form.name} configuration saved`);
     close();
@@ -481,20 +497,29 @@ export function LBForm({
               title: 'API Protection',
               content: (
                 <>
-                  <ToggleField
-                    label="API Discovery"
-                    value={config.apiDiscovery}
-                    onChange={(v) => setting('apiDiscovery', v)}
+                  <ApiSettingsFields
+                    lb={{ ...form, domains: domains.map((d) => d.trim()) }}
+                    value={{
+                      ...apiDefaults(),
+                      discovery: config.apiDiscovery,
+                      ...config.apiSecurity,
+                    }}
+                    onChange={(value) => {
+                      setConfig((current) => ({
+                        ...current,
+                        apiSecurity: value,
+                        apiDiscovery: value.discovery,
+                      }));
+                      setError('');
+                    }}
                   />
-                  <ToggleField
-                    label="API Schema Validation"
-                    value={form.apiProtection}
-                    onChange={(v) => update('apiProtection', v)}
-                  />
-                  <p className="configuration-help">
-                    Discovery generates mock endpoints; schema validation evaluates the API Schema
-                    Violation scenario.
-                  </p>
+                  {!config.apiSecurity && (
+                    <ToggleField
+                      label="API Schema Validation"
+                      value={form.apiProtection}
+                      onChange={(v) => update('apiProtection', v)}
+                    />
+                  )}
                 </>
               ),
             },

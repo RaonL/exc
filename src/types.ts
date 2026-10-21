@@ -1,6 +1,10 @@
 export type Workspace =
   'Home' | 'Web App & API Protection' | 'Multi-Cloud Network Connect' | 'Administration';
 export type Page =
+  | 'API Quickstarts'
+  | 'OpenAPI Files'
+  | 'API Definition'
+  | 'Code Base Integration'
   | 'Security Catalog'
   | 'Training Center'
   | 'Services'
@@ -146,6 +150,7 @@ export interface WafExclusion {
   expiresAt?: string;
 }
 export interface LBConfig {
+  apiSecurity?: import('./api-security/model').ApiSettings;
   description: string;
   labels: string;
   vip: 'Internet' | 'Internet (Specified VIP)' | 'Custom' | 'Do Not Advertise';

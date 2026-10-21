@@ -1,0 +1,250 @@
+[
+  {
+    "guide": "api-security",
+    "figure": 1,
+    "alt": "Figure: Select Namespace",
+    "url": "https://docs.cloud.f5.com/docs-v2/images/04--quickstart/20--api-security/images/select-namespace.png",
+    "file": "/references/api-quickstart/api-security-1-select-namespace.png",
+    "sha256": "0b06cbbd3ec5e96d177ba14e10f72d190338bb00655b2caee88b5137f6ae63f5"
+  },
+  {
+    "guide": "api-security",
+    "figure": 2,
+    "alt": "Figure: Load Balancers",
+    "url": "https://docs.cloud.f5.com/docs-v2/images/04--quickstart/20--api-security/images/load-balancers-page.png",
+    "file": "/references/api-quickstart/api-security-2-load-balancers-page.png",
+    "sha256": "206e756e653c35faffc591b026dc39660d3dc46a0f18c3f0d7669be2a767ca66"
+  },
+  {
+    "guide": "api-security",
+    "figure": 3,
+    "alt": "Figure: Manage Load Balancer Configuration",
+    "url": "https://docs.cloud.f5.com/docs-v2/images/04--quickstart/20--api-security/images/manage-lb-config.png",
+    "file": "/references/api-quickstart/api-security-3-manage-lb-config.png",
+    "sha256": "49d6092dba2f75c1dd540e39b0ab2c198905779dbfab4c9dad9394c0e98c19ea"
+  },
+  {
+    "guide": "api-security",
+    "figure": 4,
+    "alt": "Figure: Add Code Base Integration",
+    "url": "https://docs.cloud.f5.com/docs-v2/images/04--quickstart/20--api-security/images/add-code-base.png",
+    "file": "/references/api-quickstart/api-security-4-add-code-base.png",
+    "sha256": "69f3e723ceda2f05196470064745316d1d51ceee348641e833294ec2b315ce0d"
+  },
+  {
+    "guide": "api-security",
+    "figure": 5,
+    "alt": "Figure: Add Code Base Integration Form",
+    "url": "https://docs.cloud.f5.com/docs-v2/images/04--quickstart/20--api-security/images/code-base-form.png",
+    "file": "/references/api-quickstart/api-security-5-code-base-form.png",
+    "sha256": "7a450ccb232ed811a1c384aeb647bae87af7f85f6ba008a87eb63bffa22968e2"
+  },
+  {
+    "guide": "api-security",
+    "figure": 6,
+    "alt": "Figure: Monitor API Endpoints",
+    "url": "https://docs.cloud.f5.com/docs-v2/images/04--quickstart/20--api-security/images/monitor-endpoints.png",
+    "file": "/references/api-quickstart/api-security-6-monitor-endpoints.png",
+    "sha256": "bf3f8a0c6ae3ae5295948ceae12038915f98b9e2154e743992db77e3e357d786"
+  },
+  {
+    "guide": "api-security",
+    "figure": 7,
+    "alt": "Figure: Load Balancers",
+    "url": "https://docs.cloud.f5.com/docs-v2/images/04--quickstart/20--api-security/images/load-balancers-page.png",
+    "file": "/references/api-quickstart/api-security-7-load-balancers-page.png",
+    "sha256": "206e756e653c35faffc591b026dc39660d3dc46a0f18c3f0d7669be2a767ca66"
+  },
+  {
+    "guide": "api-security",
+    "figure": 8,
+    "alt": "Figure: Manage Load Balancer Configuration",
+    "url": "https://docs.cloud.f5.com/docs-v2/images/04--quickstart/20--api-security/images/manage-lb-config.png",
+    "file": "/references/api-quickstart/api-security-8-manage-lb-config.png",
+    "sha256": "49d6092dba2f75c1dd540e39b0ab2c198905779dbfab4c9dad9394c0e98c19ea"
+  },
+  {
+    "guide": "api-security",
+    "figure": 9,
+    "alt": "Figure: Monitor API Endpoint Sources",
+    "url": "https://docs.cloud.f5.com/docs-v2/images/04--quickstart/20--api-security/images/monitor-endpoint-source.png",
+    "file": "/references/api-quickstart/api-security-9-monitor-endpoint-source.png",
+    "sha256": "762b4d406375fbf8ad905315ee7dac09757625337f8dc18c5e1fdb19258e970b"
+  },
+  {
+    "guide": "api-protection",
+    "figure": 1,
+    "alt": "Figure: Select Namespace",
+    "url": "https://docs.cloud.f5.com/docs-v2/images/04--quickstart/21--api-protection/images/select-namespace.png",
+    "file": "/references/api-quickstart/api-protection-1-select-namespace.png",
+    "sha256": "0b06cbbd3ec5e96d177ba14e10f72d190338bb00655b2caee88b5137f6ae63f5"
+  },
+  {
+    "guide": "api-protection",
+    "figure": 2,
+    "alt": "Figure: OpenAPI Files",
+    "url": "https://docs.cloud.f5.com/docs-v2/images/04--quickstart/21--api-protection/images/openapi-files.png",
+    "file": "/references/api-quickstart/api-protection-2-openapi-files.png",
+    "sha256": "3ef28b225fe79032a193eb2460f2240b761839b0991f8f57384a8083d6efe8dc"
+  },
+  {
+    "guide": "api-protection",
+    "figure": 3,
+    "alt": "Figure: Upload OpenAPI File",
+    "url": "https://docs.cloud.f5.com/docs-v2/images/04--quickstart/21--api-protection/images/upload-openapi-file.png",
+    "file": "/references/api-quickstart/api-protection-3-upload-openapi-file.png",
+    "sha256": "366bcb9b6740bbb32792fdbf38d259589432663dc56403b8f012a5ee44aadd92"
+  },
+  {
+    "guide": "api-protection",
+    "figure": 4,
+    "alt": "Figure: API Definitions",
+    "url": "https://docs.cloud.f5.com/docs-v2/images/04--quickstart/21--api-protection/images/api-definitions.png",
+    "file": "/references/api-quickstart/api-protection-4-api-definitions.png",
+    "sha256": "c1815d5ad1806a300aafa78122b5675e90073df6f560f2bf600d2f58a1d392bd"
+  },
+  {
+    "guide": "api-protection",
+    "figure": 5,
+    "alt": "Figure: API Definition Form",
+    "url": "https://docs.cloud.f5.com/docs-v2/images/04--quickstart/21--api-protection/images/api-definition-form.png",
+    "file": "/references/api-quickstart/api-protection-5-api-definition-form.png",
+    "sha256": "f8c03ee26e4cf66f0917c337517aee3c8b3df7050920f8f056c982632d08013e"
+  },
+  {
+    "guide": "api-protection",
+    "figure": 6,
+    "alt": "Figure: Enable API Definition",
+    "url": "https://docs.cloud.f5.com/docs-v2/images/04--quickstart/21--api-protection/images/enable-api-definition.png",
+    "file": "/references/api-quickstart/api-protection-6-enable-api-definition.png",
+    "sha256": "6f9de93e33e0767b47ed48d31dba0ae7ada95f03fbe228a2ee9c34c97e23d2cc"
+  },
+  {
+    "guide": "api-protection",
+    "figure": 7,
+    "alt": "Figure: Select API Definition",
+    "url": "https://docs.cloud.f5.com/docs-v2/images/04--quickstart/21--api-protection/images/select-api-definition.png",
+    "file": "/references/api-quickstart/api-protection-7-select-api-definition.png",
+    "sha256": "233320e9f443b6fbce77bad81ffe3a8fff0d2ffc599ae6c36219ce369932ba2c"
+  },
+  {
+    "guide": "api-protection",
+    "figure": 8,
+    "alt": "Figure: API Definition Validation Choices",
+    "url": "https://docs.cloud.f5.com/docs-v2/images/04--quickstart/21--api-protection/images/api-def-validation-choices.png",
+    "file": "/references/api-quickstart/api-protection-8-api-def-validation-choices.png",
+    "sha256": "88a1a793c896a066b1656271fd2fca2f5bca4dc9682196eecb1f61602265e787"
+  },
+  {
+    "guide": "api-protection",
+    "figure": 9,
+    "alt": "Figure: API Definition Validation Form",
+    "url": "https://docs.cloud.f5.com/docs-v2/images/04--quickstart/21--api-protection/images/api-inventory-validation-form.png",
+    "file": "/references/api-quickstart/api-protection-9-api-inventory-validation-form.png",
+    "sha256": "38f477c7a4ee4dba6bc6451549772f1f71e07e3145db541dfa701a53494d5de7"
+  },
+  {
+    "guide": "api-protection",
+    "figure": 10,
+    "alt": "Figure: Custom List Validation Form",
+    "url": "https://docs.cloud.f5.com/docs-v2/images/04--quickstart/21--api-protection/images/custom-list-validation-form.png",
+    "file": "/references/api-quickstart/api-protection-10-custom-list-validation-form.png",
+    "sha256": "16f8bb8e24fd9da9c3dd8013ace35d6ccccb018cfa91c1a9207485937faeb2f7"
+  },
+  {
+    "guide": "api-protection",
+    "figure": 11,
+    "alt": "Figure: Custom Validation Form",
+    "url": "https://docs.cloud.f5.com/docs-v2/images/04--quickstart/21--api-protection/images/custom-validation-form.png",
+    "file": "/references/api-quickstart/api-protection-11-custom-validation-form.png",
+    "sha256": "cf2a070838f2586b84172f5c2e7bef52df32340de489d10ac0238e6ace8cd136"
+  },
+  {
+    "guide": "api-protection",
+    "figure": 12,
+    "alt": "Figure: Custom Fall Through",
+    "url": "https://docs.cloud.f5.com/docs-v2/images/04--quickstart/21--api-protection/images/custom-fall-through.png",
+    "file": "/references/api-quickstart/api-protection-12-custom-fall-through.png",
+    "sha256": "42a5ffa8887eccfdfc1fcd479526ef126d01a70d72bb1cc466109d157537c6da"
+  },
+  {
+    "guide": "automate-sec-test",
+    "figure": 1,
+    "alt": "Figure: Enable Testing",
+    "url": "https://docs.cloud.f5.com/docs-v2/images/04--quickstart/23--automate-api-sec-testing/images/enable-api-testing-menu.png",
+    "file": "/references/api-quickstart/automate-sec-test-1-enable-api-testing-menu.png",
+    "sha256": "517ed4ee1eea78c4d2faef2f7f374eed001dd406c4fece948b9d3b99622096db"
+  },
+  {
+    "guide": "automate-sec-test",
+    "figure": 2,
+    "alt": "Figure: Add Test",
+    "url": "https://docs.cloud.f5.com/docs-v2/images/04--quickstart/23--automate-api-sec-testing/images/add-api-test.png",
+    "file": "/references/api-quickstart/automate-sec-test-2-add-api-test.png",
+    "sha256": "c57e51ebd9f19f6dcc079dd278b5810daec33b1da48f31547b5322721a87fbd5"
+  },
+  {
+    "guide": "automate-sec-test",
+    "figure": 3,
+    "alt": "Figure: Add Domain for Testing",
+    "url": "https://docs.cloud.f5.com/docs-v2/images/04--quickstart/23--automate-api-sec-testing/images/add-domain-api-test.png",
+    "file": "/references/api-quickstart/automate-sec-test-3-add-domain-api-test.png",
+    "sha256": "651dbe3b37aada1ea80eb1085e9d5e62d89f32c7feb019e5af8808191ddc1c80"
+  },
+  {
+    "guide": "automate-sec-test",
+    "figure": 4,
+    "alt": "Figure: Add Destructive Methods",
+    "url": "https://docs.cloud.f5.com/docs-v2/images/04--quickstart/23--automate-api-sec-testing/images/add-desct-api-methods.png",
+    "file": "/references/api-quickstart/automate-sec-test-4-add-desct-api-methods.png",
+    "sha256": "7e4c7db2e4ed6772e25052e1f882243db93a95f35c47eded7befcd39847a55f6"
+  },
+  {
+    "guide": "automate-sec-test",
+    "figure": 5,
+    "alt": "Figure: Add Credentials",
+    "url": "https://docs.cloud.f5.com/docs-v2/images/04--quickstart/23--automate-api-sec-testing/images/add-creds-api-test.png",
+    "file": "/references/api-quickstart/automate-sec-test-5-add-creds-api-test.png",
+    "sha256": "7a28073ada98757be11d6c7c77745e28e88f287dde924800d460b97eaef609cc"
+  },
+  {
+    "guide": "automate-sec-test",
+    "figure": 6,
+    "alt": "Figure: Save Credentials",
+    "url": "https://docs.cloud.f5.com/docs-v2/images/04--quickstart/23--automate-api-sec-testing/images/save-creds-api-test.png",
+    "file": "/references/api-quickstart/automate-sec-test-6-save-creds-api-test.png",
+    "sha256": "79416ab92b98d69b52f4ff7f513ea3933fc54313fe5707f8aa4c9ccf16dc5e51"
+  },
+  {
+    "guide": "automate-sec-test",
+    "figure": 7,
+    "alt": "Figure: Add Header",
+    "url": "https://docs.cloud.f5.com/docs-v2/images/04--quickstart/23--automate-api-sec-testing/images/add-header-api-test.png",
+    "file": "/references/api-quickstart/automate-sec-test-7-add-header-api-test.png",
+    "sha256": "d8cace782457dc2cb7839877d4179506671954696173f1043f6434e1a3dbf02c"
+  },
+  {
+    "guide": "automate-sec-test",
+    "figure": 8,
+    "alt": "Figure: Add Testing Schedule",
+    "url": "https://docs.cloud.f5.com/docs-v2/images/04--quickstart/23--automate-api-sec-testing/images/add-test-schedule.png",
+    "file": "/references/api-quickstart/automate-sec-test-8-add-test-schedule.png",
+    "sha256": "6d445fb5b9fa6206822c101788cb3862461a4c0895a52333d1696501d1c7a32c"
+  },
+  {
+    "guide": "automate-sec-test",
+    "figure": 9,
+    "alt": "Figure: View Testing Results",
+    "url": "https://docs.cloud.f5.com/docs-v2/images/04--quickstart/23--automate-api-sec-testing/images/view-test-results.png",
+    "file": "/references/api-quickstart/automate-sec-test-9-view-test-results.png",
+    "sha256": "e51459cc6be0bd6a7e9edd532ab1798a56a8ff776510ebf1dad52c6a4dcd21ed"
+  },
+  {
+    "guide": "automate-sec-test",
+    "figure": 10,
+    "alt": "Figure: View Testing Scores",
+    "url": "https://docs.cloud.f5.com/docs-v2/images/04--quickstart/23--automate-api-sec-testing/images/view-test-scores.png",
+    "file": "/references/api-quickstart/automate-sec-test-10-view-test-scores.png",
+    "sha256": "e25c2fd6c281495c866f8647331c2716eec4a5004b0e537515c971c572640306"
+  }
+]

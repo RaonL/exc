@@ -150,6 +150,15 @@ export function ConfigurationReadView({
         </>
       );
     if (id === 'bot') return row('Bot Defense', l.botDefense ? 'Enable' : 'Disable');
+    if (id === 'api' && l.config?.apiSecurity)
+      return (
+        <>
+          {row('API Discovery', l.config.apiSecurity.discovery ? 'Enable' : 'Disable')}
+          {row('Validation', l.config.apiSecurity.validation)}
+          {row('API Testing', l.config.apiSecurity.testing ? 'Enable' : 'Disable')}
+          {row('Frequency of Test', l.config.apiSecurity.frequency)}
+        </>
+      );
     if (id === 'api')
       return (
         <>

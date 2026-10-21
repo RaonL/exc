@@ -1,3 +1,5 @@
+import { ApiWorkbench } from './api-security/ApiWorkbench';
+import { ApiResources } from './api-security/ApiResources';
 import { useEffect, useState, lazy, Suspense, type ElementType } from 'react';
 import {
   Bell,
@@ -71,7 +73,11 @@ const nav: Record<Workspace, NavGroup[]> = {
       icon: Wrench,
       items: ['HTTP Load Balancers', 'Origin Pools', 'App Firewall', 'Service Policies'],
     },
-    { label: 'API Security', icon: ShieldCheck, items: ['API Discovery', 'API Protection'] },
+    {
+      label: 'API Security',
+      icon: ShieldCheck,
+      items: ['API Discovery', 'API Protection', 'API Quickstarts'],
+    },
     { label: 'Bot Defense', icon: Bot, items: ['Bot Defense'] },
   ],
   'Multi-Cloud Network Connect': [
@@ -159,6 +165,14 @@ export default function App() {
     if (s.workspace === 'Multi-Cloud Network Connect')
       return <NetworkPages page={s.page} notify={notify} />;
     switch (s.page) {
+      case 'API Quickstarts':
+        return <ApiWorkbench />;
+      case 'OpenAPI Files':
+        return <ApiResources kind="file" />;
+      case 'API Definition':
+        return <ApiResources kind="definition" />;
+      case 'Code Base Integration':
+        return <ApiResources kind="integration" />;
       case 'Overview':
         return <Dashboard key={`${s.namespace}-${s.selectedLbId}`} openLab={() => setLab(true)} />;
       case 'Security':
@@ -392,21 +406,41 @@ export default function App() {
                     'Reports',
                     'Certificate Management',
                     'Bot Defense Management',
-                  ].map((label) => (
-                    <button
-                      key={label}
-                      className="nav-item"
-                      onClick={() =>
-                        setReferenceInfo(
-                          label +
-                            ' · 이 메뉴의 독립 콘솔 화면은 미구현입니다. 관련 학습 동작은 Training Center에서 사용할 수 있습니다.',
-                        )
-                      }
-                    >
-                      {label}
-                      <ChevronRight size={14} />
-                    </button>
-                  ))}
+                  ].map((label) =>
+                    label === 'Files' || label === 'API Management' ? (
+                      <details className="api-sidebar-group" key={label}>
+                        <summary>
+                          {label} <ChevronRight size={14} />
+                        </summary>
+                        {(label === 'Files'
+                          ? (['OpenAPI Files'] as const)
+                          : (['API Definition', 'Code Base Integration'] as const)
+                        ).map((page) => (
+                          <button
+                            key={page}
+                            className="nav-item"
+                            onClick={() => go('Web App & API Protection', page)}
+                          >
+                            {page}
+                          </button>
+                        ))}
+                      </details>
+                    ) : (
+                      <button
+                        key={label}
+                        className="nav-item"
+                        onClick={() =>
+                          setReferenceInfo(
+                            label +
+                              ' · 이 메뉴의 독립 콘솔 화면은 미구현입니다. 관련 학습 동작은 Training Center에서 사용할 수 있습니다.',
+                          )
+                        }
+                      >
+                        {label}
+                        <ChevronRight size={14} />
+                      </button>
+                    ),
+                  )}
                 </div>
               )}
             </div>

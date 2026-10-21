@@ -1,0 +1,202 @@
+.api-workbench {
+  padding: 24px;
+  color: #17234f;
+}
+.api-toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin: 14px 0;
+}
+.api-toolbar h1 {
+  font-size: 25px;
+  margin: 0;
+}
+.api-toolbar p {
+  color: #68758d;
+  font-size: 13px;
+}
+.api-course-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 20px 0;
+}
+.api-walkthrough {
+  display: grid;
+  grid-template-columns: 270px minmax(0, 1fr);
+  background: #fff;
+  border: 1px solid #dce1ee;
+  margin-bottom: 22px;
+}
+.api-walkthrough > div {
+  padding: 22px;
+}
+.api-walkthrough > nav {
+  border-right: 1px solid #dce1ee;
+  padding: 12px;
+}
+.api-walkthrough nav button {
+  border: 0;
+  background: transparent;
+  text-align: left;
+  width: 100%;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #17234f;
+  cursor: pointer;
+}
+.api-walkthrough nav button.active {
+  background: #eef1ff;
+  color: #5269ff;
+  border-left: 3px solid #5269ff;
+}
+.api-walkthrough nav span {
+  background: #eef1ff;
+  border-radius: 50%;
+  padding: 3px 8px;
+}
+.api-figure-list {
+  max-height: 600px;
+  overflow: auto;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  padding: 12px;
+}
+.api-figure-list figure {
+  margin: 0;
+}
+.api-figure-list img {
+  width: 100%;
+  height: 200px;
+  object-fit: contain;
+  border: 1px solid #dce1ee;
+  background: white;
+}
+.api-figure-list figcaption {
+  font-size: 12px;
+  padding: 8px;
+}
+.api-settings-fields h3 {
+  font-size: 18px;
+  margin: 24px 0 15px;
+}
+.api-settings-fields p,
+.api-resource-editor p {
+  color: #68758d;
+  font-size: 13px;
+}
+.api-field {
+  max-width: 620px;
+  margin: 20px 0;
+}
+.api-field > strong {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+.api-nested {
+  border-left: 1px solid #c5cde3;
+  margin: 10px 0 28px 18px;
+  padding: 5px 22px 18px;
+}
+.api-settings-fields .xc-select {
+  width: 100%;
+}
+.api-settings-fields .field {
+  margin: 16px 0;
+}
+.api-workbench .card {
+  padding: 20px;
+}
+.api-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin: 18px 0;
+}
+.api-metrics strong {
+  font-size: 26px;
+}
+.api-probe-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 15px;
+}
+.api-resources {
+  padding: 25px;
+}
+.api-empty {
+  padding: 70px 20px;
+  text-align: center;
+}
+.api-limitations {
+  font-size: 13px;
+  color: #68758d;
+  margin: 24px 0;
+}
+.api-workbench pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  padding: 16px;
+  background: #f6f7fa;
+  font-size: 12px;
+}
+.api-endpoint-drawer {
+  position: fixed;
+  z-index: 50;
+  right: 0;
+  top: 75px;
+  bottom: 0;
+  width: min(760px, 90vw);
+  background: white;
+  box-shadow: -12px 0 40px #17234f22;
+  padding: 25px;
+  overflow: auto;
+}
+.api-endpoint-drawer article {
+  border: 1px solid #dce1ee;
+  padding: 15px;
+  margin: 15px 0;
+}
+.api-secret {
+  border: 1px solid #dce1ee;
+  padding: 18px;
+  margin: 15px 0;
+}
+.api-workbench summary {
+  cursor: pointer;
+  color: #5269ff;
+  margin-top: 15px;
+}
+@media (max-width: 760px) {
+  .api-workbench {
+    padding: 12px;
+  }
+  .api-walkthrough,
+  .api-metrics,
+  .api-probe-grid {
+    grid-template-columns: 1fr;
+  }
+  .api-walkthrough > nav {
+    border-right: 0;
+    border-bottom: 1px solid #dce1ee;
+  }
+  .api-figure-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+.api-sidebar-group summary {
+  cursor: pointer;
+  padding: 10px 18px;
+  display: flex;
+  justify-content: space-between;
+}
+.api-sidebar-group .nav-item {
+  padding-left: 30px;
+}

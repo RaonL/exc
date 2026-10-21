@@ -243,6 +243,11 @@ export function TrainingCenter({
             <progress max={trainingLabs.length} value={complete} aria-label="전체 실습 완료율" />
           </div>
         </div>
+        <div className="api-toolbar">
+          <Button onClick={() => core.navigate('Web App & API Protection', 'API Quickstarts')}>
+            공식 API Quickstarts · Discovery → Protection → Testing
+          </Button>
+        </div>
         <div className="training-class-grid">
           {classes.map((c) => {
             const units = trainingLabs.filter((l) => l.classId === c.id),

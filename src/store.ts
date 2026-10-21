@@ -1,3 +1,4 @@
+import { useApiSecurity } from './api-security/store';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { createDemoData } from './data/seed';
@@ -147,12 +148,34 @@ export const useConsole = create<Store>()(
         const path = localRequestPath(lb, url),
           authority = url.startsWith('/') ? lb.domains[0] : new URL(url).hostname,
           scenario = classifyLocalPath(path);
-        const evaluation = evaluateRequest(lb, s.wafs, s.origins, scenario, {
-          path,
-          method,
-          signatureState: 'Existing',
-          authority,
-        });
+        const evaluation: ReturnType<typeof evaluateRequest> & { evaluationTrace?: string[] } =
+          evaluateRequest(
+            lb.config?.apiSecurity ? { ...lb, apiProtection: false } : lb,
+            s.wafs,
+            s.origins,
+            scenario,
+            {
+              path,
+              method,
+              signatureState: 'Existing',
+              authority,
+            },
+          );
+        if (
+          lb.config?.apiSecurity &&
+          evaluation.responseCode >= 200 &&
+          evaluation.responseCode < 400
+        ) {
+          const api = useApiSecurity
+            .getState()
+            .probe(lb, { path, method, domain: authority, responseCode: evaluation.responseCode });
+          if (api.action !== 'Allowed' || evaluation.action !== 'Detected')
+            evaluation.action = api.action;
+          evaluation.responseCode = api.code;
+          if (api.action !== 'Allowed' || evaluation.action !== 'Detected')
+            evaluation.reason = api.reason;
+          evaluation.evaluationTrace = api.trace;
+        }
         if (lbConfig(lb).vip === 'Do Not Advertise') {
           evaluation.responseCode = 503;
           evaluation.reason = 'VIP is not advertised';
