@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest';
-import { buildApiDashboard, summarizeRequest } from './dashboard';
+import { buildApiDashboard, summarizeRequest, pathSegments } from './dashboard';
 import { demoSpec } from './model';
 import type { ApiLog } from './store';
 
@@ -49,4 +49,21 @@ it('uses the latest run when two runs share the same simulated timestamp', () =>
   ];
   const row = buildApiDashboard('lb', demoSpec, [], [], runs, 0).rows.find(r => r.path==='/api/admin')!;
   expect(row.risk).toBe(0); expect(row.findings).toHaveLength(1); expect(row.testFingerprint).toBe('new');
+});
+
+it('retains learned classifications and latest testing metadata outside the traffic time window', () => {
+  const data = buildApiDashboard('lb', demoSpec, [], [{ ...log(200, 'Detected'), summary: {auth: 'Authenticated', sensitive: ['credit-card']} }], [], 2000);
+  const row = data.rows.find(r => r.method === 'POST' && r.path === '/api/orders')!;
+  expect(data.total).toBe(0);
+  expect(row.calls).toBe(0);
+  expect(row.sensitive).toContain('credit-card');
+  expect(row.auth).toBe('Authenticated');
+  expect(row.lastActivity).toBe(1000);
+  expect(row.threat).toBe('None');
+  expect(row.schemaStatus).toBe('Inventory');
+});
+
+it('builds path hierarchy segments without confusing query values with a segment', () => {
+  expect(pathSegments('/api/orders/{id}?limit=2')).toEqual(['api','orders','{id}']);
+  expect(pathSegments('/')).toEqual(['/']);
 });

@@ -286,3 +286,19 @@
   .api-guide-panel { position: relative; inset: auto; width: auto; max-height: 220px; flex-shrink: 0; order: 2; margin: 6px 12px; }
   .config-editor:has(> .api-guide-panel) .config-layout { margin-right: 0; width: 100%; }
 }
+.api-segment-graph { padding: 22px; overflow-x: auto; }
+.api-segment-toolbar { display:flex; gap:18px; align-items:center; padding-bottom:20px; color:#6b7892; }
+.api-segment-toolbar button, .api-segment-results button { border:1px solid #ccd5e8; background:white; color:#5269ff; padding:8px 12px; border-radius:3px; }
+.api-segment-columns { display:flex; gap:36px; min-width:700px; min-height:240px; }
+.api-segment-column { flex:1; min-width:155px; border-left:1px solid #dbe2ef; padding-left:18px; }
+.api-segment-column h3 { font-size:13px; color:#77839a; font-weight:500; margin-bottom:20px; }
+.api-segment-column button { position:relative; display:block; width:100%; padding:12px; text-align:left; background:#fff; border:1px solid #d4dcee; border-radius:3px; margin:12px 0; }
+.api-segment-column button::before { content:''; position:absolute; width:18px; height:1px; background:#d4dcee; left:-19px; top:50%; }
+.api-segment-column button[aria-pressed=true] { border-color:#5269ff; background:#f0f3ff; }
+.api-segment-column small { display:block; color:#77839a; margin-top:7px; }
+.api-segment-results { display:flex; flex-wrap:wrap; gap:8px; border-top:1px solid #e2e7f0; padding-top:18px; }
+.api-threat::before { content:'●'; margin-right:7px; color:#9ba5b7; }
+.api-threat.threat-high::before { color:#ed644d; }.api-threat.threat-medium::before { color:#ffbd39; }
+.api-console-dashboard .api-summary-card.card { min-height:210px; }
+.api-console-dashboard .api-endpoint-table th { font-size:12px; }
+.api-console-dashboard .api-risk { border-radius:12px; padding:3px 8px; min-width:30px; }

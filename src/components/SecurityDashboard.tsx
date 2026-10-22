@@ -30,6 +30,8 @@ import { Button } from './ui/button';
 import { Dialog } from './ui/dialog';
 import { EventsTable } from './EventsTable';
 import { WorldEventsMap } from './WorldEventsMap';
+import { ApiDashboard } from '../api-security/ApiDashboard';
+import { LBForm } from './LoadBalancerEditor';
 const category = (e: SecurityEvent) =>
   e.scenario === 'L7 DDoS'
     ? 'DDoS'
@@ -55,6 +57,7 @@ const counts = (events: SecurityEvent[], key: (e: SecurityEvent) => string) =>
 export function SecurityDashboard({ openLab }: { openLab: () => void }) {
   const s = useConsole();
   const [tab, setTab] = useState('Dashboard');
+  const [configuration, setConfiguration] = useState(false);
   const [range, setRange] = useState('60');
   const [selected, setSelected] = useState<string[]>(s.selectedLbId ? [s.selectedLbId] : []);
   const [search, setSearch] = useState('');
@@ -145,7 +148,7 @@ export function SecurityDashboard({ openLab }: { openLab: () => void }) {
         </Button>
       </PageHeading>
       <div className="tabs" role="tablist" aria-label="Security monitoring">
-        {['Dashboard', 'Malicious Users', 'Threat Campaigns'].map((t) => (
+        {(s.selectedLbId ? ['Dashboard', 'API Endpoints', 'Malicious Users', 'Security Analytics', 'DDoS', 'Alerts', 'Requests', 'Bot Defense'] : ['Dashboard', 'Malicious Users', 'Threat Campaigns']).map((t) => (
           <button
             role="tab"
             aria-selected={tab === t}
@@ -165,6 +168,11 @@ export function SecurityDashboard({ openLab }: { openLab: () => void }) {
           </button>
         ))}
       </div>
+      {tab === 'API Endpoints' && allLbs.find(l => l.id === s.selectedLbId) && <ApiDashboard key={s.selectedLbId} lb={allLbs.find(l => l.id === s.selectedLbId)!} />}
+      {s.selectedLbId && tab !== 'API Endpoints' && <Button variant="ghost" onClick={() => setConfiguration(true)}>Manage Configuration</Button>}
+      {configuration && allLbs.find(l => l.id === s.selectedLbId) && <LBForm initial={allLbs.find(l => l.id === s.selectedLbId)} viewOnly close={() => setConfiguration(false)} notify={() => {}} />}
+      {['DDoS', 'Alerts', 'Requests', 'Bot Defense'].includes(tab) && <Card title={`${tab} · Local simulation`}><EventsTable events={s.events.filter(e => e.lbId === s.selectedLbId && (tab === 'Requests' || tab === 'Alerts' && e.action !== 'Allowed' || tab === 'DDoS' && e.scenario === 'L7 DDoS' || tab === 'Bot Defense' && e.scenario === 'Bot Detection'))} /></Card>}
+      {tab !== 'API Endpoints' && <>
       <div className="security-controls">
         <details className="resource-picker">
           <summary>
@@ -700,6 +708,7 @@ export function SecurityDashboard({ openLab }: { openLab: () => void }) {
           )}
         </Card>
       )}
+      </>}
       {detail && (
         <Dialog
           open

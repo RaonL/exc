@@ -6,6 +6,7 @@ import { buildApiDashboard, type DashboardRow } from './dashboard';
 import { Card } from '../components/common';
 import { Button } from '../components/ui/button';
 import { ApiResourceEditor } from './ApiResources';
+import { EndpointGraph } from './EndpointGraph';
 import { LBForm } from '../components/LoadBalancerEditor';
 
 function download(name: string, text: string, type = 'application/json') {
@@ -41,7 +42,7 @@ export function ApiDashboardPage() {
 
 export function ApiDashboard({ lb }: { lb: LB }) {
   const s = useApiSecurity();
-  const [range, setRange] = useState('All time'), [domain, setDomain] = useState('All Domains');
+  const [range, setRange] = useState('0.08333333333333333'), [domain, setDomain] = useState('All Domains');
   const [summary, showSummary] = useState(true), [filters, showFilters] = useState(true);
   const [view, setView] = useState('Table'), [query, setQuery] = useState(''), [method, setMethod] = useState('All');
   const [categories, setCategories] = useState(['Inventory','Discovered','Shadow','Observed']);
@@ -75,15 +76,15 @@ export function ApiDashboard({ lb }: { lb: LB }) {
     localStorage.setItem(archiveKey, JSON.stringify(next));
   };
   const csv = () => {
-    const cols = ['API Endpoint','Group','Method','Sensitive Data','Authentication State','API Category','Discovery Source','Risk Score','API Calls','Last Tested'];
-    const values = filtered.map(r => [r.path,r.group,r.method,r.sensitive.join(';'),r.auth,r.categories.join(';'),r.sources.join(';'),r.risk ?? '',r.calls,r.lastTested ? new Date(r.lastTested).toISOString() : '']);
+    const cols = ['API Endpoint','Method','Sensitive Data','Threat Level','Authentication State','API Category','Discovery Source','Risk Score','Schema Status','Last Updated','API Calls','Last Tested'];
+    const values = filtered.map(r => [r.path,r.method,r.sensitive.join(';'),r.threat,r.auth,r.categories.join(';'),r.sources.join(';'),r.risk ?? '',r.schemaStatus,r.lastActivity ? new Date(r.lastActivity).toISOString() : '',r.calls,r.lastTested ? new Date(r.lastTested).toISOString() : '']);
     const cell = (x: unknown) => '"' + String(x).replace(/^([=+@-])/,'\t$1').replaceAll('"','""') + '"';
     download('api-endpoints.csv', [cols,...values].map(row => row.map(cell).join(',')).join('\r\n'), 'text/csv;charset=utf-8');
   };
   return <section className="api-console-dashboard" aria-label="API Endpoints 대시보드">
-    <div className="api-dash-heading"><strong>API Endpoints</strong><div className="api-toolbar">
+    <div className="api-dash-heading"><Button variant="ghost" onClick={() => setConfigEditor(true)}>Manage Configuration</Button><div className="api-toolbar">
       <select aria-label="Dashboard Domains" value={domain} onChange={e => setDomain(e.target.value)}><option>All Domains</option>{lb.domains.map(d => <option key={d}>{d}</option>)}</select>
-      <select aria-label="Dashboard time range" value={range} onChange={e => {setRange(e.target.value); setPage(0);}}><option value="All time">All time</option><option value="1">Last 1 hr</option><option value="24">Last 24 hr</option><option value="168">Last 7 days</option></select>
+      <select aria-label="Dashboard time range" value={range} onChange={e => {setRange(e.target.value); setPage(0);}}><option value="0.08333333333333333">Last 5 minutes</option><option value="All time">All time</option><option value="1">Last 1 hr</option><option value="24">Last 24 hr</option><option value="168">Last 7 days</option></select>
       <Button variant="ghost" onClick={() => setUpdated(Date.now())}>↻ Refresh</Button>
       <Button variant="ghost" onClick={() => showSummary(!summary)}>{summary ? 'Hide Summary' : 'Show Summary'}</Button>
     </div></div>
@@ -114,7 +115,7 @@ export function ApiDashboard({ lb }: { lb: LB }) {
     <Card className="api-endpoint-table"><div className="api-table-bar"><span>{filtered.length} items</span>
       <Button variant={!archiveView?'default':'outline'} onClick={() => {setArchiveView(false);setPage(0);}}>Current</Button>
       <Button variant={archiveView?'default':'outline'} onClick={() => {setArchiveView(true);setPage(0);}}>Archived</Button>
-      <span className="api-definition-name">API Definition: {definition ? `✓ ${definition.name}` : 'Not configured'}</span>
+      <span className="api-definition-name">API Definition: {definition ? `✓ ${definition.name}` : '⊗ Disabled'} {!definition && <Button variant="ghost" onClick={() => setConfigEditor(true)}>Enable</Button>}</span>
       <Button variant="ghost" onClick={csv}>Download CSV</Button>
       {selected.length > 0 && <Button variant="outline" onClick={() => {
         const next = {...archived}; selected.forEach(key => {next[key] = !archiveView;});
@@ -123,21 +124,21 @@ export function ApiDashboard({ lb }: { lb: LB }) {
     </div>
     {view === 'Table' ? <div className="table-wrap"><table><thead><tr>
       <th><input type="checkbox" aria-label="Select visible endpoints" checked={visible.length>0 && visible.every(r => selected.includes(r.key))} onChange={e => setSelected(e.target.checked ? [...new Set([...selected,...visible.map(r => r.key)])] : selected.filter(key => !visible.some(r => r.key===key)))} /></th>
-      {['API Endpoint','Group','Method','Sensitive Data','Authentication State','API Category','Discovery Source','Risk Score','API Calls',...(showTested?['Last Tested']:[]),'Actions'].map(h => <th key={h}>{h}</th>)}
+      {['API Endpoint','Method','Sensitive Data','Threat Level','Authentication State','API Category','Discovery Source','Risk Score','Schema Status','Last Updated',...(showTested?['Last Tested']:[]),'Actions'].map(h => <th key={h}>{h}</th>)}
     </tr></thead><tbody>{visible.map(row => <tr key={row.key}>
       <td><input type="checkbox" aria-label={`Select ${row.method} ${row.path}`} checked={selected.includes(row.key)} onChange={e => setSelected(e.target.checked ? [...selected,row.key] : selected.filter(k => k!==row.key))} /></td>
-      <td><button className="resource-link" onClick={() => setDetail(row)}>{row.path}</button></td><td>{row.group}</td><td>{row.method}</td><td>{row.sensitive.join(', ') || '—'}</td><td>{row.auth}</td>
+      <td><button className="resource-link" onClick={() => setDetail(row)}>{row.path}</button></td><td>{row.method}</td><td>{row.sensitive.join(', ') || '—'}</td><td><span className={`api-threat threat-${row.threat.toLowerCase()}`}>{row.threat}</span></td><td>{row.auth}</td>
       <td>{row.categories.map(v => <span className={`api-category-chip cat-${v.toLowerCase()}`} key={v}>{v}</span>)}</td><td>{row.sources.join(', ') || '—'}</td>
-      <td><span className={`api-risk ${(row.risk??0)>=60?'high':(row.risk??0)>0?'medium':'low'}`}>{row.risk ?? 'N/A'}</span></td><td>{row.calls}</td>
+      <td><span className={`api-risk ${(row.risk??0)>=60?'high':(row.risk??0)>0?'medium':'low'}`}>{row.risk ?? 'N/A'}</span></td><td>{row.schemaStatus}</td><td>{row.lastActivity ? new Date(row.lastActivity).toLocaleString() : '—'}</td>
       {showTested && <td>{row.lastTested ? new Date(row.lastTested).toLocaleString() : 'N/A'}</td>}
       <td><details><summary aria-label={`Actions ${row.method} ${row.path}`}>•••</summary><Button variant="ghost" onClick={() => setDetail(row)}>Details / Security Posture</Button><Button variant="ghost" onClick={() => archive(row)}>{archiveView?'Restore':'Archive'}</Button></details></td>
-    </tr>)}</tbody></table></div> : <div className="api-endpoint-graph" aria-label="API endpoint relationship graph"><div className="api-graph-root">{lb.name}<small>API Definition: {definition?.name ?? 'None'}</small></div><div>{visible.map(row => <button key={row.key} onClick={() => setDetail(row)}><strong>{row.method} {row.path}</strong><small>{row.sources.join(' · ') || 'API Testing'} · {row.calls} calls · risk {row.risk??'N/A'}</small></button>)}</div></div>}
+    </tr>)}</tbody></table></div> : <EndpointGraph rows={filtered} onSelect={setDetail} />}
     {!filtered.length && <p className="api-no-data">No API endpoints. 필터·Current/Archived를 확인하거나 실습 요청을 실행하세요.</p>}
     <div className="api-pagination"><label>Items per page <select aria-label="Items per page" value={size} onChange={e => {setSize(Number(e.target.value));setPage(0);}}>{[10,50,100].map(n => <option key={n}>{n}</option>)}</select></label><span>{filtered.length ? current*size+1:0}–{Math.min((current+1)*size,filtered.length)} of {filtered.length}</span><Button variant="outline" disabled={current===0} onClick={() => setPage(current-1)}>Previous</Button><Button variant="outline" disabled={current+1>=pages} onClick={() => setPage(current+1)}>Next</Button></div>
     </Card>
     <details className="api-dashboard-explanation"><summary>집계 기준 · 학습용 분류 설명</summary>
-      <p>선택한 LB의 보관 중인 Request Lab 로그(최대 1,000개)를 집계합니다. Code/Crawling fixture의 calls 값과 API Testing 검사 건수를 HTTP 호출 수로 더하지 않습니다. 시간 필터는 모의 시계를 사용합니다. Refresh는 재집계하며 새 요청을 생성하지 않습니다.</p>
-      <p>Top Sensitive Data는 OpenAPI 및 요청·응답 필드명 기반 분류의 엔드포인트 수입니다. 실제 PII 검출이 아닙니다. Authenticated는 인증 헤더 존재만 뜻하며 유효성을 검증하지 않습니다. 이전 로그는 Unknown입니다. Group은 경로 앞 두 구간입니다.</p>
+      <p>선택한 LB의 보관 중인 Request Lab 로그(최대 1,000개)를 집계합니다. 학습 목록·민감 필드 분류·Last Updated는 시간 필터 밖에도 유지됩니다. Code/Crawling fixture의 calls 값과 API Testing 검사 건수를 HTTP 호출 수로 더하지 않습니다. 시간 필터는 모의 시계를 사용합니다. Refresh는 재집계하며 새 요청을 생성하지 않습니다.</p>
+      <p>Top Sensitive Data는 OpenAPI 및 요청·응답 필드명 기반 분류의 엔드포인트 수입니다. 실제 PII 검출이 아닙니다. Authenticated는 인증 헤더 존재만 뜻하며 유효성을 검증하지 않습니다. 이전 로그는 Unknown입니다. Threat Level은 선택 시간창의 로컬 탐지 로그 기준이며 Schema Status는 Inventory/학습 여부입니다. 실제 F5 위협 등급 계산식이 아닙니다.</p>
       <p>Risk Score는 학습용 규칙: Open API Testing 결과 80, Detected 로그 60, Blocked 로그 40, 정상 실행/완화 결과 0, 데이터 없으면 N/A. 실제 F5 위험 점수가 아닙니다. Archived는 수동 보관이며 삭제가 아닙니다. Inventory 밖의 관측 경로는 보안 학습이 확인되기 전까지 Observed로 표시합니다.</p>
       <p>마지막 화면 갱신: {new Date(updated).toLocaleTimeString()} · 현재 모의 시각: {new Date(s.clock).toLocaleString()} · 비공식 학습용 시뮬레이터</p>
     </details>
