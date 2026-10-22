@@ -5,6 +5,7 @@ import { wafConfig } from '../lib/config';
 import { ConfigurationEditor } from './ConfigurationEditor';
 import { Field } from './form-fields';
 import { WafPolicyFields } from './WafPolicyFields';
+import { WafAiFields } from './WafAiFields';
 import { WafBotFields } from './WafBotFields';
 import { WafAdvancedFields } from './WafAdvancedFields';
 
@@ -198,6 +199,13 @@ export function WafEditor({
               disabledAttacks: c.disabledAttacks,
               attackTypes: c.attackTypes,
               accuracy: c.accuracy,
+              signatureSettings: c.signatureSettings,
+              enhanceWithAi: c.enhanceWithAi,
+              riskAction: c.riskAction,
+              botProtection: c.botProtection,
+              maliciousBotAction: c.maliciousBotAction,
+              suspiciousBotAction: c.suspiciousBotAction,
+              goodBotAction: c.goodBotAction,
               highAction: c.highAction,
               mediumAction: c.mediumAction,
               lowAction: c.lowAction,
@@ -209,22 +217,19 @@ export function WafEditor({
             }));
             setError('');
           },
-          content: <WafPolicyFields config={config} setting={setting} />,
-        },
-        {
-          id: 'bots',
-          title: 'Signature-Based Bot Protection',
-          description:
-            '봇 분류별 동작을 지정합니다. 카탈로그 테스트는 이 설정과 Enforcement Mode를 함께 평가합니다.',
-          onReset: () =>
-            setConfig((v) => ({
-              ...v,
-              botProtection: opened.config.botProtection,
-              maliciousBotAction: opened.config.maliciousBotAction,
-              suspiciousBotAction: opened.config.suspiciousBotAction,
-              goodBotAction: opened.config.goodBotAction,
-            })),
-          content: <WafBotFields config={config} setting={setting} />,
+          content: (
+            <>
+              <WafPolicyFields config={config} setting={setting} />
+              {config.policy === 'Custom' && (
+                <>
+                  <div data-section="bots">
+                    <WafBotFields config={config} setting={setting} />
+                  </div>
+                  <WafAiFields config={config} setting={setting} />
+                </>
+              )}
+            </>
+          ),
         },
         {
           id: 'advanced',

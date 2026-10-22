@@ -169,7 +169,10 @@ export const useApiSecurity = create<State>()(
           at: get().clock,
           path: q.path,
           method: q.method,
-          summary: summarizeRequest(q.headers ?? {}, q.body, q.responseBody),
+          summary: {
+            ...summarizeRequest(q.headers ?? {}, q.body, q.responseBody),
+            ...(c.sensitiveDataDiscovery === 'Disable' ? { sensitive: [] } : {}),
+          },
           domain: q.domain ?? lb.domains[0],
           settings: JSON.stringify(c),
         };

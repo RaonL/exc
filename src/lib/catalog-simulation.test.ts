@@ -193,3 +193,20 @@ it('identifies response signatures as an assumed response match rather than requ
   expect(result.evaluationTrace.join('\n')).toContain('phase=Response');
   expect(result.evaluationTrace.join('\n')).toContain('응답을 모의 차단');
 });
+
+it('uses Custom accuracy actions independently of the legacy range and keeps Monitoring report-only', () => {
+  const config: Partial<WafConfig> = {
+    policy: 'Custom',
+    signatureSettings: 'Custom',
+    accuracy: 'High',
+    lowAction: 'Block',
+  };
+  expect(run({ config, match: { ...signature, accuracy: 'Low' } }).action).toBe('Blocked');
+  expect(run({ config, mode: 'Monitoring', match: { ...signature, accuracy: 'Low' } }).action).toBe(
+    'Detected',
+  );
+  expect(
+    run({ config: { ...config, lowAction: 'Ignore' }, match: { ...signature, accuracy: 'Low' } })
+      .action,
+  ).toBe('Allowed');
+});

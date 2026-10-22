@@ -334,7 +334,7 @@ export function ConfigurationEditor({
                 aria-labelledby={`${editorId}-tab-${view}`}
               >
                 {view === 'Form' && (
-                  <fieldset disabled={readOnly}>
+                  <fieldset>
                     {sections
                       .filter((section) =>
                         section.title.toLowerCase().includes(query.toLowerCase()),

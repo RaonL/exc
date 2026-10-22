@@ -21,6 +21,8 @@ export type Credential = {
 };
 export type TestEnvironment = { domain: string; destructive: boolean; credentials: Credential[] };
 export interface ApiSettings {
+  discoveryPolicy?: 'Built-in';
+  sensitiveDataDiscovery?: 'Default' | 'Disable';
   discovery: boolean;
   redirects: boolean;
   purgeDays: number;

@@ -349,7 +349,7 @@ export function ConfigResources({
   const single =
     kind === 'origin' ? 'Origin Pool' : kind === 'waf' ? 'App Firewall' : 'Service Policy';
   const items = (kind === 'origin' ? s.origins : kind === 'waf' ? s.wafs : s.policies).filter(
-    (o) => o.namespace === s.namespace && o.name.includes(search.toLowerCase()),
+    (o) => (o.namespace === s.namespace || kind === 'waf' && o.namespace === 'shared') && o.name.toLowerCase().includes(search.toLowerCase()),
   );
   if (['origin'].includes(kind)) return <OriginPoolList notify={notify} />;
   return (
@@ -395,10 +395,10 @@ export function ConfigResources({
                     {kind === 'origin'
                       ? 'Origin server'
                       : kind === 'waf'
-                        ? 'Enforcement mode'
+                        ? 'Namespace'
                         : 'Action'}
                   </th>
-                  <th>{kind === 'policy' ? 'Enabled' : 'Applied to'}</th>
+                  {kind !== 'waf' && <th>{kind === 'policy' ? 'Enabled' : 'Applied to'}</th>}
                   <th>{kind === 'origin' ? 'Health / simulation' : 'Actions'}</th>
                 </tr>
               </thead>
@@ -422,14 +422,12 @@ export function ConfigResources({
                           {item.endpoint}:{item.port}
                         </span>
                       ) : 'mode' in item ? (
-                        <Badge tone={item.mode === 'Blocking' ? 'green' : 'amber'}>
-                          {item.mode}
-                        </Badge>
+                        item.namespace
                       ) : (
                         <Badge tone={item.action === 'Deny' ? 'red' : 'blue'}>{item.action}</Badge>
                       )}
                     </td>
-                    <td>
+                    {kind !== 'waf' && <td>
                       {'enabled' in item ? (
                         <Switch
                           aria-label={`Enable ${item.name}`}
@@ -454,7 +452,7 @@ export function ConfigResources({
                           load balancers
                         </button>
                       )}
-                    </td>
+                    </td>}
                     <td>
                       <div className="row-actions">
                         {'healthy' in item && (
@@ -469,7 +467,7 @@ export function ConfigResources({
                             </Button>
                           </>
                         )}
-                        {'mode' in item && (
+                        {kind !== 'waf' && 'mode' in item && (
                           <Button
                             variant="outline"
                             size="sm"
@@ -484,7 +482,7 @@ export function ConfigResources({
                             Switch to {item.mode === 'Blocking' ? 'Monitoring' : 'Blocking'}
                           </Button>
                         )}
-                        <button
+                        {kind !== 'waf' && <button
                           className="icon-button"
                           aria-label={`Edit ${item.name}`}
                           onClick={() => {
@@ -493,7 +491,7 @@ export function ConfigResources({
                           }}
                         >
                           <Pencil size={15} />
-                        </button>
+                        </button>}
                         {kind === 'waf' && (
                           <button
                             className="icon-button"

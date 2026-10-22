@@ -151,6 +151,7 @@ export interface WafExclusion {
   expiresAt?: string;
 }
 export interface LBConfig {
+  pathNormalization?: boolean;
   apiSecurity?: import('./api-security/model').ApiSettings;
   description: string;
   labels: string;
@@ -174,6 +175,9 @@ export interface LBConfig {
   originPriority?: number;
 }
 export interface WafConfig {
+  signatureSettings?: 'Default' | 'Custom';
+  enhanceWithAi?: boolean;
+  riskAction?: 'Mitigate High Risk Only';
   mediumAction?: 'Block' | 'Report' | 'Ignore';
   lowAction?: 'Block' | 'Report' | 'Ignore';
   botProtection?: 'Default' | 'Custom';

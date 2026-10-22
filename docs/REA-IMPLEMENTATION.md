@@ -11,3 +11,17 @@
 - 실제 서비스 호출·F5 위험도 계산·AI 판정 엔진을 재현했다고 표현하지 않는다. 모의 테스트는 저장된 정책과 연결하고 로그를 보존한다.
 
 검증: 대시보드 시간창/경로 탐색, LB 순서/중첩 조회/저장·재수화, WAF Custom 동작/저장·재수화/공격 전후, 전체 Class 회귀 테스트, 빌드, 로컬 브라우저 화면 확인.
+
+## 반영 결과
+
+- API Endpoints: LB Security Monitoring 탭, Threat Level / Schema Status / Last Updated 열, 실제 경로 문맥을 유지하는 Segment 탐색, 최근 5분 기본 집계. Definition이 없으면 Shadow로 단정하지 않는다. 기존 직접 메뉴와 Request Lab/Logs는 유지한다.
+- API Request Lab을 UI에서 2회 실행해 호출 차트·민감 필드 차트·목록·그래프 반영을 확인했다. 실제 F5 트래픽이나 탐지 엔진을 호출하지 않는다.
+- HTTP LB: Domains와 SSL/TLS Type을 분리하고 VIP/CDN/Delivery/DoS 섹션 순서를 반영했다. 조회는 설정에 따라 Origins 또는 Routes를 표시한다. Routes는 중첩 Apply 후 부모 LB 저장이 필요하며 새로고침 후 요청 분기에도 적용된다.
+- API Protection: Redirect Response 명칭, 기간 단위, Built-in Discovery Policy와 Sensitive Data Discovery 설정을 반영했다. 관찰값 2일을 전체 제품 기본값으로 강제하지 않는다.
+- WAF: Name / Namespace / Actions 목록, shared 정책 조회, View/Edit 분리, Custom 정확도별 동작, AI 참조용 저장 필드를 반영했다. 기존 Class의 정확도 범위 방식은 그대로 읽는다. AI 옵션은 저장·조회만 하며 실제 판정에 적용하지 않는다는 안내와 로그를 표시한다.
+- 브라우저에서 WAF Monitoring + Custom 저장·새로고침·재조회, LB 설정 조회, API 요청·대시보드 연동을 확인했다. 1920 / 1024 / 768 / 320px에서 그래프 페이지 전체 가로 넘침을 확인했다.
+- 로컬 캡처는 Git 무시 경로 output/playwright/xc-*.png에 보관한다. 실제 tenant 캡처·로그인 세션 자료는 포함하지 않는다.
+
+회귀 범위: 기존 Class 1~9의 자동 검사와 추가 UI/정책 테스트. 모든 Class를 실제 XC에서 수동 실행했다는 뜻은 아니다. 현재 실제 tenant의 Locked 편집 권한으로 확인하지 못했던 생성/저장 절차는 기존 공식 실습 동작과 로컬 저장 테스트로 보완한다.
+
+최종 검사: npm test 29개 파일·338개 테스트 통과, npm run build 성공. 기존 500KB 초과 번들 경고는 남아 있다. 브라우저 console에는 React 개발 도구 안내만 있었고 실행 오류는 관찰되지 않았다.

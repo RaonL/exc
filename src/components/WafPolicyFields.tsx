@@ -88,25 +88,38 @@ export function WafPolicyFields({ config, setting }: WafFieldsProps) {
                 ))}
               </fieldset>
             )}
-            <Field label="Signature Selection by Accuracy">
-              <ReferenceSelect
-                label="Signature Selection by Accuracy"
-                value={config.accuracy}
-                onChange={(value) => setting('accuracy', value as WafConfig['accuracy'])}
-                options={[
-                  { value: 'High', description: 'Enables only high accuracy signatures' },
-                  {
-                    value: 'High and Medium',
-                    description: 'Enables high and medium accuracy signatures',
-                    default: true,
-                  },
-                  {
-                    value: 'High, Medium and Low',
-                    description: 'Enables high, medium and low accuracy signatures',
-                  },
-                ]}
-              />
+            <Field label="Signature Settings by Accuracy">
+              <select
+                value={config.signatureSettings ?? 'Default'}
+                onChange={(e) =>
+                  setting('signatureSettings', e.target.value as 'Default' | 'Custom')
+                }
+              >
+                <option>Default</option>
+                <option>Custom</option>
+              </select>
             </Field>
+            {config.signatureSettings !== 'Custom' && (
+              <Field label="Signature Selection by Accuracy">
+                <ReferenceSelect
+                  label="Signature Selection by Accuracy"
+                  value={config.accuracy}
+                  onChange={(value) => setting('accuracy', value as WafConfig['accuracy'])}
+                  options={[
+                    { value: 'High', description: 'Enables only high accuracy signatures' },
+                    {
+                      value: 'High and Medium',
+                      description: 'Enables high and medium accuracy signatures',
+                      default: true,
+                    },
+                    {
+                      value: 'High, Medium and Low',
+                      description: 'Enables high, medium and low accuracy signatures',
+                    },
+                  ]}
+                />
+              </Field>
+            )}
             <Field label="High Accuracy Signature Action">
               <select
                 value={config.highAction}
@@ -139,8 +152,7 @@ export function WafPolicyFields({ config, setting }: WafFieldsProps) {
               </Field>
             ))}
             <p className="configuration-help">
-              Demo SQLi, XSS and command injection signatures have high accuracy. All three accuracy
-              selections include them.
+              {config.signatureSettings === 'Custom' ? 'Custom uses the selected action for each accuracy. Monitoring records matches without blocking.' : 'Demo SQLi, XSS and command injection signatures have high accuracy. All three accuracy selections include them.'}
             </p>
           </div>
           <Field label="Automatic Attack Signatures Tuning">

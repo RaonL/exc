@@ -77,6 +77,7 @@ export function evaluateCatalogRequest(
       const custom = policy.policy === 'Custom';
       const accuracy = custom ? policy.accuracy : 'High and Medium';
       const included =
+        (custom && policy.signatureSettings === 'Custom') ||
         accuracy === 'High, Medium and Low' ||
         match.accuracy === 'High' ||
         (accuracy === 'High and Medium' && match.accuracy === 'Medium');
@@ -100,9 +101,10 @@ export function evaluateCatalogRequest(
         (expires === undefined || Date.now() < expires);
       trace.push(
         `ATTACK_TYPE original=${match.attackType} normalized=${attack} disabled=${disabled}`,
-        `ACCURACY selected=${accuracy} item=${match.accuracy} included=${included} action=${signatureAction}`,
+        `ACCURACY selected=${custom && policy.signatureSettings === 'Custom' ? 'Custom (per-accuracy actions)' : accuracy} item=${match.accuracy} included=${included} action=${signatureAction}`,
         `STAGING setting=${custom ? policy.staging : 'Default 정책: 미적용'} state=${request.signatureState} active=${staged} expires=${expires === undefined ? '시작 시각 미지정' : new Date(expires).toISOString()}`,
         `TUNING enabled=${policy.tuning} · 자동 학습/튜닝 엔진은 재현하지 않음; 결과에 적용하지 않음`,
+        `AI enabled=${!!policy.enhanceWithAi} action=${policy.riskAction ?? 'Mitigate High Risk Only'} · 저장용 설정; 실제 AI 판정 엔진은 재현하지 않아 결과에 적용하지 않음`,
       );
       if (disabled) reason = `${attack} 유형이 Custom 정책에서 비활성화되어 통과`;
       else if (!included)

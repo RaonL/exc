@@ -1,0 +1,76 @@
+/* Measured from the authenticated 1920px REA capture, 2026-10-22. */
+@media (min-width: 901px) {
+  .app-shell[data-workspace='Web App & API Protection'] > .sidebar {
+    width: 264px;
+  }
+  .app-shell[data-workspace='Web App & API Protection'] > .main-shell {
+    margin-left: 264px;
+  }
+  .app-shell[data-workspace='Web App & API Protection'] .xc-load-balancers-flyout {
+    left: 254px;
+  }
+  .app-shell[data-workspace='Web App & API Protection'] .brand {
+    height: 60px;
+  }
+  .app-shell[data-workspace='Web App & API Protection'] .workspace-select {
+    font-size: 14px;
+    min-height: 34px;
+    margin: 6px 20px 18px 7px;
+  }
+  .app-shell[data-workspace='Web App & API Protection'] .workspace-title {
+    font-size: 17px;
+  }
+  .app-shell[data-workspace='Web App & API Protection'] .namespace-selector select {
+    font-size: 14px;
+  }
+  .app-shell[data-workspace='Web App & API Protection'] .namespace-selector small {
+    font-size: 12px;
+  }
+  .app-shell[data-workspace='Web App & API Protection'] .namespace-avatar {
+    width: 30px;
+    height: 30px;
+    font-size: 15px;
+  }
+  .app-shell[data-workspace='Web App & API Protection'] .nav-group-label {
+    font-size: 16px;
+    padding: 0 18px 10px;
+    gap: 12px;
+  }
+  .app-shell[data-workspace='Web App & API Protection'] .nav-item {
+    font-size: 14px;
+    min-height: 33px;
+    padding: 7px 20px 7px 46px;
+  }
+  .app-shell[data-workspace='Web App & API Protection'] .nav-group {
+    padding: 12px 0 16px;
+  }
+  .app-shell[data-workspace='Web App & API Protection'] .topbar {
+    height: 64px;
+    min-height: 64px;
+    padding: 5px 20px;
+  }
+  .app-shell[data-workspace='Web App & API Protection'] .breadcrumbs {
+    font-size: 12px;
+  }
+  .app-shell[data-workspace='Web App & API Protection'] .header-context {
+    font-size: 20px;
+  }
+}
+.api-endpoint-table.card > .table-wrap {
+  margin: 0;
+  max-width: 100%;
+}
+.api-console-dashboard .api-dash-heading {
+  padding-top: 10px;
+}
+.api-console-dashboard .api-category-legend label:nth-child(2) input {
+  accent-color: #1fb6e9;
+}
+.api-console-dashboard .api-category-legend label:nth-child(3) input {
+  accent-color: #ff513d;
+}
+.api-console-dashboard button:focus-visible,
+.api-segment-graph button:focus-visible {
+  outline: 2px solid var(--console-focus);
+  outline-offset: 3px;
+}

@@ -17,7 +17,6 @@ import {
   Search,
   Settings,
   Shield,
-  ShieldCheck,
   UserRound,
   Users,
   Wrench,
@@ -73,11 +72,6 @@ const nav: Record<Workspace, NavGroup[]> = {
       label: 'Manage',
       icon: Wrench,
       items: ['HTTP Load Balancers', 'Origin Pools', 'App Firewall', 'Service Policies'],
-    },
-    {
-      label: 'API Security',
-      icon: ShieldCheck,
-      items: ['API Discovery', 'API Protection', 'API Endpoints', 'API Quickstarts'],
     },
     { label: 'Bot Defense', icon: Bot, items: ['Bot Defense'] },
   ],
@@ -192,7 +186,9 @@ export default function App() {
       case 'Service Policies':
         return <ConfigResources key={`policy-${s.namespace}`} kind="policy" notify={notify} />;
       case 'API Discovery':
-        return <ApiPages key={`discovery-${s.namespace}`} openLab={() => setLab(true)} notify={notify} />;
+        return (
+          <ApiPages key={`discovery-${s.namespace}`} openLab={() => setLab(true)} notify={notify} />
+        );
       case 'API Endpoints':
         return <ApiDashboardPage key={s.namespace} />;
       case 'API Protection':
@@ -404,18 +400,26 @@ export default function App() {
                     'Alerts Management',
                     'Files',
                     'API Management',
+                    'API Security',
                     'Reports',
                     'Certificate Management',
                     'Bot Defense Management',
                   ].map((label) =>
-                    label === 'Files' || label === 'API Management' ? (
+                    label === 'Files' || label === 'API Management' || label === 'API Security' ? (
                       <details className="api-sidebar-group" key={label}>
                         <summary>
                           {label} <ChevronRight size={14} />
                         </summary>
                         {(label === 'Files'
                           ? (['OpenAPI Files'] as const)
-                          : (['API Definition', 'Code Base Integration'] as const)
+                          : label === 'API Security'
+                            ? ([
+                                'API Discovery',
+                                'API Protection',
+                                'API Endpoints',
+                                'API Quickstarts',
+                              ] as const)
+                            : (['API Definition', 'Code Base Integration'] as const)
                         ).map((page) => (
                           <button
                             key={page}

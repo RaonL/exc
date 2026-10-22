@@ -5,6 +5,7 @@ import { LBForm } from './LoadBalancerEditor';
 import type { LB } from '../types';
 import { sharedBaseWaf } from '../lib/console-lab';
 import { useConsole } from '../store';
+import { lbConfig } from '../lib/config';
 
 let root: Root;
 let close: ReturnType<typeof vi.fn>;
@@ -302,4 +303,77 @@ it('clears an outdated domain validation error when the draft is corrected', asy
   expect(document.querySelector('[role="alert"]')?.textContent).toContain('Domains:');
   await fill(domain(), 'corrected.example.com');
   expect(document.querySelector('[role="alert"]')).toBeNull();
+});
+
+it('follows live XC section order and exposes a nested routes table in View without changing saved configuration', async () => {
+  const original = useConsole.getState().lbs[0];
+  await render(
+    {
+      ...original,
+      config: {
+        ...lbConfig(original),
+        routes: [
+          {
+            id: 'rea-route',
+            name: 'rea-route',
+            type: 'Simple',
+            path: '/',
+            method: 'ANY',
+            match: 'Prefix',
+            enabled: true,
+            originId: original.originId,
+            wafId: '',
+            responseCode: 200,
+            responseBody: 'OK',
+            redirectUrl: '',
+          },
+        ],
+      },
+    },
+    true,
+  );
+  const titles = [...document.querySelectorAll('.config-navigation nav button')].map(
+    (b) => b.textContent,
+  );
+  expect(titles.indexOf('VIP Advertisement')).toBeLessThan(titles.indexOf('SSL/TLS Type'));
+  expect(titles.indexOf('SSL/TLS Type')).toBeLessThan(titles.indexOf('Routes'));
+  expect(titles).not.toContain('Origins');
+  expect(titles.indexOf('Common Security Controls')).toBeLessThan(titles.indexOf('API Protection'));
+  const before = JSON.stringify(useConsole.getState().lbs);
+  await click('View Routes Configuration');
+  expect([...document.querySelectorAll('[role="dialog"]')].at(-1)?.textContent).toContain(
+    'Parameters',
+  );
+  expect(JSON.stringify(useConsole.getState().lbs)).toBe(before);
+});
+
+it('applies nested route edits to the draft, saves and reloads them before routing a request', async () => {
+  const original = useConsole.getState().lbs[0];
+  await render(original);
+  const before = JSON.stringify(useConsole.getState().lbs);
+  await click('Configure Routes');
+  await click('Add Route');
+  await fill(field('Path'), '/rea-route');
+  await fill(field('Route Type'), 'Direct Response');
+  await fill(field('Response Code'), '204');
+  await click('Apply');
+  expect(JSON.stringify(useConsole.getState().lbs)).toBe(before);
+  await click('Save HTTP Load Balancer');
+  const saved = localStorage.getItem('f5-xc-simulator-v1')!;
+  await act(async () => {
+    useConsole.setState({ lbs: [] });
+    localStorage.setItem('f5-xc-simulator-v1', saved);
+    await useConsole.persist.rehydrate();
+  });
+  expect(
+    useConsole
+      .getState()
+      .lbs.find((l) => l.id === original.id)
+      ?.config?.routes.at(-1)?.path,
+  ).toBe('/rea-route');
+  await act(async () => {
+    expect(
+      useConsole.getState().requestApplication(original.id, '/rea-route', 'GET').responseCode,
+    ).toBe(204);
+  });
 });

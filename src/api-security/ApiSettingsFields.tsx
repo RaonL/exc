@@ -488,9 +488,9 @@ export function ApiSettingsFields({
       {toggle('API Discovery', 'discovery')}
       {c.discovery && (
         <div className="api-nested">
-          {toggle('Learn From Traffic With Direct Response', 'redirects')}
+          {toggle('Learn From Traffic With Redirect Response', 'redirects')}
           <p>Disable: 2xx만 검색 · Enable: 3xx 리디렉션도 학습</p>
-          <Field label="Purge Duration for Inactive Discovered APIs">
+          <Field label="Purge Duration for Inactive Discovered APIs from Traffic (days)">
             <input
               type="number"
               min={1}
@@ -499,6 +499,18 @@ export function ApiSettingsFields({
               onChange={(e) => update('purgeDays', Number(e.target.value))}
             />
           </Field>
+          <Choice
+            label="API Discovery Policy"
+            value={c.discoveryPolicy ?? 'Built-in'}
+            values={['Built-in']}
+            change={() => update('discoveryPolicy', 'Built-in')}
+          />
+          <Choice
+            label="Sensitive Data Discovery"
+            value={c.sensitiveDataDiscovery ?? 'Default'}
+            values={['Default', 'Disable']}
+            change={(v) => update('sensitiveDataDiscovery', v as 'Default' | 'Disable')}
+          />
           <h3>API Repositories</h3>
           <div className="api-field">
             <strong>Code Base Integration</strong>

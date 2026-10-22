@@ -7,6 +7,7 @@ import { wafConfig } from '../lib/config';
 import { sharedBaseWaf } from '../lib/console-lab';
 import type { Waf } from '../types';
 import { ConsoleApplication } from './ConsoleApplication';
+import { ConfigResources } from './Resources';
 
 let root: Root;
 let close: ReturnType<typeof vi.fn>;
@@ -251,4 +252,60 @@ it('shows a saved custom block body safely with its Support ID in the console ap
     event.responseBody!.replaceAll('{{request_id}}', event.id),
   );
   expect(result.querySelector('script')).toBeNull();
+});
+
+it('saves Custom accuracy actions and AI reference settings then rehydrates and evaluates the selected low signature', async () => {
+  const lb = useConsole.getState().lbs[0];
+  const waf = useConsole.getState().wafs.find((w) => w.id === lb.wafId)!;
+  await render(waf, true);
+  await click('Edit Configuration');
+  await fill('Enforcement Mode', 'Blocking');
+  await fill('Security Policy', 'Custom');
+  await fill('Signature Settings by Accuracy', 'Custom');
+  await fill('Low Accuracy Signature Action', 'Report');
+  await fill('Enhance with AI', 'Enable');
+  await click('Save App Firewall');
+  const saved = localStorage.getItem('f5-xc-simulator-v1')!;
+  await act(async () => {
+    useConsole.setState({ wafs: [] });
+    localStorage.setItem('f5-xc-simulator-v1', saved);
+    await useConsole.persist.rehydrate();
+  });
+  const policy = useConsole.getState().wafs.find((w) => w.id === waf.id)!;
+  expect(policy.config).toMatchObject({
+    signatureSettings: 'Custom',
+    lowAction: 'Report',
+    enhanceWithAi: true,
+  });
+  let result: ReturnType<typeof useConsole.getState>['events'][number];
+  await act(async () => {
+    result = useConsole
+      .getState()
+      .runCatalogTest(
+        lb.id,
+        {
+          kind: 'signatures',
+          id: 'local-low',
+          name: 'Local low accuracy',
+          attackType: 'SQL-Injection',
+          accuracy: 'Low',
+          risk: 'Medium',
+        },
+        { path: '/product', method: 'GET', signatureState: 'Existing' },
+      );
+  });
+  expect(result!).toMatchObject({ action: 'Detected', responseCode: 200 });
+  expect(result!.evaluationTrace?.join('\n')).toContain('action=Report');
+  expect(result!.evaluationTrace?.join('\n')).toContain('AI enabled=true');
+});
+
+it('lists namespace and shared WAFs through Manage Configuration without inline mode switches', async () => {
+  useConsole.getState().saveWaf(sharedBaseWaf);
+  await act(async()=>root.render(createElement(ConfigResources,{kind:'waf',notify:vi.fn()})));
+  expect([...document.querySelectorAll('th')].map(t=>t.textContent)).toEqual(['Name','Namespace','Actions']);
+  expect(document.body.textContent).toContain('shared');
+  expect([...document.querySelectorAll('button')].some(b=>b.textContent?.includes('Switch to'))).toBe(false);
+  await click(sharedBaseWaf.name);
+  expect(document.querySelector('.config-editor')?.getAttribute('data-mode')).toBe('view');
+  expect([...document.querySelectorAll('button')].some(b=>b.textContent?.includes('Edit Configuration'))).toBe(false);
 });
