@@ -1,6 +1,7 @@
 export type Workspace =
   'Home' | 'Web App & API Protection' | 'Multi-Cloud Network Connect' | 'Administration';
 export type Page =
+  | import('./navigation/catalog').ReferencePage
   | 'API Quickstarts'
   | 'API Endpoints'
   | 'OpenAPI Files'

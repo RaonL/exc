@@ -5,7 +5,6 @@ import { useEffect, useState, lazy, Suspense, type ElementType } from 'react';
 import {
   Bell,
   BookOpen,
-  Bot,
   ChevronDown,
   ChevronRight,
   CircleHelp,
@@ -23,7 +22,6 @@ import {
   X,
   CheckCircle2,
   ArrowRight,
-  ExternalLink,
 } from 'lucide-react';
 import { useConsole } from './store';
 import type { Workspace, Page } from './types';
@@ -35,6 +33,10 @@ import { SecurityDashboard } from './components/SecurityDashboard';
 import { Home } from './components/Home';
 import { LoadBalancers, ConfigResources, ApiPages, NetworkPages } from './components/Resources';
 import { SecurityEvents } from './components/Events';
+import { WaapNavigation, LearningNavigation } from './navigation/WaapNavigation';
+import { isReferencePage, menuPages, parentFor } from './navigation/catalog';
+import { SupplementalPage } from './navigation/SupplementalPage';
+import { ActivityPage } from './components/Administration';
 import { Administration } from './components/Administration';
 import { DemoResetControl } from './components/DemoResetControl';
 import { SimulationPanel } from './components/SimulationPanel';
@@ -63,17 +65,19 @@ const nav: Record<Workspace, NavGroup[]> = {
     },
   ],
   'Web App & API Protection': [
+    { label: 'Overview', icon: Grid2X2, items: ['Security', 'Overview'] },
+    { label: 'Manage', icon: Wrench, items: menuPages },
     {
-      label: 'Overview',
-      icon: Grid2X2,
-      items: ['Security', 'Overview', 'Security Analytics', 'Security Events', 'Security Catalog'],
+      label: 'Learning Lab',
+      icon: BookOpen,
+      items: [
+        'Training Center',
+        'API Quickstarts',
+        'Security Analytics',
+        'Security Events',
+        'Bot Defense',
+      ],
     },
-    {
-      label: 'Manage',
-      icon: Wrench,
-      items: ['HTTP Load Balancers', 'Origin Pools', 'App Firewall', 'Service Policies'],
-    },
-    { label: 'Bot Defense', icon: Bot, items: ['Bot Defense'] },
   ],
   'Multi-Cloud Network Connect': [
     { label: 'Overview', icon: Network, items: ['Site Management', 'Connectivity'] },
@@ -102,9 +106,6 @@ export default function App() {
   const [lab, setLab] = useState(false);
   const [toast, setToast] = useState('');
   const [sidebar, setSidebar] = useState(false);
-  const [loadBalancersOpen, setLoadBalancersOpen] = useState(false);
-  const [flyoutTop, setFlyoutTop] = useState(450);
-  const [referenceInfo, setReferenceInfo] = useState('');
   const [popover, setPopover] = useState('');
   const [searchOpen, setSearchOpen] = useState(false);
   const [search, setSearch] = useState('');
@@ -134,7 +135,6 @@ export default function App() {
     window.scrollTo({ top: 0 });
   }, [s.workspace, s.page]);
   const go = (workspace: Workspace, page: Page) => {
-    setLoadBalancersOpen(false);
     s.navigate(workspace, page);
     setPopover('');
     setSidebar(false);
@@ -208,8 +208,10 @@ export default function App() {
         return <SecurityEvents analytics openLab={() => setLab(true)} />;
       case 'Security Events':
         return <SecurityEvents openLab={() => setLab(true)} />;
+      case 'Audit Logs':
+        return <ActivityPage audit />;
       default:
-        return <Empty />;
+        return isReferencePage(s.page) ? <SupplementalPage page={s.page} /> : <Empty />;
     }
   };
   const results = [
@@ -310,185 +312,44 @@ export default function App() {
           </span>
           <ChevronDown size={13} />
         </label>
-        <nav aria-label="Main navigation">
-          {nav[s.workspace].map((group) => (
-            <div className="nav-group" key={group.label}>
-              <div className="nav-group-label">
-                <group.icon size={17} />
-                {group.label}
-              </div>
-              {group.label === 'Manage' && s.workspace === 'Web App & API Protection' && (
-                <button
-                  className="nav-item nav-parent"
-                  aria-expanded={loadBalancersOpen}
-                  onClick={(event) => {
-                    setFlyoutTop(
-                      Math.min(
-                        event.currentTarget.getBoundingClientRect().top,
-                        window.innerHeight - 180,
-                      ),
-                    );
-                    setLoadBalancersOpen((v) => !v);
-                  }}
-                >
-                  <span>Load Balancers</span>
-                  {loadBalancersOpen ? <ChevronDown size={13} /> : <ChevronRight size={13} />}
-                </button>
-              )}
-              {group.label === 'Manage' &&
-                s.workspace === 'Web App & API Protection' &&
-                loadBalancersOpen && (
-                  <div className="xc-load-balancers-flyout" style={{ top: flyoutTop }}>
-                    {(['HTTP Load Balancers', 'Origin Pools'] as Page[]).map((page) => (
-                      <button key={page} onClick={() => go(s.workspace, page)}>
-                        {page}
-                      </button>
-                    ))}
-                    <button
-                      onClick={() => {
-                        setLoadBalancersOpen(false);
-                        setReferenceInfo(
-                          'Health Checks: 이 버전은 Origin Pool 안의 HTTP / TCP Health Check 입력을 지원합니다. 독립 Health Check 객체 화면은 미구현입니다.',
-                        );
-                      }}
-                    >
-                      Health Checks
-                    </button>
-                  </div>
-                )}
-              {group.label === 'Manage' &&
-                s.workspace === 'Web App & API Protection' &&
-                ['CDN Distributions', 'BIG-IP Virtual Servers'].map((label) => (
-                  <button
-                    key={label}
-                    className="nav-item xc-support-nav"
-                    onClick={() => setReferenceInfo(label + ' · 독립 콘솔 화면은 미구현입니다.')}
-                  >
-                    {label}
-                  </button>
-                ))}
-              {group.items
-                .filter(
-                  (page) =>
-                    s.workspace !== 'Web App & API Protection' ||
-                    group.label !== 'Manage' ||
-                    !['HTTP Load Balancers', 'Origin Pools'].includes(page),
-                )
-                .map((page) => (
-                  <button
-                    key={page}
-                    className={`nav-item ${['HTTP Load Balancers', 'Origin Pools'].includes(page) ? 'nav-child' : ''} ${s.page === page ? 'active' : ''}`}
-                    aria-current={s.page === page ? 'page' : undefined}
-                    onClick={() => go(s.workspace, page)}
-                  >
-                    <span>{page === 'Overview' ? 'Performance' : page}</span>
-                    {[
-                      'HTTP Load Balancers',
-                      'Origin Pools',
-                      'Service Policies',
-                      'API Discovery',
-                    ].includes(page) && <ChevronRight size={13} />}
-                  </button>
-                ))}
-              {group.label === 'Manage' && s.workspace === 'Web App & API Protection' && (
-                <div className="xc-advanced-navigation">
-                  {[
-                    'Rate Limiter Policies',
-                    'Shared Objects',
-                    'AI & ML',
-                    'Public IP Addresses',
-                    'Alerts Management',
-                    'Files',
-                    'API Management',
-                    'API Security',
-                    'Reports',
-                    'Certificate Management',
-                    'Bot Defense Management',
-                  ].map((label) =>
-                    label === 'Files' || label === 'API Management' || label === 'API Security' ? (
-                      <details className="api-sidebar-group" key={label}>
-                        <summary>
-                          {label} <ChevronRight size={14} />
-                        </summary>
-                        {(label === 'Files'
-                          ? (['OpenAPI Files'] as const)
-                          : label === 'API Security'
-                            ? ([
-                                'API Discovery',
-                                'API Protection',
-                                'API Endpoints',
-                                'API Quickstarts',
-                              ] as const)
-                            : (['API Definition', 'Code Base Integration'] as const)
-                        ).map((page) => (
-                          <button
-                            key={page}
-                            className="nav-item"
-                            onClick={() => go('Web App & API Protection', page)}
-                          >
-                            {page}
-                          </button>
-                        ))}
-                      </details>
-                    ) : (
-                      <button
-                        key={label}
-                        className="nav-item"
-                        onClick={() =>
-                          setReferenceInfo(
-                            label +
-                              ' · 이 메뉴의 독립 콘솔 화면은 미구현입니다. 관련 학습 동작은 Training Center에서 사용할 수 있습니다.',
-                          )
-                        }
-                      >
-                        {label}
-                        <ChevronRight size={14} />
-                      </button>
-                    ),
-                  )}
+        {s.workspace === 'Web App & API Protection' ? (
+          <WaapNavigation page={s.page} onNavigate={(page) => go(s.workspace, page)} />
+        ) : (
+          <nav aria-label="Main navigation">
+            {nav[s.workspace].map((group) => (
+              <div className="nav-group" key={group.label}>
+                <div className="nav-group-label">
+                  <group.icon size={17} />
+                  {group.label}
                 </div>
-              )}
-            </div>
-          ))}
-        </nav>
-        <div className="sidebar-bottom">
-          <details className="xc-learning-tools">
-            <summary>Learning tools · 학습 도구</summary>
-            {(['Security Catalog', 'Security Analytics', 'Security Events'] as Page[]).map(
-              (page) => (
-                <button key={page} onClick={() => go('Web App & API Protection', page)}>
-                  {page}
-                </button>
-              ),
-            )}
-          </details>
-          <button onClick={() => go('Home', 'Training Center')}>
-            <BookOpen size={17} />
-            <span>Training Center</span>
-            <Badge tone="blue">1–9</Badge>
-          </button>
-          <button onClick={() => setLab(true)}>
-            <FlaskConical size={17} />
-            <span>Simulation Lab</span>
-            <Badge tone="blue">DEMO</Badge>
-          </button>
-          <a href="https://docs.cloud.f5.com/docs-v2" target="_blank" rel="noreferrer">
-            <BookOpen size={16} />
-            Documentation
-            <ExternalLink size={12} />
-          </a>
-          <div>
-            <span className="local-status" />
-            Local environment<span>v1.0</span>
-          </div>
+                {group.items
+                  .filter((page) => page !== 'Training Center')
+                  .map((page) => (
+                    <button
+                      key={page}
+                      className={`nav-item ${s.page === page ? 'active' : ''}`}
+                      aria-current={s.page === page ? 'page' : undefined}
+                      onClick={() => go(s.workspace, page)}
+                    >
+                      {page}
+                    </button>
+                  ))}
+              </div>
+            ))}
+          </nav>
+        )}
+        <LearningNavigation
+          onNavigate={(page) =>
+            go(page === 'Training Center' ? 'Home' : 'Web App & API Protection', page)
+          }
+          onLab={() => setLab(true)}
+        />
+        <div className="waap-sidebar-status">
+          <span className="local-status" />
+          Local environment<span>v1.0</span>
         </div>
       </aside>
       <div className="main-shell">
-        {referenceInfo && (
-          <Dialog open title="Console learning scope" onOpenChange={() => setReferenceInfo('')}>
-            <p>{referenceInfo}</p>
-          </Dialog>
-        )}
         <header className="topbar">
           <button
             className="icon-button mobile-menu"
@@ -513,7 +374,9 @@ export default function App() {
                   ? 'Overview'
                   : ['HTTP Load Balancers', 'Origin Pools'].includes(s.page)
                     ? 'Manage'
-                    : s.page}
+                    : parentFor(s.page)
+                      ? 'Manage'
+                      : s.page}
               </span>
               {['HTTP Load Balancers', 'Origin Pools'].includes(s.page) && (
                 <>

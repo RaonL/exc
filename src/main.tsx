@@ -17,6 +17,7 @@ import './origin-lab1.css';
 import './load-balancer-lab1.css';
 import './training/console-guide.css';
 import './rea-console.css';
+import './navigation/navigation.css';
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <App />
