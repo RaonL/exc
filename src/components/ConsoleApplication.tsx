@@ -127,9 +127,13 @@ function Application({ id, close }: { id: string; close: () => void }) {
               ) : (
                 <>
                   <h2>
-                    {result.responseCode === 200
-                      ? 'Welcome to the F5 XC Demo App'
-                      : 'Application unavailable'}
+                    {result.responseCode === 204
+                      ? 'Request completed · No Content'
+                      : result.responseCode === 200
+                        ? 'Welcome to the F5 XC Demo App'
+                        : (result.responseCode ?? 200) < 400
+                          ? 'Request completed'
+                          : 'Application unavailable'}
                   </h2>
                   <p>
                     {result.responseCode === 200

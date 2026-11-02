@@ -60,15 +60,6 @@ export function DeliveryFields({ config, setting }: Props) {
           onChange={(e) => setting('timeout', Number(e.target.value))}
         />
       </Field>
-      <Field label="Path Normalization">
-        <select
-          value={config.pathNormalization === false ? 'Disable' : 'Enable'}
-          onChange={(e) => setting('pathNormalization', e.target.value === 'Enable')}
-        >
-          <option>Enable</option>
-          <option>Disable</option>
-        </select>
-      </Field>
       <p className="configuration-help">
         Delivery controls are persisted configuration examples; TLS, caching and path normalization
         are not network processing engines.

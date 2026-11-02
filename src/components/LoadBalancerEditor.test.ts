@@ -377,3 +377,56 @@ it('applies nested route edits to the draft, saves and reloads them before routi
     ).toBe(204);
   });
 });
+
+it('persists observed TLS controls and nested mTLS only after Apply and parent Save', async () => {
+  const original = useConsole.getState().lbs[0];
+  await render(original);
+  await fill(field('Load Balancer Type'), 'Automatic');
+  await fill(field('Connection Idle Timeout (ms)'), '90000');
+  await fill(field('HTTP Protocol Configuration'), 'HTTP/1.1');
+  await fill(field('mTLS'), 'Enable');
+  await click('Configure mTLS');
+  await fill(field('CA Certificate *'), 'training-ca');
+  await click('Apply');
+  expect(useConsole.getState().lbs.find((l) => l.id === original.id)).toEqual(original);
+  await click('Save HTTP Load Balancer');
+  const stored = localStorage.getItem('f5-xc-simulator-v1')!;
+  await act(async () => {
+    useConsole.setState({ lbs: [] });
+    localStorage.setItem('f5-xc-simulator-v1', stored);
+    await useConsole.persist.rehydrate();
+  });
+  const saved = useConsole.getState().lbs.find((l) => l.id === original.id)!;
+  expect(saved.config).toMatchObject({
+    connectionIdleTimeout: 90000,
+    httpProtocol: 'HTTP/1.1',
+    mutualTls: { enabled: true, caReference: 'training-ca' },
+  });
+  await act(async () => root.unmount());
+  root = createRoot(document.body.appendChild(document.createElement('div')));
+  await render(saved, true);
+  expect(document.body.textContent).toContain('90000 ms');
+  expect(document.body.textContent).toContain('training-ca');
+  expect(document.body.textContent).toContain('HTTP/1.1');
+});
+
+it('discards nested TLS changes on Cancel and rejects invalid idle timeout', async () => {
+  const original = useConsole.getState().lbs[0];
+  await render(original);
+  await fill(field('Load Balancer Type'), 'Automatic');
+  await fill(field('mTLS'), 'Enable');
+  await click('Configure mTLS');
+  await fill(field('CA Certificate *'), 'discard-ca');
+  await click('Cancel and Exit');
+  await click('Configure mTLS');
+  expect(field('CA Certificate *').value).toBe('');
+  await click('Cancel and Exit');
+  await fill(field('mTLS'), 'Disable');
+  await fill(field('Connection Idle Timeout (ms)'), '-1');
+  await click('JSON');
+  await click('Save HTTP Load Balancer');
+  expect(document.querySelector('[role="alert"]')?.textContent).toContain(
+    'Connection Idle Timeout',
+  );
+  expect(useConsole.getState().lbs.find((l) => l.id === original.id)).toEqual(original);
+});

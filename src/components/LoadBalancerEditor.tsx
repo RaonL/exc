@@ -122,6 +122,30 @@ export function LBForm({
       return setError('Web Application Firewall: select a policy from this namespace or shared.');
     if (!Number.isInteger(config.listenPort) || config.listenPort < 1 || config.listenPort > 65535)
       return setError('Listen port must be between 1 and 65535.');
+    if (
+      !Number.isInteger(config.connectionIdleTimeout) ||
+      config.connectionIdleTimeout! < 1 ||
+      config.connectionIdleTimeout! > 2147483647
+    )
+      return setError('Connection Idle Timeout: enter a positive integer in milliseconds.');
+    if (
+      form.protocol === 'HTTPS' &&
+      config.tlsLevel === 'Custom' &&
+      config.tlsMinimum! > config.tlsMaximum!
+    )
+      return setError('TLS: minimum version must not exceed maximum version.');
+    if (
+      form.protocol === 'HTTPS' &&
+      config.mutualTls?.enabled &&
+      !config.mutualTls.caReference.trim()
+    )
+      return setError('mTLS: configure the trusted CA before saving.');
+    if (
+      config.serverHeader !== 'Default' &&
+      config.serverHeader !== 'Do not modify' &&
+      (!config.serverHeaderValue?.trim() || /[\r\n]/.test(config.serverHeaderValue))
+    )
+      return setError('Server Response Header: enter a value without line breaks.');
     if (config.vip === 'Internet (Specified VIP)' && !validIpv4(config.vipAddress))
       return setError('VIP Advertisement: enter a valid IPv4 address.');
     if (

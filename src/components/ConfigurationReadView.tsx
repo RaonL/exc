@@ -30,10 +30,8 @@ export function ConfigurationReadView({
     return (
       <>
         {row('Name', metadata.name)}
-        {kind === 'Origin Pool' && metadata.config?.labels && row('Labels', metadata.config.labels)}
-        {kind === 'Origin Pool' &&
-          metadata.config?.description &&
-          row('Description', metadata.config.description)}
+        {metadata.config?.labels && row('Labels', metadata.config.labels)}
+        {metadata.config?.description && row('Description', metadata.config.description)}
       </>
     );
   }
@@ -163,15 +161,40 @@ export function ConfigurationReadView({
             'Load Balancer Type',
             l.protocol === 'HTTP' ? 'HTTP' : `HTTPS with ${c.certificate} Certificate`,
           )}
-          {row('Listen Port', c.listenPort)}
+          {row(l.protocol === 'HTTP' ? 'HTTP Listen Port' : 'HTTPS Listen Port', c.listenPort)}
           {l.protocol === 'HTTPS' && (
             <>
               {row('HTTP Redirect to HTTPS', c.redirectHttps ? 'Enable' : 'Disable')}
               {row('Add HSTS Header', c.hsts ? 'Enable' : 'Disable')}
               {row('TLS Security Level', c.tlsLevel)}
+              {c.tlsLevel === 'Custom' && row('TLS Versions', `${c.tlsMinimum} – ${c.tlsMaximum}`)}
+              {c.tlsLevel === 'Custom' && row('Cipher Suites', c.cipherSuites || 'Default')}
+              {row('mTLS', c.mutualTls?.enabled ? 'Enable' : 'Disable')}
+              {c.mutualTls?.enabled && (
+                <div className="xc-read-nested">
+                  {row('Trusted CA', c.mutualTls.caReference)}
+                  {row(
+                    'Client Certificate Optional',
+                    c.mutualTls.certificateOptional ? 'Yes' : 'No',
+                  )}
+                  {row(
+                    'Add X-Forwarded-Client-Cert Header',
+                    c.mutualTls.xfcc ? 'Enable' : 'Disable',
+                  )}
+                </div>
+              )}
             </>
           )}
           {row('Automatically Manage DNS Records', c.manageDns ? 'Enable' : 'Disable')}
+          {row('Server Response Header', c.serverHeader)}
+          {c.serverHeader !== 'Default' &&
+            c.serverHeader !== 'Do not modify' &&
+            row('Server Header Value', c.serverHeaderValue)}
+          {row('Path Normalization', c.pathNormalization === false ? 'Disable' : 'Enable')}
+          {row('Default Load Balancer', c.defaultLoadBalancer ? 'Yes' : 'No')}
+          {row('Connection Idle Timeout', `${c.connectionIdleTimeout} ms`)}
+          {row('HTTP Protocol Configuration', c.httpProtocol)}
+          {l.protocol === 'HTTPS' && row('TLS Coalescing Options', c.tlsCoalescing)}
         </>
       );
     if (id === 'waf')
@@ -231,13 +254,7 @@ export function ConfigurationReadView({
     if (id === 'dos') return row('L7 DDoS Protection', l.ddosProtection ? 'Enable' : 'Disable');
     if (id === 'routes') return fallback;
     if (id === 'cdn') return row('CDN', c.cdn ? 'Enable' : 'Disable');
-    if (id === 'delivery')
-      return (
-        <>
-          {row('Route Timeout', `${c.timeout} s`)}
-          {row('Path Normalization', c.pathNormalization === false ? 'Disable' : 'Enable')}
-        </>
-      );
+    if (id === 'delivery') return <>{row('Route Timeout', `${c.timeout} s`)}</>;
     if (id === 'other') return row('VIP Advertisement', c.vip);
   }
   return <fieldset disabled>{fallback}</fieldset>;

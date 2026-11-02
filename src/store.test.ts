@@ -221,3 +221,23 @@ describe('Cross-screen simulation contracts', () => {
     expect(get().events.some((e) => e.id === 'expired')).toBe(false);
   });
 });
+
+it('records the saved TLS configuration separately from simulated WAF decisions', async () => {
+  const lb = get().lbs[0];
+  const waf = get().wafs.find((w) => w.id === lb.wafId)!;
+  get().saveLb({
+    ...lb,
+    config: { ...lbConfig(lb), connectionIdleTimeout: 90000, httpProtocol: 'HTTP/1.1' },
+  });
+  await useConsole.persist.rehydrate();
+  get().saveWaf({ ...waf, mode: 'Monitoring' });
+  const detected = get().requestApplication(lb.id, '/cart?search=<script>sample</script>', 'GET');
+  expect(detected.action).toBe('Detected');
+  expect(detected.evaluationTrace?.join('\n')).toContain('idle_timeout_ms=90000');
+  expect(detected.evaluationTrace?.join('\n')).toContain('TLS handshake not executed');
+  get().saveWaf({ ...waf, mode: 'Blocking' });
+  expect(
+    get().requestApplication(lb.id, '/cart?search=<script>sample</script>', 'GET').action,
+  ).toBe('Blocked');
+  expect(detected.evaluationTrace?.join('\n')).toContain('http_protocol=HTTP/1.1');
+});

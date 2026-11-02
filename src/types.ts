@@ -164,7 +164,25 @@ export interface LBConfig {
   listenPort: number;
   redirectHttps: boolean;
   hsts: boolean;
-  tlsLevel: 'High' | 'Medium' | 'Low';
+  tlsLevel: 'High' | 'Medium' | 'Low' | 'Custom';
+  tlsMinimum?: 'TLS 1.2' | 'TLS 1.3';
+  tlsMaximum?: 'TLS 1.2' | 'TLS 1.3';
+  cipherSuites?: string;
+  mutualTls?: {
+    enabled: boolean;
+    caReference: string;
+    certificateOptional: boolean;
+    xfcc: boolean;
+    caFormat?: 'PEM' | 'Base64';
+    crl?: string;
+    xfccFields?: string[];
+  };
+  serverHeader?: 'Default' | 'Modify header value' | 'Append header value' | 'Do not modify';
+  serverHeaderValue?: string;
+  defaultLoadBalancer?: boolean;
+  connectionIdleTimeout?: number;
+  httpProtocol?: 'HTTP/1.1 and HTTP/2' | 'HTTP/1.1' | 'HTTP/2';
+  tlsCoalescing?: 'Default Coalescing' | 'Disable Coalescing';
   routes: RouteRule[];
   exclusions: WafExclusion[];
   cdn: boolean;

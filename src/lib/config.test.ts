@@ -258,3 +258,20 @@ describe('Detailed configuration evaluation', () => {
     ).toBe(false);
   });
 });
+
+it('returns no content for a saved Direct Response 204 route', () => {
+  const { lbs, wafs, origins } = createDemoData();
+  const lb = {
+    ...lbs[0],
+    config: {
+      ...lbConfig(lbs[0]),
+      routes: [
+        route({ type: 'Direct Response', responseCode: 204, responseBody: 'must not be sent' }),
+      ],
+    },
+  };
+  expect(evaluateRequest(lb, wafs, origins, 'Normal HTTP traffic', request)).toMatchObject({
+    responseCode: 204,
+    responseBody: '',
+  });
+});

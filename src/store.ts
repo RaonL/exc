@@ -181,6 +181,14 @@ export const useConsole = create<Store>()(
           evaluation.reason = 'VIP is not advertised';
           evaluation.action = 'Detected';
         }
+        const connection = lbConfig(lb);
+        evaluation.evaluationTrace = [
+          `LB_CONFIG lb=${lb.name} protocol=${lb.protocol} port=${connection.listenPort} vip=${connection.vip}`,
+          `CONNECTION http_protocol=${connection.httpProtocol} idle_timeout_ms=${connection.connectionIdleTimeout} path_normalization=${connection.pathNormalization !== false}`,
+          `TLS security=${connection.tlsLevel} mtls=${!!connection.mutualTls?.enabled} server_header=${connection.serverHeader} · reference settings only; TLS handshake not executed`,
+          ...(evaluation.evaluationTrace ?? []),
+          `DECISION ${evaluation.action} HTTP ${evaluation.responseCode} · ${evaluation.reason}`,
+        ];
         const event: SecurityEvent = {
           id: uid(),
           namespace: lb.namespace,

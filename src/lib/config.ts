@@ -30,6 +30,16 @@ export const lbConfig = (lb?: Partial<LB>): LBConfig => ({
   redirectHttps: true,
   hsts: false,
   tlsLevel: 'High',
+  tlsMinimum: 'TLS 1.2',
+  tlsMaximum: 'TLS 1.3',
+  cipherSuites: '',
+  mutualTls: { enabled: false, caReference: '', certificateOptional: false, xfcc: false },
+  serverHeader: 'Default',
+  serverHeaderValue: '',
+  defaultLoadBalancer: false,
+  connectionIdleTimeout: 120000,
+  httpProtocol: 'HTTP/1.1 and HTTP/2',
+  tlsCoalescing: 'Default Coalescing',
   routes: [],
   exclusions: [],
   cdn: false,
@@ -198,8 +208,8 @@ export function evaluateRequest(
     return {
       action: decision,
       responseCode: route.responseCode,
-      responseBody: route.responseBody,
-      reason: `${reason}; direct response: ${route.responseBody}`,
+      responseBody: route.responseCode === 204 ? '' : route.responseBody,
+      reason: `${reason}; direct response: ${route.responseCode === 204 ? 'No Content' : route.responseBody}`,
       evaluatedWafId: waf?.id,
     };
   const origin = origins.find((o) => o.id === (route?.originId || lb.originId));

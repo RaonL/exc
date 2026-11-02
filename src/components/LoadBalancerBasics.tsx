@@ -4,6 +4,7 @@ import type { LB, LBConfig, Origin } from '../types';
 import { Field, ToggleField } from './form-fields';
 import { Button } from './ui/button';
 import { GuideHint } from '../training/GuideFieldContext';
+import { TlsAdvancedFields } from './LoadBalancerTls';
 export type LBFieldsProps = {
   form: LB;
   config: LBConfig;
@@ -237,12 +238,14 @@ export function DomainFields({
                       <option>High</option>
                       <option>Medium</option>
                       <option>Low</option>
+                      <option>Custom</option>
                     </select>
                   </Field>
                 </div>
               </>
             )}
           </div>
+          <TlsAdvancedFields form={form} config={config} update={update} setting={setting} />
         </>
       )}
     </>
