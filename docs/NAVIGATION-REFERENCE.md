@@ -2,7 +2,7 @@
 
 2026-10-22 사용자 캡처 및 로컬 REA 접근성 트리(endpoints.ax.txt)의 Manage 17개 이름·순서를 전사했다. Overview, Notifications, References, Workspace Info도 REA 트리의 구성을 따른다. 실제 테넌트 메뉴를 다시 조작하거나 설정을 변경하지 않았다.
 
-기존 Class 1–9, API Quickstarts, Simulation Lab 및 학습용 보안 도구는 Learning Lab에 모았다. 기존 page 식별자와 저장 키는 유지한다. API Definition과 Code Base Integration도 원래 화면으로 연결되며, 캡처에 없는 API Management 최상위 항목을 중복 표시하지 않는다.
+Class 1–9, API Quickstarts, Simulation Lab 및 Documentation만 Learning Lab에 모았다. 보안 모니터링과 카탈로그는 콘솔 메뉴에 둔다. 기존 page 식별자와 저장 키는 유지한다. API Definition과 Code Base Integration도 원래 화면으로 연결되며, 캡처에 없는 API Management 최상위 항목을 중복 표시하지 않는다.
 
 ## 하위 메뉴의 증거 한계
 
@@ -27,3 +27,9 @@ Health Checks의 새 독립 목록은 로컬 참조 구성이다. Class 1~9의 �
 검증: 상위 17개 이름·순서, 하위 항목 이동, 학습 영역 분리, 신규 페이지 연결, 로컬 저장·재수화, Namespace 분리, 기존 Class 데이터 무변경, 전체 회귀 검사와 브라우저 이동 확인.
 
 2026-10-22 결과: `npm test` 31개 파일·343개 테스트 통과, `npm run build` 통과(기존 번들 크기 경고). 브라우저에서 Health Checks 이동, API Security 펼침/Escape, Learning Lab 및 Class 1–9 진입, Third-Party Application 생성·저장·새로고침·View 재조회를 확인했다. 캡처는 `output/playwright/xc-navigation-*.png`에 보관했다.
+
+## 2026-11-02 학습 메뉴 조합·스크롤 수정
+
+학습 영역의 별도 max-height/스크롤을 제거하고, 고정된 Learning Lab 버튼에서 네 학습 도구만 팝업으로 연다. 펼쳐도 기본 콘솔 메뉴 높이가 줄지 않는다. Security Analytics·Security Events는 Overview의 Security 하위 바로가기로, Bot Defense Dashboard는 Bot Defense Management 하위로 이동했다. Security Catalog는 기존 References → Attack Signatures를 유지한다. 새 바로가기 배치는 시뮬레이터 사용성 보완이며 미확인 실제 테넌트 하위 메뉴의 전사라고 주장하지 않는다. Manage 상위 17개 이름·순서, Class 1–9 데이터 및 계정 저장 구조는 그대로 유지한다.
+
+검증: 기본 메뉴 높이 전후 동일, 학습 항목 4개, Escape/바깥 클릭/항목 선택 시 닫기, 보안·봇·Class 9 화면 이동, 모바일 375×812 팝업 경계 확인. 전체 UI 357개와 서버 10개 테스트 및 빌드 통과(기존 번들 크기 경고). 캡처: output/playwright/learning-menu-clean.png, learning-class9-preserved.png, learning-menu-mobile.png.

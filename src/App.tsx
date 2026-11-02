@@ -66,18 +66,16 @@ const nav: Record<Workspace, NavGroup[]> = {
     },
   ],
   'Web App & API Protection': [
-    { label: 'Overview', icon: Grid2X2, items: ['Security', 'Overview'] },
+    {
+      label: 'Overview',
+      icon: Grid2X2,
+      items: ['Security', 'Security Analytics', 'Security Events', 'Overview'],
+    },
     { label: 'Manage', icon: Wrench, items: menuPages },
     {
       label: 'Learning Lab',
       icon: BookOpen,
-      items: [
-        'Training Center',
-        'API Quickstarts',
-        'Security Analytics',
-        'Security Events',
-        'Bot Defense',
-      ],
+      items: ['Training Center', 'API Quickstarts'],
     },
   ],
   'Multi-Cloud Network Connect': [
@@ -341,6 +339,7 @@ export default function App() {
           </nav>
         )}
         <LearningNavigation
+          page={s.page}
           onNavigate={(page) =>
             go(page === 'Training Center' ? 'Home' : 'Web App & API Protection', page)
           }

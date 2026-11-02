@@ -84,6 +84,7 @@ export const manageMenu: MenuEntry[] = [
   {
     label: 'Bot Defense Management',
     children: [
+      { label: 'Bot Defense Dashboard', page: 'Bot Defense' },
       child('Bot Infrastructure'),
       child('Bot Policies'),
       child('Mobile Base Configurations'),
