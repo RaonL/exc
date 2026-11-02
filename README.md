@@ -4,7 +4,7 @@
 
 Class 1–8의 UI 실습 검증 결과와 공식 Task 대조: [검증 보고서](docs/verification/README.md).
 
-F5 XC 콘솔을 학습하기 위한 시뮬레이터입니다. 보안 결과는 더미 데이터이며 실제 F5 API·CE/RE·보안 엔진에 연결하지 않습니다. 로그인은 별도의 실제 Node 인증 서버와 SQLite DB를 사용하며, 설정·Class 1~9 진행률·모의 로그를 계정별로 저장합니다. [로그인·운영·검증 안내](docs/AUTHENTICATION.md).
+F5 XC 콘솔을 학습하기 위한 시뮬레이터입니다. 보안 결과는 더미 데이터이며 실제 F5 API·CE/RE·보안 엔진에 연결하지 않습니다. 기본 로그인은 정적 사이트용 데모 방식이며, 설정·Class 1~9 진행률·모의 로그를 브라우저에 계정별로 저장합니다. 예시 계정은 ete_root1, ete_root2, ete_root3이며 공통 비밀번호는 etrevers입니다. [로그인·운영·검증 안내](docs/AUTHENTICATION.md).
 
 ## 실행
 
@@ -16,7 +16,7 @@ npm install
 npm run dev
 ```
 
-[http://127.0.0.1:5173](http://127.0.0.1:5173)에서 실행합니다. 개발 UI와 인증 API는 로컬 주소에만 바인딩됩니다. npm run dev로 두 서버가 함께 시작됩니다. 인터넷 배포는 Node 서버와 HTTPS·영구 DB 디스크가 필요하며, 정적 호스팅만으로는 로그인/저장이 동작하지 않습니다.
+[http://127.0.0.1:5173](http://127.0.0.1:5173)에서 실행합니다. 개발 UI와 인증 API는 로컬 주소에만 바인딩됩니다. npm run dev로 두 서버가 함께 시작됩니다. 기본 데모 모드는 Render 정적 호스팅에서도 로그인과 브라우저 저장이 동작합니다. 실제 서버 인증은 VITE_AUTH_MODE=server 빌드를 선택하고 Node 서버·HTTPS·영구 DB 디스크를 구성해야 합니다.
 
 ```powershell
 npm test          # 상태 연동 테스트

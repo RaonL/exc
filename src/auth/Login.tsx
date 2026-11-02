@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { api, type AccountUser } from './api';
+import { demoMode } from './mode';
 export function Login({ onLogin }: { onLogin: (user: AccountUser) => Promise<void> }) {
   const [signup, setSignup] = useState(false),
     [username, setUsername] = useState(''),
@@ -105,22 +106,28 @@ export function Login({ onLogin }: { onLogin: (user: AccountUser) => Promise<voi
           <button type="submit" className="account-primary" disabled={busy}>
             {busy ? '처리 중…' : signup ? '계정 만들기' : '로그인'}
           </button>
-          <button
-            type="button"
-            className="account-secondary"
-            disabled={busy}
-            onClick={() => {
-              setSignup(!signup);
-              setError('');
-              setPassword('');
-              setConfirmation('');
-            }}
-          >
-            {signup ? '기존 계정으로 로그인' : '새 계정 만들기'}
-          </button>
+          {!demoMode && (
+            <button
+              type="button"
+              className="account-secondary"
+              disabled={busy}
+              onClick={() => {
+                setSignup(!signup);
+                setError('');
+                setPassword('');
+                setConfirmation('');
+              }}
+            >
+              {signup ? '기존 계정으로 로그인' : '새 계정 만들기'}
+            </button>
+          )}
           <div className="account-demo-note">
             실습 예시 계정 <strong>ete_root1 · ete_root2 · ete_root3</strong>
-            <span>공유 예시 계정에는 실습용 데이터만 입력하세요.</span>
+            <span>
+              {demoMode
+                ? '데모 로그인 · 이 브라우저에 계정별 저장 · 다른 PC와 동기화되지 않습니다.'
+                : '공유 예시 계정에는 실습용 데이터만 입력하세요.'}
+            </span>
           </div>
         </form>
       </section>

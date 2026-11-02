@@ -1,4 +1,6 @@
 import { notifySessionChange } from './sessionSignal';
+import { demoMode } from './mode';
+import { demoRequest } from './demo';
 
 export class ApiError extends Error {
   constructor(
@@ -13,6 +15,11 @@ export async function api<T>(
   path: string,
   options: { method?: string; body?: unknown; account?: string; keepalive?: boolean } = {},
 ): Promise<T> {
+  if (demoMode) {
+    const result = demoRequest(path, options, (status, message) => new ApiError(status, message));
+    if (['/auth/login', '/auth/logout'].includes(path)) notifySessionChange();
+    return result as T;
+  }
   const response = await fetch(`/api${path}`, {
     method: options.method ?? 'GET',
     credentials: 'same-origin',

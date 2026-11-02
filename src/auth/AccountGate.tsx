@@ -10,6 +10,7 @@ import {
 import { AccountContext } from './context';
 import { Login } from './Login';
 import { onSessionChange } from './sessionSignal';
+import { demoMode } from './mode';
 export function AccountGate({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AccountUser | null>(null),
     [loading, setLoading] = useState(true),
@@ -82,13 +83,24 @@ export function AccountGate({ children }: { children: ReactNode }) {
   }, []);
   useEffect(() => {
     const preventLoss = (event: BeforeUnloadEvent) => {
+      if (demoMode) {
+        void sync.current?.flush().catch(() => {});
+        return;
+      }
       if (sync.current?.isDirty()) {
         event.preventDefault();
         event.returnValue = '';
       }
     };
+    const saveOnHide = () => {
+      void sync.current?.flush().catch(() => {});
+    };
     window.addEventListener('beforeunload', preventLoss);
-    return () => window.removeEventListener('beforeunload', preventLoss);
+    window.addEventListener('pagehide', saveOnHide);
+    return () => {
+      window.removeEventListener('beforeunload', preventLoss);
+      window.removeEventListener('pagehide', saveOnHide);
+    };
   }, []);
   useEffect(
     () =>
@@ -150,7 +162,7 @@ export function AccountGate({ children }: { children: ReactNode }) {
           >
             저장 재시도
           </button>
-          <button onClick={() => window.location.reload()}>서버 값 다시 불러오기</button>
+          <button onClick={() => window.location.reload()}>저장 값 다시 불러오기</button>
         </div>
       )}
       {children}

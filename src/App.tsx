@@ -1,3 +1,4 @@
+import { demoMode } from './auth/mode';
 import { ApiWorkbench } from './api-security/ApiWorkbench';
 import { ApiResources } from './api-security/ApiResources';
 import { ApiDashboardPage } from './api-security/ApiDashboard';
@@ -461,9 +462,13 @@ export default function App() {
                 <strong>{account.user.username}</strong>
                 <small role="status">
                   {account.status === 'saved'
-                    ? '서버 저장됨'
+                    ? demoMode
+                      ? '브라우저 저장됨'
+                      : '서버 저장됨'
                     : account.status === 'saving'
-                      ? '서버 저장 중…'
+                      ? demoMode
+                        ? '브라우저 저장 중…'
+                        : '서버 저장 중…'
                       : '저장 실패'}
                 </small>
               </span>

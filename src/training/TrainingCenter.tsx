@@ -1,3 +1,4 @@
+import { demoMode } from '../auth/mode';
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import {
   ArrowRight,
@@ -241,7 +242,14 @@ export function TrainingCenter({
               {complete}
               <small> / {trainingLabs.length}</small>
             </strong>
-            <span>검증 완료 · {account ? '계정별 서버 저장' : '브라우저에 저장'}</span>
+            <span>
+              검증 완료 ·{' '}
+              {account
+                ? demoMode
+                  ? '계정별 브라우저 저장'
+                  : '계정별 서버 저장'
+                : '브라우저에 저장'}
+            </span>
             <progress max={trainingLabs.length} value={complete} aria-label="전체 실습 완료율" />
           </div>
         </div>
