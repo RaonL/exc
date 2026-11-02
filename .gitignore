@@ -9,3 +9,10 @@ output/verification/
 .playwright-cli/
 
 output/
+.env
+.env.*
+!.env.example
+server-data/
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm

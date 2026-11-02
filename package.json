@@ -4,10 +4,15 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite --configLoader native --host 127.0.0.1",
+    "dev": "node scripts/dev.mjs",
     "build": "tsc -b && vite build --configLoader native",
     "preview": "vite preview --configLoader native --host 127.0.0.1",
-    "test": "vitest run --config vitest.config.ts --configLoader native"
+    "test": "npm run test:ui && npm run test:server",
+    "server": "node --env-file-if-exists=.env.server.local server/index.mjs",
+    "start": "node --env-file-if-exists=.env.server.local server/index.mjs",
+    "test:server": "node --test server/*.test.mjs",
+    "dev:ui": "vite --configLoader native --host 127.0.0.1",
+    "test:ui": "vitest run --config vitest.config.ts --configLoader native"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.15",
@@ -34,5 +39,8 @@
     "typescript": "~5.9.3",
     "vite": "^7.1.9",
     "vitest": "^3.2.4"
+  },
+  "engines": {
+    "node": ">=24.0.0"
   }
 }
