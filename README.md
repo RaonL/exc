@@ -4,18 +4,19 @@
 
 Class 1–8의 UI 실습 검증 결과와 공식 Task 대조: [검증 보고서](docs/verification/README.md).
 
-F5 XC 콘솔을 학습하기 위한 **브라우저 로컬 시뮬레이터**입니다. 제공된 Performance Monitoring 스크린샷의 레이아웃을 참고했으며, 모든 데이터와 보안 결과는 더미 데이터입니다. 실제 F5 API, CE/RE, 보안 엔진, 인증 서버에 연결하지 않습니다.
+F5 XC 콘솔을 학습하기 위한 시뮬레이터입니다. 보안 결과는 더미 데이터이며 실제 F5 API·CE/RE·보안 엔진에 연결하지 않습니다. 로그인은 별도의 실제 Node 인증 서버와 SQLite DB를 사용하며, 설정·Class 1~9 진행률·모의 로그를 계정별로 저장합니다. [로그인·운영·검증 안내](docs/AUTHENTICATION.md).
 
 ## 실행
 
-Node.js **22.18 이상 또는 24 이상**을 권장합니다. `--configLoader native`를 사용하므로 Node의 TypeScript 설정 파일 실행 지원이 필요합니다. 검증 환경: Windows / Node 24.14.1.
+인증 서버의 내장 SQLite를 위해 Node.js **24 이상**이 필요합니다. `--configLoader native`를 사용하므로 Node의 TypeScript 설정 파일 실행 지원이 필요합니다. 검증 환경: Windows / Node 24.14.1.
 
 ```powershell
 npm install
+# 새 설치는 .env.example을 .env.server.local로 복사하고 예시 계정 비밀번호를 설정합니다.
 npm run dev
 ```
 
-[http://127.0.0.1:5173](http://127.0.0.1:5173)에서 실행합니다. 개발 서버는 로컬 주소에만 바인딩됩니다.
+[http://127.0.0.1:5173](http://127.0.0.1:5173)에서 실행합니다. 개발 UI와 인증 API는 로컬 주소에만 바인딩됩니다. npm run dev로 두 서버가 함께 시작됩니다. 인터넷 배포는 Node 서버와 HTTPS·영구 DB 디스크가 필요하며, 정적 호스팅만으로는 로그인/저장이 동작하지 않습니다.
 
 ```powershell
 npm test          # 상태 연동 테스트

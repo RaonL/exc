@@ -1,4 +1,5 @@
 import { useApiSecurity } from './api-security/store';
+import { accountStorage } from './auth/storage';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { createDemoData } from './data/seed';
@@ -463,7 +464,7 @@ export const useConsole = create<Store>()(
       storage: createJSONStorage(() => ({
         getItem: (key) => {
           try {
-            return localStorage.getItem(key);
+            return accountStorage.getItem(key);
           } catch {
             reportStorageError();
             return null;
@@ -471,14 +472,14 @@ export const useConsole = create<Store>()(
         },
         setItem: (key, value) => {
           try {
-            localStorage.setItem(key, value);
+            accountStorage.setItem(key, value);
           } catch {
             reportStorageError();
           }
         },
         removeItem: (key) => {
           try {
-            localStorage.removeItem(key);
+            accountStorage.removeItem(key);
           } catch {
             reportStorageError();
           }

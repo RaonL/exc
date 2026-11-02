@@ -2,6 +2,9 @@ import './api-security/api-security.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
+import { AccountGate } from './auth/AccountGate';
+import { requireAccounts } from './auth/storage';
+import './auth/auth.css';
 import './styles.css';
 import './configuration.css';
 import './training/training.css';
@@ -18,8 +21,11 @@ import './load-balancer-lab1.css';
 import './training/console-guide.css';
 import './rea-console.css';
 import './navigation/navigation.css';
+requireAccounts();
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <App />
+    <AccountGate>
+      <App />
+    </AccountGate>
   </React.StrictMode>,
 );

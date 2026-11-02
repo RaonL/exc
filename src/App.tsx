@@ -24,6 +24,7 @@ import {
   ArrowRight,
 } from 'lucide-react';
 import { useConsole } from './store';
+import { useAccountSession } from './auth/context';
 import type { Workspace, Page } from './types';
 
 import { Dialog } from './components/ui/dialog';
@@ -102,6 +103,7 @@ const defaultPage: Record<Workspace, Page> = {
   Administration: 'Tenant / Namespace',
 };
 export default function App() {
+  const account = useAccountSession();
   const s = useConsole();
   const [lab, setLab] = useState(false);
   const [toast, setToast] = useState('');
@@ -455,6 +457,18 @@ export default function App() {
             >
               <UserRound size={19} />
             </button>
+            {account && (
+              <span className="account-header-status">
+                <strong>{account.user.username}</strong>
+                <small role="status">
+                  {account.status === 'saved'
+                    ? '서버 저장됨'
+                    : account.status === 'saving'
+                      ? '서버 저장 중…'
+                      : '저장 실패'}
+                </small>
+              </span>
+            )}
           </div>
           {popover === 'notifications' && (
             <div className="header-popover notifications">
@@ -480,8 +494,8 @@ export default function App() {
           {popover === 'user' && (
             <div className="header-popover user-popover">
               <div>
-                <strong>Demo Administrator</strong>
-                <small>{s.settings.email}</small>
+                <strong>{account?.user.username ?? 'Demo Administrator'}</strong>
+                <small>{account ? '계정별 실습 데이터' : s.settings.email}</small>
               </div>
               <button onClick={() => go('Administration', 'Users / Roles')}>
                 <Users size={15} />
@@ -491,7 +505,19 @@ export default function App() {
                 <Settings size={15} />
                 System settings
               </button>
-              <Badge tone="blue">Local simulation session</Badge>
+              <Badge tone="blue">
+                {account ? 'Authenticated training session' : 'Local simulation session'}
+              </Badge>
+              {account && (
+                <button
+                  disabled={account.busy}
+                  onClick={() => {
+                    void account.logout();
+                  }}
+                >
+                  로그아웃
+                </button>
+              )}
             </div>
           )}
         </header>

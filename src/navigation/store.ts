@@ -1,5 +1,6 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import { accountStorage } from '../auth/storage';
 import type { ResourcePage } from './resource-catalog';
 export type LocalResource = {
   id: string;
@@ -36,6 +37,6 @@ export const useNavigationResources = create<State>()(
       },
       remove: (id) => set((s) => ({ resources: s.resources.filter((r) => r.id !== id) })),
     }),
-    { name: 'f5-xc-navigation-resources-v1' },
+    { name: 'f5-xc-navigation-resources-v1', storage: createJSONStorage(() => accountStorage) },
   ),
 );

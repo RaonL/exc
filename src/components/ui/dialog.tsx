@@ -1,6 +1,7 @@
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { X } from 'lucide-react';
 import type { ReactNode } from 'react';
+import { useAccountSession } from '../../auth/context';
 export function Dialog({
   open,
   onOpenChange,
@@ -16,6 +17,7 @@ export function Dialog({
   children: ReactNode;
   wide?: boolean;
 }) {
+  const account = useAccountSession();
   return (
     <DialogPrimitive.Root open={open} onOpenChange={onOpenChange}>
       <DialogPrimitive.Portal>
@@ -26,7 +28,9 @@ export function Dialog({
               <DialogPrimitive.Title>{title}</DialogPrimitive.Title>
               <DialogPrimitive.Description>
                 {description ??
-                  'Configure this simulated resource. Changes are saved in this browser.'}
+                  (account
+                    ? 'Configure this simulated resource. Changes are saved to your server account.'
+                    : 'Configure this simulated resource. Changes are saved in this browser.')}
               </DialogPrimitive.Description>
             </div>
             <DialogPrimitive.Close className="icon-button" aria-label="Close dialog">

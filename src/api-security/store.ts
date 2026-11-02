@@ -1,5 +1,6 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import { accountStorage } from '../auth/storage';
 import type { LB } from '../types';
 import { summarizeRequest, type RequestSummary } from './dashboard';
 import {
@@ -237,7 +238,7 @@ export const useApiSecurity = create<State>()(
         }
       },
     }),
-    { name: 'f5-xc-api-security-v1' },
+    { name: 'f5-xc-api-security-v1', storage: createJSONStorage(() => accountStorage) },
   ),
 );
 export function configurationError(c: ApiSettings, lb: LB): string {

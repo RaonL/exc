@@ -11,6 +11,7 @@ import {
   ShieldCheck,
 } from 'lucide-react';
 import { useConsole } from '../store';
+import { useAccountSession } from '../auth/context';
 import { Badge } from '../components/common';
 import { Button } from '../components/ui/button';
 import { Dialog } from '../components/ui/dialog';
@@ -88,6 +89,7 @@ export function TrainingCenter({
   embedded?: boolean;
   onOpenConsole?: () => void;
 }) {
+  const account = useAccountSession();
   const t = useTraining(),
     core = useConsole();
   const lab = labById(t.selectedLab),
@@ -239,7 +241,7 @@ export function TrainingCenter({
               {complete}
               <small> / {trainingLabs.length}</small>
             </strong>
-            <span>검증 완료 · 브라우저에 저장</span>
+            <span>검증 완료 · {account ? '계정별 서버 저장' : '브라우저에 저장'}</span>
             <progress max={trainingLabs.length} value={complete} aria-label="전체 실습 완료율" />
           </div>
         </div>

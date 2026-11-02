@@ -1,3 +1,4 @@
+import { accountStorage } from '../auth/storage';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { useConsole } from '../store';
@@ -129,7 +130,7 @@ interface TrainingState {
 const safeStorage = {
   getItem: (key: string) => {
     try {
-      return localStorage.getItem(key);
+      return accountStorage.getItem(key);
     } catch {
       queueMicrotask(() => useConsole.setState({ storageError: true }));
       return null;
@@ -137,14 +138,14 @@ const safeStorage = {
   },
   setItem: (key: string, value: string) => {
     try {
-      localStorage.setItem(key, value);
+      accountStorage.setItem(key, value);
     } catch {
       queueMicrotask(() => useConsole.setState({ storageError: true }));
     }
   },
   removeItem: (key: string) => {
     try {
-      localStorage.removeItem(key);
+      accountStorage.removeItem(key);
     } catch {
       queueMicrotask(() => useConsole.setState({ storageError: true }));
     }
