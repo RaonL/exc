@@ -4,7 +4,7 @@
 
 Class 1–8의 UI 실습 검증 결과와 공식 Task 대조: [검증 보고서](docs/verification/README.md).
 
-F5 XC 콘솔을 학습하기 위한 시뮬레이터입니다. 보안 결과는 더미 데이터이며 실제 F5 API·CE/RE·보안 엔진에 연결하지 않습니다. 기본 로그인은 정적 사이트용 데모 방식이며, 설정·Class 1~9 진행률·모의 로그를 브라우저에 계정별로 저장합니다. 예시 계정은 ete_root1, ete_root2, ete_root3이며 공통 비밀번호는 etrevers입니다. [로그인·운영·검증 안내](docs/AUTHENTICATION.md).
+F5 XC 콘솔을 학습하기 위한 시뮬레이터입니다. 보안 결과는 더미 데이터이며 실제 F5 API·CE/RE·보안 엔진에 연결하지 않습니다. 기본 로그인은 정적 사이트용 데모 방식이며, 설정·Class 1~9 진행률·모의 로그를 브라우저에 계정별로 저장합니다. 예시 계정과 비밀번호는 ete_root1 / etevers1, ete_root2 / etevers2, ete_root3 / etevers3입니다. [로그인·운영·검증 안내](docs/AUTHENTICATION.md).
 
 ## 실행
 

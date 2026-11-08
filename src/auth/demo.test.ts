@@ -8,9 +8,18 @@ it('logs all three demo users in without an API server, rejects wrong credential
     for (const username of ['ete_root1', 'ete_root2', 'ete_root3']) {
       const result = await api<{ user: { id: string; username: string } }>('/auth/login', {
         method: 'POST',
-        body: { username, password: 'etrevers' },
+        body: { username, password: 'etevers' + username.slice(-1) },
       });
       expect(result.user.username).toBe(username);
+      for (const password of [
+        'etrevers',
+        'etevers',
+        ...['1', '2', '3'].filter((n) => n !== username.slice(-1)).map((n) => 'etevers' + n),
+      ]) {
+        await expect(
+          api('/auth/login', { method: 'POST', body: { username, password } }),
+        ).rejects.toMatchObject({ status: 401 });
+      }
       expect(await api('/auth/session')).toEqual(result);
       await api('/auth/logout', { method: 'POST', body: {}, account: result.user.id });
       await expect(api('/auth/session')).rejects.toMatchObject({ status: 401 });
@@ -28,7 +37,7 @@ it('persists separate snapshots across logout/login and rejects stale account wr
     (
       await api<{ user: { id: string } }>('/auth/login', {
         method: 'POST',
-        body: { username, password: 'etrevers' },
+        body: { username, password: 'etevers' + username.slice(-1) },
       })
     ).user;
   const first = await login('ete_root1');

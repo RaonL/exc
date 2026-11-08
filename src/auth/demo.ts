@@ -1,6 +1,11 @@
 import type { AccountUser } from './api';
 const sessionKey = 'xc-demo-session-v1';
-const users = ['ete_root1', 'ete_root2', 'ete_root3'];
+const credentials: Record<string, string> = {
+  ete_root1: 'etevers1',
+  ete_root2: 'etevers2',
+  ete_root3: 'etevers3',
+};
+const users = Object.keys(credentials);
 const stateKey = (id: string) => `xc-demo-workspace-v1:${id}`;
 type Options = { method?: string; body?: unknown; account?: string };
 export function demoRequest(
@@ -13,7 +18,7 @@ export function demoRequest(
     const username = String(body?.username ?? '')
       .trim()
       .toLowerCase();
-    if (!users.includes(username) || body?.password !== 'etrevers')
+    if (!users.includes(username) || body?.password !== credentials[username])
       throw fail(401, '아이디 또는 비밀번호가 일치하지 않습니다.');
     localStorage.setItem(sessionKey, username);
     return { user: { id: `demo-${username}`, username } };
